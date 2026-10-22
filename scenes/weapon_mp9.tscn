@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://btybwp83naq4j"]
+
+[ext_resource type="Script" uid="uid://b8rry7ws2gj6" path="res://scripts/weapons/weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" uid="uid://crx5xvw4fcfuq" path="res://models/mp9/Mp9.fbx" id="2_model"]
+[ext_resource type="Texture2D" uid="uid://dn6qoku2vvrs6" path="res://assets/textures/muzzle_flash.png" id="3_flash"]
+[ext_resource type="AudioStream" uid="uid://d1jllrabbfke6" path="res://assets/audio/akm_shot.wav" id="4_shot"]
+[ext_resource type="AudioStream" uid="uid://c038y6fpjjw2n" path="res://assets/audio/akm_dry.wav" id="5_dry"]
+[ext_resource type="AudioStream" uid="uid://t728nfqniowj" path="res://assets/audio/akm_reload.wav" id="6_reload"]
+[ext_resource type="AudioStream" uid="uid://lyseimj7pvji" path="res://assets/audio/headshot.wav" id="7_headshot"]
+[ext_resource type="Material" path="res://assets/materials/gun_polymer.tres" id="8_metal"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 0.9, 0.72, 1)
+albedo_texture = ExtResource("3_flash")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_flash"]
+size = Vector2(0.26, 0.26)
+
+[node name="MP9" type="Node3D" unique_id=672891591]
+script = ExtResource("1_weapon")
+display_name = "MP9"
+damage = 48.0
+max_range = 90.0
+automatic = true
+fire_rate = 15.0
+spread_degrees = 2.2
+recoil_pitch = 1.2
+recoil_yaw = 1.0
+max_ammo = 30
+reload_time = 1.9
+kick_back = 0.02
+kick_up_degrees = 4.0
+kick_roll_degrees = 3.5
+flash_duration = 0.03
+surface_materials = Array[Material]([ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal")])
+can_be_dual = true
+strip_skinning = true
+aim_position = Vector3(-0.17, 0.03, -0.02)
+aim_rotation_degrees = Vector3(2, -2, 3)
+aim_spread_multiplier = 0.4
+
+[node name="Model" type="Node3D" parent="." unique_id=459709400]
+
+[node name="Body" type="Node3D" parent="Model" unique_id=1296814078]
+transform = Transform3D(0.0024, 0, 0, 0, -0.0024, 0, 0, 0, -0.0024, 0, 0, 0)
+
+[node name="Pivot" parent="Model/Body" unique_id=99469719 instance=ExtResource("2_model")]
+
+[node name="Muzzle" type="Marker3D" parent="Model" unique_id=3009053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.27)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Model/Muzzle" unique_id=1609613831]
+visible = false
+material_override = SubResource("Mat_flash")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_flash")
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Model/Muzzle" unique_id=1073679508]
+light_color = Color(1, 0.72, 0.35, 1)
+light_energy = 0.0
+omni_range = 4.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="." unique_id=870715626]
+stream = ExtResource("4_shot")
+volume_db = -4.0
+max_polyphony = 6
+
+[node name="DrySound" type="AudioStreamPlayer" parent="." unique_id=1558786659]
+stream = ExtResource("5_dry")
+volume_db = -2.0
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="." unique_id=1678540473]
+stream = ExtResource("6_reload")
+volume_db = -3.0
+
+[node name="HeadshotSound" type="AudioStreamPlayer" parent="." unique_id=554691658]
+stream = ExtResource("7_headshot")
+volume_db = 1.0
+max_polyphony = 3

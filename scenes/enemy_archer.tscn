@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/enemy.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://models/vrag skeleton archer/low_poly_skeleton_archer_animated.glb" id="2_body"]
+[ext_resource type="PackedScene" path="res://scenes/fx/arrow.tscn" id="3_arrow"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_body"]
+radius = 0.3
+height = 1.6
+
+[node name="Archer" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_script")
+max_health = 180.0
+move_speed = 3.4
+damage = 9.0
+attack_cooldown = 2.3
+attack_hit_delay = 0.95
+head_zone_height = 1.35
+mode = 1
+preferred_distance = 9.0
+retreat_distance = 5.5
+shot_range = 22.0
+projectile_scene = ExtResource("3_arrow")
+projectile_speed = 18.0
+projectile_spawn_height = 1.15
+walk_anim = &"Skeleton Walk"
+attack_anim = &"Skeleton Shooting"
+idle_anim = &"Skeleton Idle"
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("Capsule_body")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Body" parent="Model" instance=ExtResource("2_body")]
+transform = Transform3D(0.62, 0, 0, 0, 0.62, 0, 0, 0, 0.62, -2.19, 0, 2.17)

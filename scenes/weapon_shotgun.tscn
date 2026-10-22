@@ -1,0 +1,83 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" path="res://models/shotgun/source/Escopeta doble canon para SP.fbx" id="2_model"]
+[ext_resource type="Texture2D" path="res://assets/textures/muzzle_flash.png" id="3_flash"]
+[ext_resource type="AudioStream" path="res://assets/audio/shotgun_blast.wav" id="4_shot"]
+[ext_resource type="AudioStream" path="res://assets/audio/shotgun_dry.wav" id="5_dry"]
+[ext_resource type="AudioStream" path="res://assets/audio/shotgun_reload.wav" id="6_reload"]
+[ext_resource type="Material" path="res://assets/materials/shotgun_metal.tres" id="7_metal"]
+[ext_resource type="Material" path="res://assets/materials/shotgun_wood.tres" id="8_wood"]
+[ext_resource type="AudioStream" path="res://assets/audio/headshot.wav" id="9_headshot"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_flash"]
+size = Vector2(0.55, 0.55)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_texture = ExtResource("3_flash")
+albedo_color = Color(1, 0.88, 0.66, 1)
+billboard_mode = 1
+no_depth_test = true
+
+[node name="Shotgun" type="Node3D"]
+script = ExtResource("1_weapon")
+display_name = "Двустволка"
+damage = 16.0
+max_range = 60.0
+pellets = 9
+automatic = false
+fire_rate = 0.9
+spread_degrees = 6.5
+recoil_pitch = 16.0
+recoil_yaw = 5.5
+max_ammo = 2
+reload_time = 2.6
+auto_reload = true
+kick_back = 0.26
+kick_up_degrees = 32.0
+kick_roll_degrees = 12.0
+flash_duration = 0.07
+surface_materials = Array[Material]([ExtResource("7_metal"), ExtResource("8_wood")])
+aim_position = Vector3(-0.17, 0.062, 0.12)
+aim_rotation_degrees = Vector3(2, -2, 3)
+aim_spread_multiplier = 0.45
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.026317, -0.827706, -0.397418)
+
+[node name="Muzzle" type="Marker3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026525, 0.916341, 0.072509)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Model/Muzzle"]
+visible = false
+cast_shadow = 0
+mesh = SubResource("QuadMesh_flash")
+material_override = SubResource("Mat_flash")
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Model/Muzzle"]
+light_color = Color(1, 0.72, 0.34, 1)
+light_energy = 0.0
+shadow_enabled = false
+omni_range = 6.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_shot")
+volume_db = -1.0
+max_polyphony = 2
+
+[node name="DrySound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_dry")
+volume_db = -2.0
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_reload")
+volume_db = -3.0
+
+[node name="HeadshotSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_headshot")
+volume_db = 1.0
+max_polyphony = 3

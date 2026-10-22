@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://lru8fw458fto"]
+
+[ext_resource type="Script" uid="uid://cmo8yof6souy6" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/castle.tscn" id="4_castle"]
+[ext_resource type="PackedScene" path="res://scenes/levelup_menu.tscn" id="5_menu"]
+[ext_resource type="PackedScene" path="res://scenes/run_over.tscn" id="6_run_over"]
+[ext_resource type="Script" path="res://scripts/world/wave_manager.gd" id="7_waves"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_skeleton.tscn" id="8_skeleton"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_zombie.tscn" id="9_zombie"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_slime.tscn" id="10_slime"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_archer.tscn" id="11_archer"]
+[ext_resource type="PackedScene" path="res://scenes/enemy_boss.tscn" id="12_boss"]
+[ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="13_pause"]
+[ext_resource type="Script" path="res://scripts/world/arena_bounds.gd" id="14_bounds"]
+[ext_resource type="Script" path="res://scripts/net/network_game.gd" id="15_net"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat_night"]
+sky_top_color = Color(0.015, 0.018, 0.045, 1)
+sky_horizon_color = Color(0.14, 0.12, 0.2, 1)
+sky_curve = 0.18
+sky_energy_multiplier = 0.8
+ground_bottom_color = Color(0.01, 0.01, 0.015, 1)
+ground_horizon_color = Color(0.07, 0.06, 0.09, 1)
+ground_curve = 0.2
+
+[sub_resource type="Sky" id="Sky_night"]
+sky_material = SubResource("SkyMat_night")
+
+[sub_resource type="Environment" id="Env_night"]
+background_mode = 2
+sky = SubResource("Sky_night")
+ambient_light_source = 3
+ambient_light_energy = 0.95
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 1.1
+ssao_enabled = true
+ssao_radius = 1.4
+ssao_intensity = 1.6
+glow_enabled = true
+glow_intensity = 0.7
+glow_bloom = 0.06
+fog_enabled = true
+fog_light_color = Color(0.07, 0.065, 0.11, 1)
+fog_light_energy = 0.45
+fog_density = 0.004
+fog_sky_affect = 0.4
+
+[node name="Main" type="Node3D" unique_id=949805955]
+script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1508691228]
+environment = SubResource("Env_night")
+
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=1535066165]
+transform = Transform3D(-0.46947157, 0.51898354, -0.7143196, 0, 0.809017, 0.58778524, 0.88294756, 0.27594846, -0.37981048, 0, 0, 0)
+light_color = Color(0.45, 0.55, 0.88, 1)
+light_energy = 1.1
+shadow_enabled = true
+directional_shadow_max_distance = 170.0
+
+[node name="FillLight" type="DirectionalLight3D" parent="." unique_id=11483278]
+transform = Transform3D(0.52991927, -0.31768438, 0.7862965, 0, 0.92718387, 0.37460658, -0.8480481, -0.19851124, 0.4913326, 0, 0, 0)
+light_color = Color(0.38, 0.42, 0.7, 1)
+light_energy = 0.4
+
+[node name="Castle" parent="." unique_id=269653204 instance=ExtResource("4_castle")]
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 34)
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="NetworkGame" type="Node3D" parent="."]
+script = ExtResource("15_net")
+
+[node name="HUD" parent="." unique_id=666411481 instance=ExtResource("3_hud")]
+
+[node name="LevelUpMenu" parent="." instance=ExtResource("5_menu")]
+
+[node name="WaveManager" type="Node3D" parent="."]
+script = ExtResource("7_waves")
+skeleton_scene = ExtResource("8_skeleton")
+zombie_scene = ExtResource("9_zombie")
+slime_scene = ExtResource("10_slime")
+archer_scene = ExtResource("11_archer")
+boss_scene = ExtResource("12_boss")
+
+[node name="RunOver" parent="." instance=ExtResource("6_run_over")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("13_pause")]
+
+[node name="ArenaBounds" type="Node3D" parent="."]
+script = ExtResource("14_bounds")

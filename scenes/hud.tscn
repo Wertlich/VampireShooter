@@ -1,0 +1,139 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_hud")
+
+[node name="Ammo" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -96.0
+offset_right = -36.0
+offset_bottom = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.93, 0.85, 1)
+theme_override_font_sizes/font_size = 40
+text = "6 / 6"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="WeaponName" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -262.0
+offset_right = -36.0
+offset_bottom = -234.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.9, 0.8, 0.7)
+theme_override_font_sizes/font_size = 19
+text = "Револьвер"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="Stats" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -230.0
+offset_right = -36.0
+offset_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9, 0.86, 0.8, 0.75)
+theme_override_font_sizes/font_size = 15
+theme_override_constants/line_spacing = 0
+text = ""
+horizontal_alignment = 0
+vertical_alignment = 1
+vertical_alignment = 1
+
+[node name="Hint" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 1200.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.85, 0.82, 0.78, 0.5)
+theme_override_font_sizes/font_size = 15
+text = "ЛКМ — стрельба    1–4 — оружие    R — перезарядка    Shift — бег    Пробел — прыжок/хоп    ПКМ — прицел    Esc — пауза и настройки"
+
+[node name="Wave" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 52.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.6, 0.92)
+theme_override_font_sizes/font_size = 22
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Cheat" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 82.0
+offset_right = 760.0
+offset_bottom = 110.0
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 0.95)
+theme_override_font_sizes/font_size = 18
+text = ""
+
+[node name="Speed" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = -78.0
+offset_right = 460.0
+offset_bottom = -34.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.95, 0.86, 0.62, 0.95)
+theme_override_font_sizes/font_size = 26
+vertical_alignment = 1
+
+[node name="Enemies" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 18.0
+offset_right = -32.0
+offset_bottom = 44.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.85, 0.34, 0.28, 0.85)
+theme_override_font_sizes/font_size = 18
+text = ""
+horizontal_alignment = 2
+vertical_alignment = 1

@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/fx/arrow.gd" id="1_arrow"]
+
+[sub_resource type="BoxMesh" id="Mesh_shaft"]
+size = Vector3(0.02, 0.02, 0.58)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.42, 0.27, 0.14, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="Mesh_head"]
+size = Vector3(0.035, 0.035, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="Mat_steel"]
+albedo_color = Color(0.6, 0.62, 0.66, 1)
+metallic = 0.7
+roughness = 0.35
+
+[node name="Arrow" type="Node3D"]
+script = ExtResource("1_arrow")
+
+[node name="Shaft" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh_shaft")
+material_override = SubResource("Mat_wood")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.33)
+mesh = SubResource("Mesh_head")
+material_override = SubResource("Mat_steel")
+
+[node name="Fletching" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 0, 0.24)
+mesh = SubResource("Mesh_head")
+material_override = SubResource("Mat_wood")

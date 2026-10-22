@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" path="res://models/akm/source/akm_fit.glb" id="2_model"]
+[ext_resource type="Texture2D" path="res://assets/textures/muzzle_flash.png" id="3_flash"]
+[ext_resource type="AudioStream" path="res://assets/audio/akm_shot.wav" id="4_shot"]
+[ext_resource type="AudioStream" path="res://assets/audio/akm_dry.wav" id="5_dry"]
+[ext_resource type="AudioStream" path="res://assets/audio/akm_reload.wav" id="6_reload"]
+[ext_resource type="AudioStream" path="res://assets/audio/headshot.wav" id="7_headshot"]
+[ext_resource type="Material" path="res://assets/materials/akm_metal.tres" id="8_metal"]
+[ext_resource type="Material" path="res://assets/materials/akm_wood.tres" id="9_wood"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_flash"]
+size = Vector2(0.3, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_texture = ExtResource("3_flash")
+albedo_color = Color(1, 0.9, 0.72, 1)
+billboard_mode = 1
+no_depth_test = true
+
+[node name="AKM" type="Node3D"]
+script = ExtResource("1_weapon")
+display_name = "АКМ"
+damage = 26.0
+max_range = 120.0
+pellets = 1
+automatic = true
+fire_rate = 9.0
+spread_degrees = 1.1
+recoil_pitch = 1.7
+recoil_yaw = 0.8
+max_ammo = 30
+reload_time = 2.6
+auto_reload = true
+kick_back = 0.03
+kick_up_degrees = 5.0
+kick_roll_degrees = 2.5
+flash_duration = 0.035
+surface_materials = Array[Material]([ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("9_wood"), ExtResource("9_wood")])
+aim_position = Vector3(-0.17, 0.0, -0.1)
+aim_rotation_degrees = Vector3(2, -2, 3)
+aim_spread_multiplier = 0.35
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Muzzle" type="Marker3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01, 0.09, -0.44)
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="Model/Muzzle"]
+visible = false
+cast_shadow = 0
+mesh = SubResource("QuadMesh_flash")
+material_override = SubResource("Mat_flash")
+
+[node name="MuzzleLight" type="OmniLight3D" parent="Model/Muzzle"]
+light_color = Color(1, 0.72, 0.35, 1)
+light_energy = 0.0
+shadow_enabled = false
+omni_range = 4.0
+
+[node name="FireSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_shot")
+volume_db = -3.0
+max_polyphony = 4
+
+[node name="DrySound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_dry")
+volume_db = -2.0
+
+[node name="ReloadSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_reload")
+volume_db = -3.0
+
+[node name="HeadshotSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_headshot")
+volume_db = 1.0
+max_polyphony = 3
