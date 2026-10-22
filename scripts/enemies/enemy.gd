@@ -14,6 +14,10 @@ const XP_GEM := preload("res://scenes/pickups/xp_gem.tscn")
 
 enum Mode { MELEE, RANGED }
 
+## Debug switch from the in-game console: frozen enemies still take hits and die
+## but stop moving and attacking. Static so newly spawned waves freeze too.
+static var ai_frozen: bool = false
+
 @export_group("Stats")
 @export var max_health: float = 120.0
 @export var move_speed: float = 3.0
@@ -201,6 +205,17 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	if ai_frozen:
+		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
+		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
+		if flying or is_on_floor():
+			velocity.y = 0.0
+		else:
+			velocity.y -= gravity * delta
+		move_and_slide()
+		_update_visual(delta)
+		return
+
 	_attack_cd = maxf(0.0, _attack_cd - delta)
 	_stagger = maxf(0.0, _stagger - delta)
 
@@ -314,6 +329,8 @@ func _swing() -> void:
 	if _dead:
 		return
 	_attacking = false
+	if ai_frozen:
+		return
 	if is_instance_valid(_player) and not _player.is_dead \
 			and global_position.distance_to(_player.global_position) <= attack_range * 1.35:
 		_player.take_damage(damage, global_position + Vector3.UP, global_basis.z)
@@ -328,7 +345,7 @@ func _fire_arrow() -> void:
 	# that window is safe.
 	await get_tree().create_timer(attack_hit_delay).timeout
 	_attacking = false
-	if _dead or projectile_scene == null:
+	if _dead or ai_frozen or projectile_scene == null:
 		return
 	if not is_instance_valid(_player) or _player.is_dead:
 		return

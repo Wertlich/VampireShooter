@@ -24,6 +24,8 @@ var _pending_levels: int = 0
 
 
 func _ready() -> void:
+	# A new arena starts with thinking enemies even after a debug/console run.
+	Enemy.ai_frozen = false
 	# Sound, resolution and the quality preset from the last session.
 	Settings.load_all()
 	Settings.apply_all(self)
