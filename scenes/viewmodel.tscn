@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/weapon_svd.tscn" id="5_svd"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_rpd.tscn" id="6_rpd"]
 [ext_resource type="PackedScene" path="res://scenes/weapon_saiga.tscn" id="7_saiga"]
-[ext_resource type="PackedScene" path="res://scenes/weapon_mp9.tscn" id="8_mp9"]
+[ext_resource type="PackedScene" uid="uid://btybwp83naq4j" path="res://scenes/weapon_mp9.tscn" id="8_mp9"]
 
 [sub_resource type="Environment" id="Env_viewmodel"]
 ambient_light_source = 2

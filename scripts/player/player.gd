@@ -21,8 +21,8 @@ const CHEAT_CODE: Array[int] = [
 @export var sprint_speed: float = 8.0
 @export var ground_acceleration: float = 14.0
 @export var ground_friction: float = 12.0
-@export var jump_velocity: float = 5.0
-@export var gravity: float = 22.0
+@export var jump_velocity: float = 6.0
+@export var gravity: float = 18.0
 
 @export_group("Bunny Hop")
 ## Air acceleration. Higher = easier to build speed by strafing in the air.

@@ -203,8 +203,8 @@ func _upgrade_card(index: int, weapon: Weapon, stat: String) -> Dictionary:
 			title = "Темп +20%"
 			desc = "%s\n%.2f → %.2f выстр./с" % [weapon.display_name, weapon.fire_rate, weapon.fire_rate * 1.2]
 		"ammo":
-			title = "Магазин +2"
-			desc = "%s\n%d → %d патронов" % [weapon.display_name, weapon.max_ammo, weapon.max_ammo + 2]
+			title = "Магазин +20%"
+			desc = "%s\n%d → %d патронов" % [weapon.display_name, weapon.max_ammo, weapon.max_ammo * 1.2]
 		"reload":
 			title = "Перезарядка −22%"
 			desc = "%s\n%.2f → %.2f с" % [weapon.display_name, weapon.reload_time, weapon.reload_time * 0.78]
@@ -264,7 +264,7 @@ func _apply_card(card: Dictionary) -> void:
 				"fire_rate":
 					weapon.fire_rate *= 1.2
 				"ammo":
-					weapon.max_ammo += 2
+					weapon.max_ammo *= 1.2
 					weapon.ammo = weapon.max_ammo
 					weapon.ammo_changed.emit(weapon.ammo, weapon.max_ammo)
 				"reload":

@@ -68,19 +68,6 @@
   },
   {
    "pos": [
-    0,
-    49.2,
-    6.5
-   ],
-   "size": [
-    100.0,
-    1.6,
-    13.0
-   ],
-   "rot_y": 0.0
-  },
-  {
-   "pos": [
     -49.2,
     0,
     6.5
@@ -728,6 +715,19 @@
     0.9
    ],
    "rot_y": 5.236
+  },
+  {
+   "pos": [
+    0,
+    49.2,
+    6.5
+   ],
+   "size": [
+    100.0,
+    1.6,
+    13.0
+   ],
+   "rot_y": 0.0
   }
  ],
  "candles": [
@@ -1028,5 +1028,48 @@
   0.0,
   1.2,
   30.0
- ]
+ ],
+ "layout_notes": {
+  "church_front_main_entrance": {
+   "center": [
+    0,
+    0,
+    5.8
+   ],
+   "width": 10.0,
+   "height": 11.5
+  },
+  "church_rear_small_passages": [
+   {
+    "center": [
+     -9,
+     28,
+     4.8
+    ],
+    "width": 4.4,
+    "height": 9.4
+   },
+   {
+    "center": [
+     9,
+     28,
+     4.8
+    ],
+    "width": 4.4,
+    "height": 9.4
+   }
+  ],
+  "church_roof": {
+   "wall_footprint": [
+    -16,
+    0,
+    16,
+    28
+   ],
+   "overhang": 0.8,
+   "eaves_z": 14.0,
+   "ridge_z": 19.0
+  },
+  "church_doors_open": true
+ }
 }

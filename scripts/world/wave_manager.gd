@@ -54,8 +54,8 @@ const WAVE_MIX := {
 
 @export_group("Spawn")
 ## Ring around the player where enemies are allowed to rise.
-@export var spawn_radius_min: float = 6.0
-@export var spawn_radius_max: float = 10.0
+@export var spawn_radius_min: float = 12.0
+@export var spawn_radius_max: float = 18.0
 ## Used to keep spawns inside the castle walls.
 @export var arena_half_size: float = 46.0
 ## A wave pours in over this many ticks instead of all at once, so a big wave
@@ -337,10 +337,31 @@ func _find_spawn_position() -> Vector3:
 		var candidate := player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * distance
 		candidate.x = clampf(candidate.x, -arena_half_size, arena_half_size)
 		candidate.z = clampf(candidate.z, -arena_half_size, arena_half_size)
+		if candidate.distance_to(player.global_position) < spawn_radius_min:
+			continue
 		candidate.y = 1.0
 		query.transform = Transform3D(Basis(), candidate)
 		if space.intersect_shape(query, 1).is_empty():
 			candidate.y = 0.05
 			return candidate
 
-	return player.global_position + Vector3(0.0, 0.05, -6.0)
+	# Keep the minimum distance even when random attempts are blocked.
+	for angle in range(0, 360, 30):
+		var radians := deg_to_rad(float(angle))
+		var candidate := player.global_position + Vector3(cos(radians), 0.0, sin(radians)) * spawn_radius_min
+		candidate.x = clampf(candidate.x, -arena_half_size, arena_half_size)
+		candidate.z = clampf(candidate.z, -arena_half_size, arena_half_size)
+		if candidate.distance_to(player.global_position) < spawn_radius_min:
+			continue
+		candidate.y = 1.0
+		query.transform = Transform3D(Basis(), candidate)
+		if space.intersect_shape(query, 1).is_empty():
+			candidate.y = 0.05
+			return candidate
+
+	# If every valid point is blocked, keep the distance rule instead of spawning
+	# nearby. This is preferable to clamping inside the arena and breaking the
+	# minimum-distance guarantee.
+	var fallback := player.global_position + Vector3.RIGHT * spawn_radius_min
+	fallback.y = 0.05
+	return fallback

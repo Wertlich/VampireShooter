@@ -1,11 +1,16 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://cynplkp15ljtn"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://d0e063s5n2syi" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" uid="uid://cyyq8awyok511" path="res://models/castle/castle.glb" id="2_ekxnf"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=390163482]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
+
+[node name="castle" parent="." unique_id=657602695 instance=ExtResource("2_ekxnf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18154061, 0, 2.2477808)
