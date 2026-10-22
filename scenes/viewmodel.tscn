@@ -88,5 +88,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.015, -0.42)
 visible = false
 
 [node name="MP9" parent="Container/Viewport/Camera/WeaponHolder" unique_id=1805594253 instance=ExtResource("8_mp9")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02, -0.04, -0.32)
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 visible = false

@@ -41,19 +41,21 @@ flash_duration = 0.03
 surface_materials = Array[Material]([ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal"), ExtResource("8_metal")])
 can_be_dual = true
 strip_skinning = true
-aim_position = Vector3(-0.17, 0.03, -0.02)
+aim_position = Vector3(-0.17, 0.052, -0.13)
 aim_rotation_degrees = Vector3(2, -2, 3)
 aim_spread_multiplier = 0.4
 
 [node name="Model" type="Node3D" parent="." unique_id=459709400]
 
 [node name="Body" type="Node3D" parent="Model" unique_id=1296814078]
-transform = Transform3D(0.0024, 0, 0, 0, -0.0024, 0, 0, 0, -0.0024, 0, 0, 0)
+position = Vector3(0, 0.0511, -0.0568)
+rotation_degrees = Vector3(0, 90, 180)
+scale = Vector3(0.0021, 0.0021, 0.0021)
 
 [node name="Pivot" parent="Model/Body" unique_id=99469719 instance=ExtResource("2_model")]
 
 [node name="Muzzle" type="Marker3D" parent="Model" unique_id=3009053]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, -0.27)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.044481, -0.117)
 
 [node name="MuzzleFlash" type="MeshInstance3D" parent="Model/Muzzle" unique_id=1609613831]
 visible = false
