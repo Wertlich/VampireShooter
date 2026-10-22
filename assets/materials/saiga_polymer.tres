@@ -1,0 +1,21 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/saiga_metal_albedo.png" id="1_albedo"]
+[ext_resource type="Texture2D" path="res://assets/textures/saiga_metal_normal.png" id="2_normal"]
+
+[resource]
+resource_name = "Saiga Polymer"
+albedo_texture = ExtResource("1_albedo")
+albedo_color = Color(0.72, 0.73, 0.78, 1)
+metallic = 0.08
+metallic_specular = 0.4
+roughness = 0.72
+normal_enabled = true
+normal_texture = ExtResource("2_normal")
+normal_scale = 0.35
+emission_enabled = true
+emission_texture = ExtResource("1_albedo")
+emission_energy_multiplier = 0.06
+uv1_scale = Vector3(1, 1, 1)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 1.0
