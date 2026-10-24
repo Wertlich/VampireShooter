@@ -1,0 +1,24 @@
+================================================================
+  EmacEArt Asset License
+  Low Poly Cemetery Grave Pack (Godot 4)
+================================================================
+
+Copyright (c) 2026 Maciej "EmacEArt"
+
+Free for personal and commercial use, but resale or redistribution
+of the assets as standalone files or asset packs is prohibited.
+No credit is required, though it is always welcome.
+
+This covers everything in the package: the object scenes, the
+meshes, the shared material, the textures, the shaders and the
+demo scenes.
+
+----------------------------------------------------------------
+  CONTACT
+----------------------------------------------------------------
+  Maciej "EmacEArt"
+  Discord: https://discord.com/invite/ctXaf5Ftqw
+  itch.io: https://emaceart.itch.io
+
+THE ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+================================================================

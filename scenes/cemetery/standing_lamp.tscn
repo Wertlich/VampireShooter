@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/cemetery_lamp.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://models/cemetery/lamps/japanese_lamp.glb" id="2_model"]
+[ext_resource type="Material" path="res://assets/cemetery/materials/lamp_glow.tres" id="3_glow"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_glow"]
+radius = 0.16
+height = 0.32
+radial_segments = 10
+rings = 5
+
+[node name="StandingLamp" type="Node3D"]
+script = ExtResource("1_script")
+flicker_amount = 0.19
+flicker_speed = 4.2
+glow_pulse = 0.08
+chain_length = 0.0
+lamp_top = 3.0
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_color = Color(1, 0.6, 0.26, 1)
+light_energy = 2.15
+light_specular = 0.3
+shadow_enabled = false
+omni_range = 8.0
+omni_attenuation = 1.3
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 2.52, 0)
+cast_shadow = 0
+material_override = ExtResource("3_glow")
+mesh = SubResource("SphereMesh_glow")

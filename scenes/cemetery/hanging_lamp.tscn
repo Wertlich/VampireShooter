@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/cemetery_lamp.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://models/cemetery/lamps/cage_lamp.glb" id="2_model"]
+[ext_resource type="Material" path="res://assets/cemetery/materials/lamp_glow.tres" id="3_glow"]
+[ext_resource type="Material" path="res://assets/cemetery/materials/chain_metal.tres" id="4_chain"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_glow"]
+radius = 0.1
+height = 0.2
+radial_segments = 10
+rings = 5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_chain"]
+top_radius = 0.018
+bottom_radius = 0.018
+height = 1.0
+radial_segments = 6
+rings = 1
+
+[node name="HangingLamp" type="Node3D"]
+script = ExtResource("1_script")
+flicker_amount = 0.2
+flicker_speed = 5.1
+glow_pulse = 0.1
+chain_length = 5.0
+lamp_top = 1.35
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
+light_color = Color(1, 0.56, 0.24, 1)
+light_energy = 1.65
+light_specular = 0.24
+shadow_enabled = true
+shadow_bias = 0.08
+omni_range = 8.0
+omni_attenuation = 1.25
+
+[node name="Glow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.62, 0)
+cast_shadow = 0
+material_override = ExtResource("3_glow")
+mesh = SubResource("SphereMesh_glow")
+
+[node name="Chain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 5, 0, 0, 0, 1, 0, 3.85, 0)
+cast_shadow = 0
+material_override = ExtResource("4_chain")
+mesh = SubResource("CylinderMesh_chain")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cmo8yof6souy6" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
-[ext_resource type="PackedScene" path="res://scenes/castle.tscn" id="4_castle"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery.tscn" id="4_world"]
 [ext_resource type="PackedScene" path="res://scenes/levelup_menu.tscn" id="5_menu"]
 [ext_resource type="PackedScene" path="res://scenes/run_over.tscn" id="6_run_over"]
 [ext_resource type="Script" path="res://scripts/world/wave_manager.gd" id="7_waves"]
@@ -16,71 +16,30 @@
 [ext_resource type="Script" path="res://scripts/world/arena_bounds.gd" id="14_bounds"]
 [ext_resource type="Script" path="res://scripts/net/network_game.gd" id="15_net"]
 [ext_resource type="PackedScene" path="res://scenes/debug_console.tscn" id="16_console"]
-[ext_resource type="PackedScene" path="res://models/trees/tree_1.glb" id="17_tree"]
-
-[sub_resource type="ProceduralSkyMaterial" id="SkyMat_night"]
-sky_top_color = Color(0.015, 0.018, 0.045, 1)
-sky_horizon_color = Color(0.14, 0.12, 0.2, 1)
-sky_curve = 0.18
-sky_energy_multiplier = 0.8
-ground_bottom_color = Color(0.01, 0.01, 0.015, 1)
-ground_horizon_color = Color(0.07, 0.06, 0.09, 1)
-ground_curve = 0.2
-
-[sub_resource type="Sky" id="Sky_night"]
-sky_material = SubResource("SkyMat_night")
-
-[sub_resource type="Environment" id="Env_night"]
-background_mode = 2
-sky = SubResource("Sky_night")
-ambient_light_source = 3
-ambient_light_energy = 0.95
-reflected_light_source = 2
-tonemap_mode = 3
-tonemap_exposure = 1.1
-ssao_enabled = true
-ssao_radius = 1.4
-ssao_intensity = 1.6
-glow_enabled = true
-glow_intensity = 0.7
-glow_bloom = 0.06
-fog_enabled = true
-fog_light_color = Color(0.07, 0.065, 0.11, 1)
-fog_light_energy = 0.45
-fog_density = 0.004
-fog_sky_affect = 0.4
+[ext_resource type="Environment" path="res://assets/cemetery/materials/night_environment.tres" id="18_env"]
 
 [node name="Main" type="Node3D" unique_id=949805955]
 script = ExtResource("1_main")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1508691228]
-environment = SubResource("Env_night")
+environment = ExtResource("18_env")
 
 [node name="Moon" type="DirectionalLight3D" parent="." unique_id=1535066165]
-transform = Transform3D(-0.46947157, 0.51898354, -0.7143196, 0, 0.809017, 0.58778524, 0.88294756, 0.27594846, -0.37981048, 0, 0, 0)
-light_color = Color(0.45, 0.55, 0.88, 1)
-light_energy = 1.1
+transform = Transform3D(-0.906835, 0, -0.421487, -0.261662, 0.783963, 0.56297, 0.33043, 0.620808, -0.710925, 0, 0, 0)
+light_color = Color(0.56, 0.66, 0.98, 1)
+light_energy = 1.8
 shadow_enabled = true
-directional_shadow_max_distance = 170.0
+directional_shadow_max_distance = 150.0
 
 [node name="FillLight" type="DirectionalLight3D" parent="." unique_id=11483278]
 transform = Transform3D(0.52991927, -0.31768438, 0.7862965, 0, 0.92718387, 0.37460658, -0.8480481, -0.19851124, 0.4913326, 0, 0, 0)
-light_color = Color(0.38, 0.42, 0.7, 1)
+light_color = Color(0.3, 0.36, 0.62, 1)
 light_energy = 0.4
 
-[node name="Castle" parent="." unique_id=269653204 instance=ExtResource("4_castle")]
-
-[node name="Tree1" parent="." instance=ExtResource("17_tree")]
-transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, 66.81671, 0.23535347, 3.2937698)
-
-[node name="Tree2" parent="." instance=ExtResource("17_tree")]
-transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, -73.476685, 0.23535347, 63.95926)
-
-[node name="Tree3" parent="." instance=ExtResource("17_tree")]
-transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, -6.1878967, 0.23535347, -74.84483)
+[node name="Cemetery" parent="." unique_id=269653204 instance=ExtResource("4_world")]
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 34)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 35)
 
 [node name="Players" type="Node3D" parent="."]
 
@@ -93,6 +52,7 @@ script = ExtResource("15_net")
 
 [node name="WaveManager" type="Node3D" parent="."]
 script = ExtResource("7_waves")
+arena_half_size = 42.0
 skeleton_scene = ExtResource("8_skeleton")
 zombie_scene = ExtResource("9_zombie")
 slime_scene = ExtResource("10_slime")

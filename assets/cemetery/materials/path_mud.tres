@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/cemetery/textures/EA_Ground_Mud.png" id="1_mud"]
+
+[resource]
+resource_name = "CemeteryMudPath"
+albedo_texture = ExtResource("1_mud")
+albedo_color = Color(0.76, 0.72, 0.66, 1)
+metallic_specular = 0.18
+roughness = 0.96
+texture_filter = 5
+uv1_scale = Vector3(2.2, 11, 1)

@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/cemetery/textures/T_colorPalette2048_CGT.png" id="1_palette"]
+
+[resource]
+resource_name = "CemeteryStonePalette"
+albedo_texture = ExtResource("1_palette")
+albedo_color = Color(0.82, 0.85, 0.9, 1)
+metallic_specular = 0.35
+roughness = 0.92
+texture_filter = 5
