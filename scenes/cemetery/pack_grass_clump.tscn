@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="ArrayMesh" path="res://Meshes/EA_Grass_Clump.mesh" id="1_mesh"]
+[ext_resource type="Material" path="res://assets/cemetery/pack/Materials/EA_Grass_Dead.tres" id="2_material"]
+
+[node name="PackGrassClump" type="MeshInstance3D"]
+mesh = ExtResource("1_mesh")
+material_override = ExtResource("2_material")

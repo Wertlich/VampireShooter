@@ -1,32 +1,32 @@
 [gd_scene format=3 uid="uid://lru8fw458fto"]
 
 [ext_resource type="Script" uid="uid://cmo8yof6souy6" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
-[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ground.tscn" id="4_ground"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/paths.tscn" id="4_paths"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fence.tscn" id="4_fence"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/graves.tscn" id="4_graves"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/lamps.tscn" id="4_lamps"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/props.tscn" id="4_props"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/trees.tscn" id="4_trees"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fireflies.tscn" id="4_fireflies"]
+[ext_resource type="PackedScene" uid="uid://b64elpmcq0w61" path="res://scenes/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" uid="uid://d1n6m26wsrvyq" path="res://scenes/hud.tscn" id="3_hud"]
 [ext_resource type="PackedScene" path="res://scenes/cemetery/groups/church_fireflies.tscn" id="4_church_fireflies"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/prop_collision.tscn" id="4_prop_collision"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ruin_rubble.tscn" id="4_ruin_rubble"]
 [ext_resource type="PackedScene" path="res://scenes/cemetery/church_intact.tscn" id="4_church_intact"]
 [ext_resource type="PackedScene" path="res://scenes/cemetery/church_ruined.tscn" id="4_church_ruined"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fence.tscn" id="4_fence"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fireflies.tscn" id="4_fireflies"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/graves.tscn" id="4_graves"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ground.tscn" id="4_ground"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/lamps.tscn" id="4_lamps"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/paths.tscn" id="4_paths"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/props.tscn" id="4_props"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/prop_collision.tscn" id="4_prop_collision"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ruin_rubble.tscn" id="4_ruin_rubble"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/trees.tscn" id="4_trees"]
 [ext_resource type="PackedScene" path="res://scenes/levelup_menu.tscn" id="5_menu"]
 [ext_resource type="PackedScene" path="res://scenes/run_over.tscn" id="6_run_over"]
-[ext_resource type="Script" path="res://scripts/world/wave_manager.gd" id="7_waves"]
+[ext_resource type="Script" uid="uid://blfbrjdqn2rpn" path="res://scripts/world/wave_manager.gd" id="7_waves"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_skeleton.tscn" id="8_skeleton"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_zombie.tscn" id="9_zombie"]
-[ext_resource type="PackedScene" path="res://scenes/enemy_slime.tscn" id="10_slime"]
-[ext_resource type="PackedScene" path="res://scenes/enemy_archer.tscn" id="11_archer"]
+[ext_resource type="PackedScene" uid="uid://dt5f71a6edgcl" path="res://scenes/enemy_slime.tscn" id="10_slime"]
+[ext_resource type="PackedScene" uid="uid://du1uebg0vn7st" path="res://scenes/enemy_archer.tscn" id="11_archer"]
 [ext_resource type="PackedScene" path="res://scenes/enemy_boss.tscn" id="12_boss"]
 [ext_resource type="PackedScene" path="res://scenes/pause_menu.tscn" id="13_pause"]
-[ext_resource type="Script" path="res://scripts/world/arena_bounds.gd" id="14_bounds"]
-[ext_resource type="Script" path="res://scripts/net/network_game.gd" id="15_net"]
+[ext_resource type="Script" uid="uid://dqxc2knnf500r" path="res://scripts/world/arena_bounds.gd" id="14_bounds"]
+[ext_resource type="Script" uid="uid://gb75dbvbbqak" path="res://scripts/net/network_game.gd" id="15_net"]
 [ext_resource type="PackedScene" path="res://scenes/debug_console.tscn" id="16_console"]
 [ext_resource type="Environment" path="res://assets/cemetery/materials/night_environment.tres" id="18_env"]
 
@@ -48,73 +48,60 @@ transform = Transform3D(0.52991927, -0.31768438, 0.7862965, 0, 0.92718387, 0.374
 light_color = Color(0.3, 0.36, 0.62, 1)
 light_energy = 0.4
 
-[node name="Ground" parent="." instance=ExtResource("4_ground")]
-editable_instance = true
+[node name="Ground" parent="." unique_id=352917370 instance=ExtResource("4_ground")]
 
-[node name="Paths" parent="." instance=ExtResource("4_paths")]
-editable_instance = true
+[node name="Paths" parent="." unique_id=457442754 instance=ExtResource("4_paths")]
 
-[node name="Fence" parent="." instance=ExtResource("4_fence")]
-editable_instance = true
+[node name="Fence" parent="." unique_id=433600081 instance=ExtResource("4_fence")]
 
-[node name="Graves" parent="." instance=ExtResource("4_graves")]
-editable_instance = true
+[node name="Graves" parent="." unique_id=2091692863 instance=ExtResource("4_graves")]
 
-[node name="ChurchIntact" parent="." instance=ExtResource("4_church_intact")]
-editable_instance = true
+[node name="ChurchIntact" parent="." unique_id=1002318009 instance=ExtResource("4_church_intact")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.5, -7)
 
-[node name="ChurchRuined" parent="." instance=ExtResource("4_church_ruined")]
-editable_instance = true
+[node name="ChurchRuined" parent="." unique_id=1851909529 instance=ExtResource("4_church_ruined")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 27, -0.5, -27)
 
-[node name="RuinRubble" parent="." instance=ExtResource("4_ruin_rubble")]
-editable_instance = true
+[node name="RuinRubble" parent="." unique_id=324847693 instance=ExtResource("4_ruin_rubble")]
 
-[node name="Lamps" parent="." instance=ExtResource("4_lamps")]
-editable_instance = true
+[node name="Lamps" parent="." unique_id=2046780457 instance=ExtResource("4_lamps")]
 
-[node name="Props" parent="." instance=ExtResource("4_props")]
-editable_instance = true
+[node name="Props" parent="." unique_id=695441757 instance=ExtResource("4_props")]
 
-[node name="Trees" parent="." instance=ExtResource("4_trees")]
-editable_instance = true
+[node name="Trees" parent="." unique_id=314882492 instance=ExtResource("4_trees")]
 
-[node name="Fireflies" parent="." instance=ExtResource("4_fireflies")]
-editable_instance = true
+[node name="Fireflies" parent="." unique_id=174787283 instance=ExtResource("4_fireflies")]
 
-[node name="ChurchFireflies" parent="." instance=ExtResource("4_church_fireflies")]
-editable_instance = true
+[node name="ChurchFireflies" parent="." unique_id=636722562 instance=ExtResource("4_church_fireflies")]
 
-[node name="PropCollision" parent="." instance=ExtResource("4_prop_collision")]
-editable_instance = true
+[node name="PropCollision" parent="." unique_id=1462712880 instance=ExtResource("4_prop_collision")]
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="Player" parent="." unique_id=1286663951 instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 35)
 
-[node name="Players" type="Node3D" parent="."]
+[node name="Players" type="Node3D" parent="." unique_id=1974398087]
 
-[node name="NetworkGame" type="Node3D" parent="."]
+[node name="NetworkGame" type="Node3D" parent="." unique_id=723140789]
 script = ExtResource("15_net")
 
 [node name="HUD" parent="." unique_id=666411481 instance=ExtResource("3_hud")]
 
-[node name="LevelUpMenu" parent="." instance=ExtResource("5_menu")]
+[node name="LevelUpMenu" parent="." unique_id=2063341735 instance=ExtResource("5_menu")]
 
-[node name="WaveManager" type="Node3D" parent="."]
+[node name="WaveManager" type="Node3D" parent="." unique_id=171958523]
 script = ExtResource("7_waves")
-arena_half_size = 42.0
 skeleton_scene = ExtResource("8_skeleton")
 zombie_scene = ExtResource("9_zombie")
 slime_scene = ExtResource("10_slime")
 archer_scene = ExtResource("11_archer")
 boss_scene = ExtResource("12_boss")
+arena_half_size = 42.0
 
-[node name="RunOver" parent="." instance=ExtResource("6_run_over")]
+[node name="RunOver" parent="." unique_id=1291873834 instance=ExtResource("6_run_over")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("13_pause")]
+[node name="PauseMenu" parent="." unique_id=1470331171 instance=ExtResource("13_pause")]
 
-[node name="DebugConsole" parent="." instance=ExtResource("16_console")]
+[node name="DebugConsole" parent="." unique_id=1521192821 instance=ExtResource("16_console")]
 
-[node name="ArenaBounds" type="Node3D" parent="."]
+[node name="ArenaBounds" type="Node3D" parent="." unique_id=674934090]
 script = ExtResource("14_bounds")

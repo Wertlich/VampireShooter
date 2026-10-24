@@ -1,0 +1,2607 @@
+[gd_scene format=3 uid="uid://33wi2koxsvuq"]
+
+[sub_resource type="Sky" id="sky"]
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 2
+ambient_light_color = Color(0.24, 0.36, 0.62, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 0.95
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 0.95
+tonemap_white = 3.29
+ssao_enabled = true
+ssao_radius = 2.2
+ssao_intensity = 0.6
+ssao_power = 1.1
+ssao_light_affect = 0.25
+glow_enabled = true
+glow_levels/3 = 1.0
+glow_levels/4 = 1.0
+glow_levels/5 = 1.0
+glow_levels/6 = 1.0
+glow_intensity = 0.5
+glow_strength = 0.95
+glow_bloom = 0.06
+glow_blend_mode = 0
+glow_hdr_threshold = 1.45
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.085, 0.15, 0.26, 1)
+fog_light_energy = 0.26
+fog_sun_scatter = 0.45
+fog_density = 1.0
+fog_aerial_perspective = 0.45
+fog_sky_affect = 0.55
+fog_depth_curve = 1.55
+fog_depth_begin = 26.0
+fog_depth_end = 150.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.014
+volumetric_fog_albedo = Color(0.32, 0.42, 0.62, 1)
+volumetric_fog_emission = Color(0.07, 0.12, 0.26, 1)
+volumetric_fog_emission_energy = 0.3
+volumetric_fog_anisotropy = 0.55
+volumetric_fog_length = 170.0
+volumetric_fog_ambient_inject = 0.4
+volumetric_fog_sky_affect = 0.0
+adjustment_enabled = true
+adjustment_saturation = 1.16
+
+[sub_resource type="CylinderMesh" id="candle_mesh"]
+top_radius = 0.032
+bottom_radius = 0.042
+height = 0.22
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereMesh" id="flame_mesh"]
+radius = 0.032
+height = 0.105
+radial_segments = 8
+rings = 4
+
+[sub_resource type="ParticleProcessMaterial" id="ember_proc"]
+lifetime_randomness = 0.45
+emission_shape = 3
+emission_box_extents = Vector3(20, 2.4, 44)
+direction = Vector3(0, 1, 0)
+spread = 32.0
+initial_velocity_min = 0.05
+initial_velocity_max = 0.24
+gravity = Vector3(0, 0.012, 0)
+scale_min = 0.45
+scale_max = 1.7
+color = Color(1, 0.7, 0.36, 1)
+turbulence_enabled = true
+turbulence_noise_strength = 0.42
+turbulence_noise_scale = 2.6
+turbulence_influence_min = 0.02
+turbulence_influence_max = 0.09
+
+[sub_resource type="StandardMaterial3D" id="ember_mat"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.68, 0.34, 1)
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="ember_mesh"]
+material = SubResource("ember_mat")
+radius = 0.028
+height = 0.056
+radial_segments = 6
+rings = 3
+
+[sub_resource type="ParticleProcessMaterial" id="mote_proc"]
+lifetime_randomness = 0.5
+emission_shape = 3
+emission_box_extents = Vector3(34, 4.2, 62)
+direction = Vector3(0.2, -1, 0)
+spread = 22.0
+initial_velocity_min = 0.02
+initial_velocity_max = 0.12
+gravity = Vector3(0.01, -0.02, 0)
+scale_min = 0.4
+scale_max = 1.3
+color = Color(0.68, 0.82, 1, 1)
+turbulence_enabled = true
+turbulence_noise_strength = 0.3
+turbulence_noise_scale = 3.4
+turbulence_influence_min = 0.01
+turbulence_influence_max = 0.06
+
+[sub_resource type="StandardMaterial3D" id="mote_mat"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.66, 0.8, 1, 1)
+disable_receive_shadows = true
+
+[sub_resource type="SphereMesh" id="mote_mesh"]
+material = SubResource("mote_mat")
+radius = 0.019
+height = 0.038
+radial_segments = 6
+rings = 3
+
+[node name="Demo" type="Node3D" unique_id=2047125705]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1854316436]
+environment = SubResource("env")
+
+[node name="Moon" type="DirectionalLight3D" parent="." unique_id=1226791532]
+transform = Transform3D(-0.92718, -0.15237, 0.34222, 0, 0.91355, 0.40674, -0.37461, 0.37712, -0.84702, 0, 40, 0)
+light_color = Color(0.62, 0.79, 1, 1)
+light_energy = 0.66
+light_angular_distance = 0.9
+light_specular = 0.22
+shadow_enabled = true
+shadow_bias = 0.03
+shadow_normal_bias = 1.0
+shadow_blur = 1.2
+directional_shadow_split_1 = 0.131
+directional_shadow_split_2 = 0.129
+directional_shadow_split_3 = 0.256
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.392
+directional_shadow_max_distance = 190.0
+
+[node name="Fill" type="DirectionalLight3D" parent="." unique_id=735763689]
+transform = Transform3D(0.82904, 0.1728, -0.53182, 0, 0.95106, 0.30902, 0.55919, -0.25619, 0.78846, 0, 40, 0)
+light_color = Color(0.3, 0.42, 0.75, 1)
+light_energy = 0.62
+light_specular = 0.1
+
+[node name="Rim" type="DirectionalLight3D" parent="." unique_id=805237875]
+transform = Transform3D(-0.76604, -0.32139, 0.55667, 0, 0.86603, 0.5, -0.64279, 0.38302, -0.66341, 0, 40, 0)
+light_color = Color(0.42, 0.56, 0.86, 1)
+light_energy = 0.34
+light_specular = 0.1
+
+[node name="FacadeGlow" type="Node3D" parent="." unique_id=1765790665]
+
+[node name="FacadeGlow_Tomb" type="OmniLight3D" parent="FacadeGlow" unique_id=228018661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 5.067, -37.6)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 2.0
+light_specular = 0.25
+omni_range = 16.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_TombDoor" type="OmniLight3D" parent="FacadeGlow" unique_id=2038535715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.4, 4.113, -39.2)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.3
+light_specular = 0.25
+omni_range = 8.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Columbarium" type="OmniLight3D" parent="FacadeGlow" unique_id=409478322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.2, 2.553, -29.2)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.85
+light_specular = 0.25
+omni_range = 15.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Monument" type="OmniLight3D" parent="FacadeGlow" unique_id=1962066037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 2.388, -34.6)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.6
+light_specular = 0.25
+omni_range = 14.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Arch" type="OmniLight3D" parent="FacadeGlow" unique_id=1178426967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 2.301, -43.6)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.4
+light_specular = 0.25
+omni_range = 13.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Obelisk" type="OmniLight3D" parent="FacadeGlow" unique_id=1369198231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 2.184, -8.6)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.35
+light_specular = 0.25
+omni_range = 12.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_LanternMid" type="OmniLight3D" parent="FacadeGlow" unique_id=1602850747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 2.141, -16.2)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.25
+light_specular = 0.25
+omni_range = 12.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_LanternDeep" type="OmniLight3D" parent="FacadeGlow" unique_id=520694379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2.867, -33.4)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.35
+light_specular = 0.25
+omni_range = 12.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Gate" type="OmniLight3D" parent="FacadeGlow" unique_id=30159573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.8, 1.946, 9.6)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.45
+light_specular = 0.25
+omni_range = 13.0
+omni_attenuation = 1.15
+
+[node name="FacadeGlow_Pyramid" type="OmniLight3D" parent="FacadeGlow" unique_id=2144344931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.918, -25.8)
+light_color = Color(1, 0.62, 0.28, 1)
+light_energy = 1.2
+light_specular = 0.25
+omni_range = 12.0
+omni_attenuation = 1.15
+
+[node name="Lights" type="Node3D" parent="." unique_id=764645406]
+
+[node name="LanternFlame_04" type="OmniLight3D" parent="Lights" unique_id=842996606]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.1467, 5.5)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.4
+light_specular = 0.6
+shadow_enabled = true
+shadow_bias = 0.05
+omni_range = 8.5
+omni_attenuation = 1.6
+
+[node name="LanternFlame_05" type="OmniLight3D" parent="Lights" unique_id=1592247996]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2.8724, -11.5)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.0
+light_specular = 0.6
+shadow_bias = 0.05
+omni_range = 8.0
+omni_attenuation = 1.6
+
+[node name="LanternFlame_06" type="OmniLight3D" parent="Lights" unique_id=695859970]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6, 4.487, -34.6)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.8
+light_specular = 0.6
+shadow_enabled = true
+shadow_bias = 0.05
+omni_range = 10.0
+omni_attenuation = 1.6
+
+[node name="LanternFlame_07" type="OmniLight3D" parent="Lights" unique_id=1569084724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 2.9363, -27.5)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.2
+light_specular = 0.6
+shadow_bias = 0.05
+omni_range = 8.5
+omni_attenuation = 1.6
+
+[node name="LanternFlame_08" type="OmniLight3D" parent="Lights" unique_id=1193287742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 3.0952, -20)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 2.8
+light_specular = 0.6
+shadow_bias = 0.05
+omni_range = 7.5
+omni_attenuation = 1.6
+
+[node name="Embers_01" type="OmniLight3D" parent="Lights" unique_id=799550964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2, 0.8945, -30)
+light_color = Color(1, 0.52, 0.19, 1)
+light_energy = 1.3
+light_specular = 0.35
+omni_range = 6.5
+omni_attenuation = 2.2
+
+[node name="Embers_02" type="OmniLight3D" parent="Lights" unique_id=323005557]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0.92938, -44)
+light_color = Color(1, 0.52, 0.19, 1)
+light_energy = 1.1
+light_specular = 0.35
+omni_range = 6.0
+omni_attenuation = 2.2
+
+[node name="LanternFlame_01" type="OmniLight3D" parent="Lights" unique_id=970675304]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.9, 2.8296, 13.2)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 2.6
+light_specular = 0.6
+shadow_enabled = true
+shadow_bias = 0.05
+omni_range = 9.5
+omni_attenuation = 1.6
+
+[node name="LanternFlame_02" type="OmniLight3D" parent="Lights" unique_id=1548727000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 4.601, -74)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.4
+light_specular = 0.6
+shadow_bias = 0.05
+omni_range = 16.0
+omni_attenuation = 1.6
+
+[node name="LanternFlame_03" type="OmniLight3D" parent="Lights" unique_id=1281005995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 6.4772, -82)
+light_color = Color(1, 0.63, 0.28, 1)
+light_energy = 3.4
+light_specular = 0.6
+shadow_bias = 0.05
+omni_range = 16.0
+omni_attenuation = 1.6
+
+[node name="Moonpool_01" type="OmniLight3D" parent="Lights" unique_id=2015294507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8, 6.0043, 11)
+light_color = Color(0.55, 0.76, 0.95, 1)
+light_energy = 0.16
+light_specular = 0.2
+omni_range = 18.0
+omni_attenuation = 1.1
+
+[node name="Moonpool_02" type="OmniLight3D" parent="Lights" unique_id=1487867133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 6.5232, -18)
+light_color = Color(0.55, 0.76, 0.95, 1)
+light_energy = 0.14
+light_specular = 0.2
+omni_range = 18.0
+omni_attenuation = 1.1
+
+[node name="Moonpool_03" type="OmniLight3D" parent="Lights" unique_id=1271961079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 6.3216, -30)
+light_color = Color(0.55, 0.76, 0.95, 1)
+light_energy = 0.12
+light_specular = 0.2
+omni_range = 18.0
+omni_attenuation = 1.1
+
+[node name="Candles" type="Node3D" parent="." unique_id=1953425862]
+
+[node name="Candle_Lane_01" type="MeshInstance3D" parent="Candles" unique_id=993594499]
+transform = Transform3D(0.9981071, 0.059286416, 0, -0.061500434, 0.9621752, 0, 0, 0, 1, -9.04, 0.556, -14.209)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Lane_01" type="MeshInstance3D" parent="Candles" unique_id=882072663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.04, 0.707, -14.209)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Lane_02" type="MeshInstance3D" parent="Candles" unique_id=229069019]
+transform = Transform3D(0.9965993, -0.08915674, 0, 0.08239994, 1.0783205, 0, 0, 0, 1, -10.173, 0.461, -13.176)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Lane_02" type="MeshInstance3D" parent="Candles" unique_id=1635255039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.173, 0.625, -13.176)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Lane_03" type="MeshInstance3D" parent="Candles" unique_id=1946398947]
+transform = Transform3D(0.99701554, -0.074267566, 0, 0.07720121, 0.959129, 0, 0, 0, 1, -10.952, 0.405, -14.265)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Lane_03" type="MeshInstance3D" parent="Candles" unique_id=1665664997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.952, 0.556, -14.265)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Lane_04" type="MeshInstance3D" parent="Candles" unique_id=920523250]
+transform = Transform3D(0.9989229, -0.058001325, 0, 0.04640106, 1.2486537, 0, 0, 0, 1, -10.039, 0.523, -14.901)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Lane_04" type="MeshInstance3D" parent="Candles" unique_id=1335370805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.039, 0.706, -14.901)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Lane" type="OmniLight3D" parent="Candles" unique_id=58309626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.871, -14)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.2
+light_specular = 0.4
+omni_range = 6.5
+omni_attenuation = 1.8
+
+[node name="Candle_Rows_01" type="MeshInstance3D" parent="Candles" unique_id=1172478505]
+transform = Transform3D(0.99841946, -0.05563909, 0, 0.0562011, 0.98843527, 0, 0, 0, 1, 11.2, 0.797, -16.096)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Rows_01" type="MeshInstance3D" parent="Candles" unique_id=1245685346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2, 0.951, -16.096)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Rows_02" type="MeshInstance3D" parent="Candles" unique_id=782145905]
+transform = Transform3D(0.99693745, -0.08398995, 0, 0.07820293, 1.0707108, 0, 0, 0, 1, 10.325, 0.859, -15.328)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Rows_02" type="MeshInstance3D" parent="Candles" unique_id=496569918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.325, 1.022, -15.328)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Rows_03" type="MeshInstance3D" parent="Candles" unique_id=1999816153]
+transform = Transform3D(0.9999837, 0.0043775295, 0, -0.005699908, 0.7679875, 0, 0, 0, 1, 9.897, 0.832, -16.106)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Rows_03" type="MeshInstance3D" parent="Candles" unique_id=1381166502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.897, 0.961, -16.106)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Rows_04" type="MeshInstance3D" parent="Candles" unique_id=430010074]
+transform = Transform3D(0.9999639, -0.0101996325, 0, 0.008499693, 1.1999567, 0, 0, 0, 1, 10.767, 0.828, -16.912)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Rows_04" type="MeshInstance3D" parent="Candles" unique_id=2055310361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.767, 1.005, -16.912)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Rows" type="OmniLight3D" parent="Candles" unique_id=353856952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 1.222, -16)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.2
+light_specular = 0.4
+omni_range = 6.5
+omni_attenuation = 1.8
+
+[node name="Candle_Monument_01" type="MeshInstance3D" parent="Candles" unique_id=2031575497]
+transform = Transform3D(0.9992037, -0.040618353, 0, 0.03990015, 1.0171894, 0, 0, 0, 1, 3.822, 0.491, -34.9)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_01" type="MeshInstance3D" parent="Candles" unique_id=298838387]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.822, 0.648, -34.9)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_02" type="MeshInstance3D" parent="Candles" unique_id=2131750232]
+transform = Transform3D(0.99930036, 0.047198813, 0, -0.03740001, 1.261117, 0, 0, 0, 1, 3.078, 0.626, -33.482)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_02" type="MeshInstance3D" parent="Candles" unique_id=1614096391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.078, 0.809, -33.482)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_03" type="MeshInstance3D" parent="Candles" unique_id=2040603596]
+transform = Transform3D(0.99700785, -0.070420854, 0, 0.07730061, 0.9082742, 0, 0, 0, 1, 2.518, 0.592, -34.039)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_03" type="MeshInstance3D" parent="Candles" unique_id=504067703]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.518, 0.738, -34.039)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_04" type="MeshInstance3D" parent="Candles" unique_id=768889197]
+transform = Transform3D(0.9997919, -0.025826192, 0, 0.020399835, 1.2657366, 0, 0, 0, 1, 1.629, 0.629, -34.639)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_04" type="MeshInstance3D" parent="Candles" unique_id=403323151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.629, 0.813, -34.639)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_05" type="MeshInstance3D" parent="Candles" unique_id=1631660317]
+transform = Transform3D(0.99863654, -0.03800299, 0, 0.05220191, 0.7270074, 0, 0, 0, 1, 1.613, 0.568, -35.856)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_05" type="MeshInstance3D" parent="Candles" unique_id=1795158413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.613, 0.693, -35.856)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_06" type="MeshInstance3D" parent="Candles" unique_id=867205969]
+transform = Transform3D(0.9998289, -0.024994219, 0, 0.018500533, 1.3507688, 0, 0, 0, 1, 2.667, 0.613, -35.961)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_06" type="MeshInstance3D" parent="Candles" unique_id=1251318206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.667, 0.806, -35.961)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Monument_07" type="MeshInstance3D" parent="Candles" unique_id=1164372184]
+transform = Transform3D(0.9991426, -0.05063436, 0, 0.041401766, 1.2219515, 0, 0, 0, 1, 3.037, 0.556, -36.012)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Monument_07" type="MeshInstance3D" parent="Candles" unique_id=1785029140]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.037, 0.735, -36.012)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Monument" type="OmniLight3D" parent="Candles" unique_id=1809831781]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0.985, -34.9)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.6
+light_specular = 0.4
+omni_range = 8.0
+omni_attenuation = 1.8
+
+[node name="Candle_Tomb_01" type="MeshInstance3D" parent="Candles" unique_id=1247165233]
+transform = Transform3D(0.9989229, 0.062223822, 0, -0.04640106, 1.3395555, 0, 0, 0, 1, -14.411, 3.044, -38.834)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_01" type="MeshInstance3D" parent="Candles" unique_id=1197468372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.411, 3.237, -38.834)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Tomb_02" type="MeshInstance3D" parent="Candles" unique_id=506897818]
+transform = Transform3D(0.9968669, -0.062645115, 0, 0.07909737, 0.7895186, 0, 0, 0, 1, -14.659, 2.989, -38.065)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_02" type="MeshInstance3D" parent="Candles" unique_id=1525410940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.659, 3.121, -38.065)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Tomb_03" type="MeshInstance3D" parent="Candles" unique_id=1915530782]
+transform = Transform3D(0.9999549, -0.0102880355, 0, 0.009499571, 1.0829511, 0, 0, 0, 1, -15.676, 2.994, -38.07)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_03" type="MeshInstance3D" parent="Candles" unique_id=23330471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.676, 3.159, -38.07)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Tomb_04" type="MeshInstance3D" parent="Candles" unique_id=1246036706]
+transform = Transform3D(0.99966455, 0.021004155, 0, -0.025899082, 0.81072795, 0, 0, 0, 1, -16.282, 2.944, -38.362)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_04" type="MeshInstance3D" parent="Candles" unique_id=506079364]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.282, 3.079, -38.362)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Tomb_05" type="MeshInstance3D" parent="Candles" unique_id=1084836935]
+transform = Transform3D(0.9991426, -0.035729725, 0, 0.041401766, 0.86226004, 0, 0, 0, 1, -15.831, 2.948, -39.222)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_05" type="MeshInstance3D" parent="Candles" unique_id=582049893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.831, 3.088, -39.222)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Tomb_06" type="MeshInstance3D" parent="Candles" unique_id=880911957]
+transform = Transform3D(0.9976028, 0.06373338, 0, -0.069200195, 0.9187922, 0, 0, 0, 1, -14.326, 2.99, -39.362)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Tomb_06" type="MeshInstance3D" parent="Candles" unique_id=414049637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.326, 3.136, -39.362)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Tomb" type="OmniLight3D" parent="Candles" unique_id=1168896756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.2, 3.38, -38.6)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.4
+light_specular = 0.4
+omni_range = 7.5
+omni_attenuation = 1.8
+
+[node name="Candle_Gate_01" type="MeshInstance3D" parent="Candles" unique_id=1898731206]
+transform = Transform3D(0.99967486, 0.032409687, 0, -0.025499359, 1.2705867, 0, 0, 0, 1, 2.515, 0.586, -43.788)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Gate_01" type="MeshInstance3D" parent="Candles" unique_id=192243208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.515, 0.771, -43.788)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Gate_02" type="MeshInstance3D" parent="Candles" unique_id=797809438]
+transform = Transform3D(0.99905354, -0.03753875, 0, 0.043497972, 0.86218315, 0, 0, 0, 1, 2.379, 0.554, -42.447)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Gate_02" type="MeshInstance3D" parent="Candles" unique_id=614883069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.379, 0.694, -42.447)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Gate_03" type="MeshInstance3D" parent="Candles" unique_id=1211399506]
+transform = Transform3D(0.99705446, -0.070254, 0, 0.0766965, 0.9133019, 0, 0, 0, 1, 0.8, 0.647, -43.226)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Gate_03" type="MeshInstance3D" parent="Candles" unique_id=1036137163]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0.793, -43.226)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Gate_04" type="MeshInstance3D" parent="Candles" unique_id=339572396]
+transform = Transform3D(0.99983436, 0.016052952, 0, -0.018200625, 0.88185394, 0, 0, 0, 1, 0.584, 0.643, -43.961)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Gate_04" type="MeshInstance3D" parent="Candles" unique_id=1547297322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.584, 0.785, -43.961)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Gate_05" type="MeshInstance3D" parent="Candles" unique_id=2088291579]
+transform = Transform3D(0.99999577, -0.003880184, 0, 0.0028999879, 1.3379945, 0, 0, 0, 1, 1.818, 0.622, -44.554)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Gate_05" type="MeshInstance3D" parent="Candles" unique_id=657077982]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.818, 0.814, -44.554)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Gate" type="OmniLight3D" parent="Candles" unique_id=1556273726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, 1.001, -43.6)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.4
+light_specular = 0.4
+omni_range = 7.5
+omni_attenuation = 1.8
+
+[node name="Candle_DeepRight_01" type="MeshInstance3D" parent="Candles" unique_id=505596190]
+transform = Transform3D(0.99806386, -0.052494895, 0, 0.062197745, 0.84236586, 0, 0, 0, 1, 11.388, 0.644, -27.927)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_01" type="MeshInstance3D" parent="Candles" unique_id=1264359390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.388, 0.782, -27.927)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_DeepRight_02" type="MeshInstance3D" parent="Candles" unique_id=318252111]
+transform = Transform3D(0.9984418, -0.049440872, 0, 0.055802338, 0.8846194, 0, 0, 0, 1, 10.318, 0.764, -26.688)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_02" type="MeshInstance3D" parent="Candles" unique_id=1711571367]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.318, 0.907, -26.688)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_DeepRight_03" type="MeshInstance3D" parent="Candles" unique_id=2079597275]
+transform = Transform3D(0.9967221, 0.06892833, 0, -0.080901794, 0.8492072, 0, 0, 0, 1, 9.075, 0.789, -26.882)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_03" type="MeshInstance3D" parent="Candles" unique_id=1386610061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.075, 0.928, -26.882)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_DeepRight_04" type="MeshInstance3D" parent="Candles" unique_id=1672095127]
+transform = Transform3D(0.9974623, -0.07084131, 0, 0.0711973, 0.992475, 0, 0, 0, 1, 8.869, 0.766, -28.31)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_04" type="MeshInstance3D" parent="Candles" unique_id=316449799]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.869, 0.92, -28.31)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_DeepRight_05" type="MeshInstance3D" parent="Candles" unique_id=519915320]
+transform = Transform3D(0.9993226, 0.032347936, 0, -0.036800835, 0.87840456, 0, 0, 0, 1, 8.9, 0.729, -28.974)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_05" type="MeshInstance3D" parent="Candles" unique_id=150380328]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.9, 0.871, -28.974)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_DeepRight_06" type="MeshInstance3D" parent="Candles" unique_id=278071500]
+transform = Transform3D(0.9993078, -0.041180722, 0, 0.03720029, 1.1062337, 0, 0, 0, 1, 10.469, 0.664, -29.271)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_DeepRight_06" type="MeshInstance3D" parent="Candles" unique_id=1771332796]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.469, 0.831, -29.271)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_DeepRight" type="OmniLight3D" parent="Candles" unique_id=1510982858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.11, -28)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.8
+light_specular = 0.4
+omni_range = 8.5
+omni_attenuation = 1.8
+
+[node name="Candle_Center_01" type="MeshInstance3D" parent="Candles" unique_id=1649540095]
+transform = Transform3D(0.9988037, -0.037702043, 0, 0.048900183, 0.77007765, 0, 0, 0, 1, -4.763, 0.847, -40.286)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Center_01" type="MeshInstance3D" parent="Candles" unique_id=322618715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.763, 0.977, -40.286)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Center_02" type="MeshInstance3D" parent="Candles" unique_id=1481053220]
+transform = Transform3D(0.9992156, -0.044273492, 0, 0.03960062, 1.1171231, 0, 0, 0, 1, -5.629, 0.898, -38.673)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Center_02" type="MeshInstance3D" parent="Candles" unique_id=1545600179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.629, 1.066, -38.673)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Center_03" type="MeshInstance3D" parent="Candles" unique_id=919460571]
+transform = Transform3D(0.9991384, -0.030628175, 0, 0.041501593, 0.7373641, 0, 0, 0, 1, -6.796, 0.964, -39.722)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Center_03" type="MeshInstance3D" parent="Candles" unique_id=1249662742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.796, 1.091, -39.722)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Center_04" type="MeshInstance3D" parent="Candles" unique_id=2122623366]
+transform = Transform3D(0.99972147, -0.019800827, 0, 0.02360051, 0.8387663, 0, 0, 0, 1, -6.602, 0.925, -40.403)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Center_04" type="MeshInstance3D" parent="Candles" unique_id=829110721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.602, 1.062, -40.403)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_Center_05" type="MeshInstance3D" parent="Candles" unique_id=1586400924]
+transform = Transform3D(0.99752575, 0.06734914, 0, -0.070301816, 0.95562965, 0, 0, 0, 1, -5.721, 0.876, -40.732)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_Center_05" type="MeshInstance3D" parent="Candles" unique_id=663906128]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.721, 1.026, -40.732)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_Center" type="OmniLight3D" parent="Candles" unique_id=778796547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.284, -40)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.6
+light_specular = 0.4
+omni_range = 8.0
+omni_attenuation = 1.8
+
+[node name="Candle_BackLeft_01" type="MeshInstance3D" parent="Candles" unique_id=1496260881]
+transform = Transform3D(0.9998845, 0.017738126, 0, -0.015199765, 1.1668652, 0, 0, 0, 1, -15.504, 0.038, -16.652)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_BackLeft_01" type="MeshInstance3D" parent="Candles" unique_id=1832271260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.504, 0.211, -16.652)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_BackLeft_02" type="MeshInstance3D" parent="Candles" unique_id=1996211393]
+transform = Transform3D(0.9972732, 0.05453673, 0, -0.07379801, 0.7369849, 0, 0, 0, 1, -16.173, -0.066, -16.485)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_BackLeft_02" type="MeshInstance3D" parent="Candles" unique_id=651769180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.173, 0.06, -16.485)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_BackLeft_03" type="MeshInstance3D" parent="Candles" unique_id=1254391780]
+transform = Transform3D(0.99969983, 0.018154494, 0, -0.024499994, 0.74077755, 0, 0, 0, 1, -17.625, -0.183, -16.403)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_BackLeft_03" type="MeshInstance3D" parent="Candles" unique_id=1975526977]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.625, -0.056, -16.403)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_BackLeft_04" type="MeshInstance3D" parent="Candles" unique_id=303508435]
+transform = Transform3D(0.9959601, 0.08351066, 0, -0.08979641, 0.9262429, 0, 0, 0, 1, -17.404, -0.132, -17.64)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_BackLeft_04" type="MeshInstance3D" parent="Candles" unique_id=737298512]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.404, 0.015, -17.64)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_BackLeft_05" type="MeshInstance3D" parent="Candles" unique_id=296998872]
+transform = Transform3D(0.99740463, 0.086112395, 0, -0.07200033, 1.1928959, 0, 0, 0, 1, -16.484, -0.031, -17.975)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_BackLeft_05" type="MeshInstance3D" parent="Candles" unique_id=301153271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.484, 0.145, -17.975)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_BackLeft" type="OmniLight3D" parent="Candles" unique_id=839155277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5, 0.328, -17)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.6
+light_specular = 0.4
+omni_range = 8.0
+omni_attenuation = 1.8
+
+[node name="Candle_LaneEntry_01" type="MeshInstance3D" parent="Candles" unique_id=1297913077]
+transform = Transform3D(0.9972, -0.0749, 0, 0.0749, 1.2915, 0, 0, 0, 1, 4.901, 0.909, 12.899)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneEntry_01" type="MeshInstance3D" parent="Candles" unique_id=936478271]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.901, 1.096, 12.899)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneEntry_02" type="MeshInstance3D" parent="Candles" unique_id=1763754004]
+transform = Transform3D(0.9978, -0.0665, 0, 0.0665, 1.0622, 0, 0, 0, 1, 3.836, 0.788, 13.427)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneEntry_02" type="MeshInstance3D" parent="Candles" unique_id=4749500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.836, 0.95, 13.427)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneEntry_03" type="MeshInstance3D" parent="Candles" unique_id=916983308]
+transform = Transform3D(1, -0.0081, 0, 0.0081, 0.8679, 0, 0, 0, 1, 2.954, 0.7, 13.227)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneEntry_03" type="MeshInstance3D" parent="Candles" unique_id=2074137753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.954, 0.84, 13.227)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneEntry_04" type="MeshInstance3D" parent="Candles" unique_id=1419272124]
+transform = Transform3D(0.9999, -0.0142, 0, 0.0142, 1.179, 0, 0, 0, 1, 2.934, 0.773, 12.297)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneEntry_04" type="MeshInstance3D" parent="Candles" unique_id=840585134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.934, 0.948, 12.297)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneEntry_05" type="MeshInstance3D" parent="Candles" unique_id=2093392786]
+transform = Transform3D(0.9968, -0.0796, 0, 0.0796, 0.9527, 0, 0, 0, 1, 3.979, 0.873, 11.366)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneEntry_05" type="MeshInstance3D" parent="Candles" unique_id=259736656]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.979, 1.023, 11.366)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_LaneEntry" type="OmniLight3D" parent="Candles" unique_id=1915677884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.19, 12.5)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.6
+light_specular = 0.4
+omni_range = 9.0
+omni_attenuation = 1.8
+
+[node name="Candle_LaneNear_01" type="MeshInstance3D" parent="Candles" unique_id=458259397]
+transform = Transform3D(0.9998, 0.0218, 0, -0.0218, 1.1457, 0, 0, 0, 1, -3.213, 0.692, 2.198)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneNear_01" type="MeshInstance3D" parent="Candles" unique_id=954765976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.213, 0.863, 2.198)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneNear_02" type="MeshInstance3D" parent="Candles" unique_id=1345456426]
+transform = Transform3D(0.9997, -0.0236, 0, 0.0236, 1.2104, 0, 0, 0, 1, -4.213, 0.584, 2.844)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneNear_02" type="MeshInstance3D" parent="Candles" unique_id=1000297680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.213, 0.763, 2.844)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneNear_03" type="MeshInstance3D" parent="Candles" unique_id=1961978210]
+transform = Transform3D(0.9972, -0.0745, 0, 0.0745, 0.9248, 0, 0, 0, 1, -5.086, 0.443, 2.578)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneNear_03" type="MeshInstance3D" parent="Candles" unique_id=488564862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.086, 0.59, 2.578)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneNear_04" type="MeshInstance3D" parent="Candles" unique_id=595160080]
+transform = Transform3D(1, -0.0095, 0, 0.0095, 1.1031, 0, 0, 0, 1, -5.1, 0.446, 1.371)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneNear_04" type="MeshInstance3D" parent="Candles" unique_id=493378967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1, 0.612, 1.371)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="Candle_LaneNear_05" type="MeshInstance3D" parent="Candles" unique_id=125605842]
+transform = Transform3D(0.9995, -0.0318, 0, 0.0318, 0.8405, 0, 0, 0, 1, -3.912, 0.564, 1.345)
+cast_shadow = 0
+mesh = SubResource("candle_mesh")
+
+[node name="CandleFlame_LaneNear_05" type="MeshInstance3D" parent="Candles" unique_id=1008925357]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.912, 0.701, 1.345)
+cast_shadow = 0
+mesh = SubResource("flame_mesh")
+
+[node name="CandleGlow_LaneNear" type="OmniLight3D" parent="Candles" unique_id=968391845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2, 0.944, 2)
+light_color = Color(1, 0.6, 0.24, 1)
+light_energy = 2.4
+light_specular = 0.4
+omni_range = 8.5
+omni_attenuation = 1.8
+
+[node name="Fog" type="Node3D" parent="." unique_id=532242006]
+
+[node name="FogVolume_Ground" type="FogVolume" parent="Fog" unique_id=1466959344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -14)
+size = Vector3(60, 3.5, 90)
+
+[node name="FogVolume_TombHollow" type="FogVolume" parent="Fog" unique_id=386426861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 1.1, -37)
+size = Vector3(26, 3, 26)
+
+[node name="FogVolume_FarRidge" type="FogVolume" parent="Fog" unique_id=574668927]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, -62)
+size = Vector3(74, 5, 30)
+
+[node name="Camera" type="Camera3D" parent="." unique_id=350037113]
+transform = Transform3D(0.99988, 0.0003033, -0.015785, 0, 0.99982, 0.019211, 0.015788, -0.019209, 0.99969, 0.5, 2.7839, 21)
+current = true
+fov = 55.0
+far = 600.0
+
+[node name="Terrain" type="MeshInstance3D" parent="." unique_id=475674723]
+
+[node name="Grass" type="MultiMeshInstance3D" parent="." unique_id=1897742701]
+
+[node name="Particles" type="Node3D" parent="." unique_id=1971044851]
+
+[node name="Embers_Air" type="GPUParticles3D" parent="Particles" unique_id=1630613102]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -12)
+amount = 260
+lifetime = 11.0
+preprocess = 11.0
+randomness = 0.4
+visibility_aabb = AABB(-24, -5, -60, 48, 16, 108)
+process_material = SubResource("ember_proc")
+draw_pass_1 = SubResource("ember_mesh")
+
+[node name="Motes_Moon" type="GPUParticles3D" parent="Particles" unique_id=1236463875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, -14)
+amount = 180
+lifetime = 16.0
+preprocess = 16.0
+randomness = 0.5
+visibility_aabb = AABB(-40, -9, -84, 80, 24, 160)
+process_material = SubResource("mote_proc")
+draw_pass_1 = SubResource("mote_mesh")
+
+[node name="Landmarks" type="Node3D" parent="." unique_id=2091940203]
+
+[node name="Grave_Lantern_Stone_01a_04" parent="Landmarks" unique_id=1347111717]
+transform = Transform3D(0.877, 0, -0.39047, 0, 0.96, 0, 0.39047, 0, 0.877, 2.4, 0.9675, 5.5)
+
+[node name="Grave_Lantern_Stone_01a_05" parent="Landmarks" unique_id=1528376180]
+transform = Transform3D(0.81461, 0, 0.61385, 0, 1.02, 0, -0.61385, 0, 0.81461, -5, 0.557, -11.5)
+
+[node name="Grave_Lantern_Stone_01a_06" parent="Landmarks" unique_id=741541212]
+transform = Transform3D(0.51642, 0, -0.97124, 0, 1.1, 0, 0.97124, 0, 0.51642, -12.6, 1.99, -34.6)
+
+[node name="Grave_Lantern_Stone_01a_07" parent="Landmarks" unique_id=131888246]
+transform = Transform3D(0.91208, 0, 0.22741, 0, 0.94, 0, -0.22741, 0, 0.91208, 3.6, 0.8025, -27.5)
+
+[node name="Grave_Lantern_Stone_01a_08" parent="Landmarks" unique_id=1227391696]
+transform = Transform3D(-0.6526, 0, -0.83529, 0, 1.06, 0, 0.83529, 0, -0.6526, -6.2, 0.689, -20)
+
+[node name="Grave_Arch_01a_01" parent="Landmarks" unique_id=978120132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6, -0.053871, -45.5)
+
+[node name="Grave_Monu_01a_01" parent="Landmarks" unique_id=844595065]
+transform = Transform3D(0.99756, 0, 0.069756, 0, 1, 0, -0.069756, 0, 0.99756, 2.6, 0.10995, -36.5)
+
+[node name="Grave_Tomb_01a_01" parent="Landmarks" unique_id=1243183305]
+transform = Transform3D(0.84805, 0, 0.52992, 0, 1, 0, -0.52992, 0, 0.84805, -16.5, 2.5375, -40.5)
+
+[node name="Grave_Columbarium_01a_01" parent="Landmarks" unique_id=321887189]
+transform = Transform3D(0.76604, 0, -0.64279, 0, 1, 0, 0.64279, 0, 0.76604, 15.5, -0.19088, -31)
+
+[node name="Grave_RockStack_01a_01" parent="Landmarks" unique_id=1902569817]
+transform = Transform3D(0.93969, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.93969, -11.5, 0.50577, -44.5)
+
+[node name="Grave_Rock_01a_01" parent="Landmarks" unique_id=920906168]
+transform = Transform3D(0.70711, 0, 0.70711, 0, 1, 0, -0.70711, 0, 0.70711, -21.5, 0.25476, -36)
+
+[node name="Grave_01a_01" parent="Landmarks" unique_id=1506950048]
+transform = Transform3D(0.10453, 0, 0.99452, 0, 1, 0, -0.99452, 0, 0.10453, -4.3, 0.42063, -13.6)
+
+[node name="Grave_Book_01a_01" parent="Landmarks" unique_id=49347555]
+transform = Transform3D(-0.10453, 0, -0.99452, 0, 1, 0, 0.99452, 0, -0.10453, 5.2, 0.72523, -12.4)
+
+[node name="Grave_Bank_01a_01" parent="Landmarks" unique_id=698625226]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -3.6, 0.14702, 1.2)
+
+[node name="Grave_WoodForm_01a_01" parent="Landmarks" unique_id=344156181]
+transform = Transform3D(0.10453, 0, -0.99452, 0, 1, 0, 0.99452, 0, 0.10453, 8.6, 0.57388, -22)
+
+[node name="Grave_Broken_Comp_01_01" parent="Landmarks" unique_id=1505115336]
+transform = Transform3D(-0.34202, 0, 0.93969, 0, 1, 0, -0.93969, 0, -0.34202, -20.5, -0.15147, -30)
+
+[node name="Grave_Archway_Wood_01a_01" parent="Landmarks" unique_id=1660129924]
+transform = Transform3D(-0.24184, -0.013384, 0.97022, -0.026583, 0.99962, 0.007163, -0.96995, -0.024059, -0.2421, -6.8, -0.46658, 12)
+
+[node name="Grave_Lantern_Stone_01a_01" parent="Landmarks" unique_id=2027056608]
+transform = Transform3D(0.88266, -0.014201, -0.46979, 0.025436, 0.99952, 0.017576, 0.46932, -0.027463, 0.8826, 5.9, 0.56074, 13.2)
+
+[node name="Grave_LogPile_01a_01" parent="Landmarks" unique_id=1853683836]
+transform = Transform3D(0.30897, 0.0047138, 0.95106, -0.017712, 0.99984, 0.00079847, -0.95091, -0.017092, 0.309, -4.6, 0.0065572, 6.6)
+
+[node name="Grave_Mud_Flat_01a_01" parent="Landmarks" unique_id=1459763297]
+transform = Transform3D(0.13909, -0.01629, -0.99015, -0.034327, 0.99918, -0.02126, 0.98968, 0.036946, 0.13842, 4.6, 0.73374, 7.6)
+
+[node name="Grave_Railing_01a_01" parent="Landmarks" unique_id=1222965570]
+transform = Transform3D(-0.034897, 0.017391, 0.99924, 0.012191, 0.99978, -0.016974, -0.99932, 0.01159, -0.035101, -6.2, -0.10733, -2.2)
+
+[node name="Grave_Slab_Tall_01a_01" parent="Landmarks" unique_id=1071146378]
+transform = Transform3D(-0.069756, 0.019306, -0.99738, 0.001209, 0.99981, 0.019268, 0.99756, 0.00013822, -0.069767, 6.4, 0.61854, -6.4)
+
+[node name="Grave_Obelisk_01a_01" parent="Landmarks" unique_id=379931094]
+transform = Transform3D(0.034895, -0.030315, 0.99893, -0.015703, 0.9994, 0.030878, -0.99927, -0.016764, 0.034398, -6.9, 0.25878, -9.8)
+
+[node name="Grave_Mud_Stones_01a_01" parent="Landmarks" unique_id=1019235254]
+transform = Transform3D(0.069751, 0.027775, -0.99718, 0.012551, 0.99951, 0.028718, 0.99749, -0.014519, 0.069368, 5.4, 0.6927, -14.2)
+
+[node name="Grave_Mud_Post_01a_01" parent="Landmarks" unique_id=2017953077]
+transform = Transform3D(0.069722, -0.015622, 0.99744, 0.03125, 0.99942, 0.013469, -0.99708, 0.030231, 0.07017, -5.2, 0.5256, -17.4)
+
+[node name="Grave_Mud_Plank_01a_01" parent="Landmarks" unique_id=1722816308]
+transform = Transform3D(-0.034888, 0.032062, -0.99888, 0.026163, 0.99917, 0.031157, 0.99905, -0.025047, -0.035698, 5, 0.7801, -20.2)
+
+[node name="Grave_Pyramid_01a_01" parent="Landmarks" unique_id=1504228332]
+transform = Transform3D(0.96118, -0.0146, 0.27555, 0.013389, 0.99989, 0.006273, -0.27561, -0.00234, 0.96127, -10.2, 0.086206, -27.5)
+
+[node name="Graves" type="Node3D" parent="." unique_id=1941558754]
+
+[node name="Grave_Modern_Mini_01b_01" parent="Graves" unique_id=1261887175]
+transform = Transform3D(0.19155, 0.002378, -1.0006, -0.042699, 1.0179, -0.0057548, 0.99973, 0.04302, 0.19148, 18.091, 0.91812, 7.7643)
+
+[node name="Grave_Modern_Full_01d_02" parent="Graves" unique_id=249239332]
+transform = Transform3D(-0.15803, 0.024227, -0.9512, 0.041398, 0.96349, 0.017662, 0.95061, -0.037932, -0.15889, 20.469, 0.87328, 8.2581)
+
+[node name="Grave_Modern_Full_01c_01" parent="Graves" unique_id=118544106]
+transform = Transform3D(-0.28877, -0.022457, -0.92745, -0.03313, 0.97097, -0.013195, 0.92713, 0.027702, -0.28934, 2.8316, 0.75665, 4.6641)
+
+[node name="Grave_Modern_Mini_01a_01" parent="Graves" unique_id=503828938]
+transform = Transform3D(0.13063, 0.033747, -1.0115, -0.0024144, 1.0199, 0.033715, 1.0121, -0.0019227, 0.13064, 8.5371, 1.1012, 4.4152)
+
+[node name="Grave_Stone_Mini_02b_01" parent="Graves" unique_id=1510343249]
+transform = Transform3D(-0.031513, -0.062823, -0.96431, 0.0055791, 0.96479, -0.063036, 0.96634, -0.0076189, -0.031083, 11.693, 0.8092, 4.2861)
+
+[node name="Grave_Modern_Mini_01d_01" parent="Graves" unique_id=81984904]
+transform = Transform3D(0.039773, 0.012502, -1.092, 0.033967, 1.0922, 0.013741, 1.0916, -0.034443, 0.039362, 13.738, 0.84138, 4.5734)
+
+[node name="Grave_Modern_Mini_01b_02" parent="Graves" unique_id=757547703]
+transform = Transform3D(-0.31131, -0.028671, -1.0706, -0.023051, 1.1149, -0.023153, 1.0708, 0.015664, -0.31177, 19.055, 0.79272, 4.651)
+
+[node name="Grave_Modern_Full_01c_02" parent="Graves" unique_id=1734336592]
+transform = Transform3D(-0.014826, -0.026953, -0.95943, -0.026638, 0.95919, -0.026534, 0.95944, 0.026215, -0.015563, 2.4348, 0.76325, 1.4218)
+
+[node name="Grave_Modern_Mini_01b_03" parent="Graves" unique_id=529990605]
+transform = Transform3D(-0.19462, -0.017773, -0.97665, -0.015459, 0.99578, -0.015041, 0.97669, 0.012219, -0.19486, 6.249, 1.1139, 1.6437)
+
+[node name="Grave_Modern_Mini_01d_02" parent="Graves" unique_id=1184621649]
+transform = Transform3D(-0.18143, 0.019229, -0.90493, 0.027622, 0.92262, 0.014067, 0.90471, -0.024312, -0.1819, 9.2463, 0.54315, 1.4047)
+
+[node name="Grave_Modern_Mini_01b_04" parent="Graves" unique_id=517516141]
+transform = Transform3D(0.12469, -0.0039655, -1.132, 0.034352, 1.1384, -0.00020388, 1.1315, -0.034123, 0.12475, 11.405, 0.1703, 1.5262)
+
+[node name="Grave_Modern_Mini_01b_05" parent="Graves" unique_id=1162491672]
+transform = Transform3D(0.025763, 0.021708, -1.0071, 0.0089399, 1.0074, 0.021943, 1.0073, -0.0094959, 0.025563, 17.853, 0.37168, 1.4913)
+
+[node name="Grave_Stone_Mini_02a_01" parent="Graves" unique_id=25685605]
+transform = Transform3D(-0.044111, -0.023337, -0.91036, -0.017331, 0.91129, -0.022521, 0.9105, 0.016215, -0.044533, 20.226, 0.66058, 1.5161)
+
+[node name="Grave_Stone_Mini_02b_02" parent="Graves" unique_id=2072916356]
+transform = Transform3D(-0.11511, 0.051207, -1.006, 0.0036883, 1.0125, 0.051119, 1.0073, 0.0021446, -0.11515, 22.021, 0.56393, 1.7238)
+
+[node name="Grave_Stone_Mini_02b_03" parent="Graves" unique_id=2015027741]
+transform = Transform3D(-0.27179, 0.10668, 1.0278, 0.08574, 1.0615, -0.087499, -1.0298, 0.06022, -0.27856, 1.8652, 0.68033, -1.7093)
+
+[node name="Grave_Modern_Mini_01c_01" parent="Graves" unique_id=1479293947]
+transform = Transform3D(0.1701, -0.016803, -0.94435, -0.033574, 0.95883, -0.023109, 0.9439, 0.037133, 0.16936, 4.5148, 1.0757, -1.8494)
+
+[node name="Grave_Stone_Mini_02a_02" parent="Graves" unique_id=1088478955]
+transform = Transform3D(-0.067435, 0.050373, -1.0343, -0.11496, 1.0298, 0.057644, 1.0292, 0.11832, -0.061335, 6.8003, 0.69105, -1.6838)
+
+[node name="Grave_Stone_Mini_02b_04" parent="Graves" unique_id=1618471626]
+transform = Transform3D(0.12001, 0.094731, -1.0291, 0.10502, 1.0295, 0.10702, 1.0281, -0.11623, 0.1092, 7.9988, 0.37819, -1.6134)
+
+[node name="Grave_Modern_Full_01d_03" parent="Graves" unique_id=373202989]
+transform = Transform3D(-0.18433, 0.025393, -0.91449, 0.020707, 0.93275, 0.021726, 0.91461, -0.016, -0.1848, 20.203, 0.32742, -1.994)
+
+[node name="Grave_Modern_Mini_01d_03" parent="Graves" unique_id=1615647553]
+transform = Transform3D(0.23553, 0.015535, -0.85448, 0.02782, 0.88573, 0.023772, 0.85417, -0.033132, 0.23484, 4.9926, 0.99118, -5.14)
+
+[node name="Grave_Stone_Mini_02b_05" parent="Graves" unique_id=2122334546]
+transform = Transform3D(0.16834, 0.012426, -1.0449, -0.0090078, 1.0583, 0.011135, 1.0449, 0.0071215, 0.16843, 7.2425, 0.49976, -4.9054)
+
+[node name="Grave_Stone_Mini_02a_03" parent="Graves" unique_id=351613375]
+transform = Transform3D(-0.19862, -0.018095, -0.97717, -0.069753, 0.99487, -0.0042454, 0.97485, 0.067499, -0.19939, 20.963, 0.62446, -7.6544)
+
+[node name="Grave_Modern_Mini_01d_04" parent="Graves" unique_id=2021804962]
+transform = Transform3D(-0.20788, 0.026268, 0.9026, -0.008865, 0.92611, -0.028994, -0.90294, -0.01514, -0.20752, 14.385, 0.72515, -11.083)
+
+[node name="Grave_Modern_Full_01c_03" parent="Graves" unique_id=2100087206]
+transform = Transform3D(-0.11219, 0.0057123, -0.90083, -0.037927, 0.90695, 0.010474, 0.90005, 0.03893, -0.11185, 16.614, 0.67337, -10.639)
+
+[node name="Grave_Modern_Mini_01d_05" parent="Graves" unique_id=303727479]
+transform = Transform3D(-0.036948, 0.00086185, -0.88817, -0.017163, 0.88878, 0.0015764, 0.88801, 0.017213, -0.036924, 21.824, 0.55508, -10.743)
+
+[node name="Grave_Modern_Mini_01c_02" parent="Graves" unique_id=1686459726]
+transform = Transform3D(-0.031174, -0.025093, -0.99721, 0.0075133, 0.99766, -0.02534, 0.9975, -0.0082988, -0.030974, 11.59, 0.59051, -13.966)
+
+[node name="Grave_Modern_Full_01c_04" parent="Graves" unique_id=367963031]
+transform = Transform3D(-0.047038, -0.0089273, -0.914, 0.01, 0.91515, -0.0094531, 0.91399, -0.010472, -0.046936, 13.362, 0.51648, -13.649)
+
+[node name="Grave_Modern_Full_01b_02" parent="Graves" unique_id=483314436]
+transform = Transform3D(0.24822, -0.0359, -1.1104, -0.008543, 1.1377, -0.038692, 1.1109, 0.01677, 0.2478, 16.889, 0.27797, -13.936)
+
+[node name="Grave_Stone_Mini_02b_06" parent="Graves" unique_id=1208272630]
+transform = Transform3D(0.058647, -0.026755, -0.9217, 0.098863, 0.91842, -0.020369, 0.91677, -0.097329, 0.061159, 20.727, 0.30029, -14.082)
+
+[node name="Grave_Modern_Mini_01c_03" parent="Graves" unique_id=1323035754]
+transform = Transform3D(-0.042579, -0.0080706, -0.88548, -0.029455, 0.88603, -0.0066592, 0.88503, 0.0291, -0.042823, 21.981, 0.36677, -13.815)
+
+[node name="Grave_Stone_Mini_01a_01" parent="Graves" unique_id=2004050380]
+transform = Transform3D(-0.25843, 0.021323, 1.0124, -0.057782, 1.0429, -0.036713, -1.011, -0.065053, -0.25669, -2.3089, 0.2952, 7.9774)
+
+[node name="Grave_Stone_Mini_01c_01" parent="Graves" unique_id=1957909580]
+transform = Transform3D(-0.054926, -0.0057905, 1.1341, 0.064247, 1.1336, 0.0088995, -1.1323, 0.064601, -0.054509, -10.46, -0.4669, 8.2531)
+
+[node name="Grave_Stone_Mini_01c_02" parent="Graves" unique_id=1300383446]
+transform = Transform3D(0.1835, -0.079027, 1.1192, 0.12218, 1.1288, 0.059669, -1.1153, 0.11065, 0.19068, -16.509, -1.0112, 7.8098)
+
+[node name="Grave_Stone_Mini_01a_02" parent="Graves" unique_id=1471851965]
+transform = Transform3D(0.092192, -0.03352, 1.0107, -0.025392, 1.0145, 0.035962, -1.0109, -0.028538, 0.091267, -17.612, -1.1128, 7.7491)
+
+[node name="Grave_Stone_Mini_01b_01" parent="Graves" unique_id=1746497331]
+transform = Transform3D(-0.058725, 0.05375, 0.89614, 0.0016092, 0.89806, -0.053759, -0.89775, -0.0019062, -0.058716, -21.682, -1.286, 8.3154)
+
+[node name="Grave_Wooden_Mini_01d_01" parent="Graves" unique_id=944890996]
+transform = Transform3D(0.16238, 0.03312, 1.0798, -0.0048969, 1.0919, -0.032756, -1.0803, 2.8845e-05, 0.16246, -8.7727, -0.36211, 4.515)
+
+[node name="Grave_Stone_Mini_01e_01" parent="Graves" unique_id=1875144770]
+transform = Transform3D(0.22628, 0.10477, -1.1057, -0.11003, 1.125, 0.084078, 1.1052, 0.09055, 0.23476, -14.142, -0.86808, 4.6164)
+
+[node name="Grave_Stone_Mini_01c_03" parent="Graves" unique_id=534572173]
+transform = Transform3D(0.31488, -0.020699, 1.0137, 0.0080134, 1.0614, 0.019185, -1.0138, 0.001961, 0.31498, -16.762, -1.0656, 4.8587)
+
+[node name="Grave_Stone_Mini_02c_01" parent="Graves" unique_id=17967499]
+transform = Transform3D(-0.32777, 0.012594, 1.0621, 0.068452, 1.1095, 0.0079682, -1.06, 0.067753, -0.32791, -18.373, -1.1842, 4.6486)
+
+[node name="Grave_Wooden_Mini_01a_01" parent="Graves" unique_id=1548951225]
+transform = Transform3D(-0.10033, 0.066621, 0.99956, -0.010712, 1.0044, -0.068021, -1.0017, -0.017413, -0.099383, -20.523, -1.2404, 4.6866)
+
+[node name="Grave_Stone_Mini_01c_04" parent="Graves" unique_id=1565188114]
+transform = Transform3D(-0.2471, 0.035685, -0.95834, -0.07594, 0.9858, 0.056288, 0.95599, 0.087532, -0.24323, -10.992, -0.57736, 2.0354)
+
+[node name="Grave_Stone_Mini_02c_02" parent="Graves" unique_id=1307916267]
+transform = Transform3D(-0.07947, 0.033541, 1.1319, -0.061267, 1.1329, -0.037872, -1.1308, -0.063741, -0.0775, -14.303, -0.91197, 1.4973)
+
+[node name="Grave_Stone_Mini_01c_05" parent="Graves" unique_id=2077060383]
+transform = Transform3D(0.28499, 0.10204, 0.95398, -0.023946, 0.99562, -0.09934, -0.95912, 0.0054613, 0.28594, -15.775, -0.96234, 1.6908)
+
+[node name="Grave_Stone_Mini_01a_03" parent="Graves" unique_id=482962235]
+transform = Transform3D(0.30209, 0.020981, 0.90989, -0.023862, 0.95855, -0.014181, -0.90982, -0.018174, 0.30248, -16.922, -1.0369, 1.7341)
+
+[node name="Grave_Stone_Mini_01b_02" parent="Graves" unique_id=1424855655]
+transform = Transform3D(-0.23131, 0.065396, 0.94555, 0.068725, 0.9719, -0.050405, -0.94531, 0.054656, -0.23503, -18.766, -1.1024, 1.6564)
+
+[node name="Grave_Wooden_Mini_01c_01" parent="Graves" unique_id=1550831655]
+transform = Transform3D(0.015123, 0.020565, 0.8838, -0.0041792, 0.88392, -0.020496, -0.88403, -0.0038269, 0.015216, -21.877, -1.145, 1.5188)
+
+[node name="Grave_Stone_Mini_01a_04" parent="Graves" unique_id=1162575169]
+transform = Transform3D(-0.31731, 0.095178, 1.0077, 0.039477, 1.0564, -0.087348, -1.0114, 0.011373, -0.31956, -3.2331, 0.23842, -1.7697)
+
+[node name="Grave_Wooden_Mini_01a_02" parent="Graves" unique_id=715469955]
+transform = Transform3D(-0.00075652, -0.035174, 1.1261, -0.057396, 1.1246, 0.03509, -1.1252, -0.057344, -0.0025471, -8.6144, -0.30496, -1.4536)
+
+[node name="Grave_Wooden_Mini_01c_02" parent="Graves" unique_id=785472571]
+transform = Transform3D(0.26818, 0.090035, 0.9717, -0.0102, 1.0079, -0.090577, -0.9758, 0.014209, 0.268, -10.358, -0.45937, -1.4226)
+
+[node name="Grave_Stone_Mini_01e_02" parent="Graves" unique_id=1769384141]
+transform = Transform3D(0.2697, 0.11237, 1.0059, -0.11513, 1.0377, -0.085049, -1.0056, -0.08866, 0.27952, -11.781, -0.58302, -1.4693)
+
+[node name="Grave_Stone_Mini_01a_05" parent="Graves" unique_id=377811860]
+transform = Transform3D(0.33314, 0.0035847, 1.0259, 0.003862, 1.0786, -0.005023, -1.0259, 0.0052246, 0.33312, -13.24, -0.70696, -1.5845)
+
+[node name="Grave_Stone_Mini_01e_03" parent="Graves" unique_id=1155455787]
+transform = Transform3D(0.14394, 0.050034, 0.96564, 0.0067976, 0.9762, -0.051594, -0.96691, 0.014311, 0.14339, -15.82, -0.82566, -1.3976)
+
+[node name="Grave_Stone_Mini_02c_03" parent="Graves" unique_id=1375323281]
+transform = Transform3D(-0.17893, -0.013968, -0.866, 0.016543, 0.88407, -0.017678, 0.86595, -0.019775, -0.1786, -18.066, -0.91714, -1.9051)
+
+[node name="Grave_Stone_Mini_02d_01" parent="Graves" unique_id=368896415]
+transform = Transform3D(-0.050617, -0.065403, 1.1283, 0.070168, 1.1271, 0.06848, -1.128, 0.073044, -0.04637, -19.911, -0.95741, -1.729)
+
+[node name="Grave_Wooden_Mini_01c_03" parent="Graves" unique_id=671767381]
+transform = Transform3D(-0.079377, -0.050012, 0.9298, 0.055975, 0.93123, 0.054868, -0.92946, 0.060353, -0.076102, -22.43, -0.98109, -1.7578)
+
+[node name="Grave_Wooden_Mini_01d_02" parent="Graves" unique_id=1618063143]
+transform = Transform3D(0.028555, 0.088469, 1.0965, 0.0171, 1.0967, -0.088931, -1.0999, 0.019346, 0.027083, -2.7731, 0.27528, -4.6036)
+
+[node name="Grave_Wooden_Mini_01a_03" parent="Graves" unique_id=146296567]
+transform = Transform3D(-0.12026, 0.022421, 0.91133, -0.045278, 0.91794, -0.028558, -0.91048, -0.048611, -0.11895, -5.351, 0.089769, -4.7024)
+
+[node name="Grave_Stone_Mini_01a_06" parent="Graves" unique_id=451972505]
+transform = Transform3D(0.20592, -0.11524, 1.0885, 0.021897, 1.1078, 0.11315, -1.0943, 0.00048053, 0.20708, -7.5298, -0.15714, -4.5855)
+
+[node name="Grave_Stone_Mini_01b_03" parent="Graves" unique_id=2024279887]
+transform = Transform3D(-0.053078, 0.087679, 0.94233, 0.0038043, 0.94383, -0.087604, -0.9464, -0.0011235, -0.053202, -9.1583, -0.23615, -4.9565)
+
+[node name="Grave_Wooden_Mini_01a_04" parent="Graves" unique_id=1544144102]
+transform = Transform3D(0.33751, -0.010941, 0.98373, 0.024775, 1.0398, 0.0030645, -0.98348, 0.022438, 0.33767, -11.891, -0.44635, -4.5836)
+
+[node name="Grave_Stone_Mini_01b_04" parent="Graves" unique_id=578074912]
+transform = Transform3D(-0.27489, -0.076906, 0.88773, -0.056332, 0.92866, 0.063008, -0.88927, -0.035054, -0.27841, -14.351, -0.56099, -4.7574)
+
+[node name="Grave_Wooden_Mini_01b_01" parent="Graves" unique_id=168306276]
+transform = Transform3D(-0.2756, -0.10535, 0.84203, -0.055884, 0.88566, 0.092519, -0.84675, -0.024163, -0.28016, -16.468, -0.66348, -4.7682)
+
+[node name="Grave_Wooden_Mini_01d_03" parent="Graves" unique_id=858124393]
+transform = Transform3D(0.1457, 0.047414, 0.94876, 0.11504, 0.95191, -0.065237, -0.94295, 0.12346, 0.13864, -19.615, -0.80298, -4.633)
+
+[node name="Grave_Wooden_Mini_01a_05" parent="Graves" unique_id=243630746]
+transform = Transform3D(-0.21903, -0.072369, 0.91588, 0.029951, 0.94048, 0.081476, -0.91824, 0.047939, -0.21581, -22.565, -0.8674, -4.8516)
+
+[node name="Grave_Stone_Mini_01d_01" parent="Graves" unique_id=1820900442]
+transform = Transform3D(-0.15208, 0.021825, 0.90259, -0.077782, 0.91158, -0.035148, -0.89949, -0.082517, -0.14956, -2.8634, 0.34226, -7.9351)
+
+[node name="Grave_Stone_Mini_02c_04" parent="Graves" unique_id=86665433]
+transform = Transform3D(0.19049, -0.09632, 1.0508, 0.0083403, 1.0679, 0.096375, -1.0552, -0.0089468, 0.19046, -13.756, -0.26059, -11.347)
+
+[node name="Grave_Stone_Mini_02d_02" parent="Graves" unique_id=274544361]
+transform = Transform3D(-0.057422, -0.040744, 0.95258, 0.11128, 0.9475, 0.047235, -0.94694, 0.11382, -0.052213, -15.364, -0.29472, -11.469)
+
+[node name="Grave_Stone_Mini_01c_06" parent="Graves" unique_id=1004496935]
+transform = Transform3D(-0.14616, -0.04442, 0.89733, -0.025886, 0.90895, 0.040779, -0.89805, -0.018971, -0.14722, -17.008, -0.41416, -11.462)
+
+[node name="Grave_Stone_Mini_01e_04" parent="Graves" unique_id=1567907750]
+transform = Transform3D(0.25338, -0.059185, 0.89354, 0.10715, 0.92395, 0.030815, -0.88906, 0.094489, 0.25837, -18.641, -0.53972, -11.325)
+
+[node name="Grave_Wooden_Mini_01a_06" parent="Graves" unique_id=1547349087]
+transform = Transform3D(0.24575, 0.08097, 1.0857, 0.054823, 1.1107, -0.095243, -1.0873, 0.0743, 0.24058, -20.174, -0.66671, -10.863)
+
+[node name="Grave_Stone_Mini_01a_07" parent="Graves" unique_id=1642317164]
+transform = Transform3D(-0.049597, -0.10674, 1.0252, -0.11777, 1.0203, 0.10053, -1.024, -0.11217, -0.061217, -22.615, -0.87239, -11.368)
+
+[node name="Grave_Stone_Mini_01a_08" parent="Graves" unique_id=55989264]
+transform = Transform3D(0.20604, -0.10469, 1.0153, -0.00069752, 1.0358, 0.10694, -1.0207, -0.021841, 0.20488, -6.647, 0.37708, -14.019)
+
+[node name="Grave_Stone_Mini_02d_03" parent="Graves" unique_id=1106214452]
+transform = Transform3D(-0.29969, -0.052353, 1.0754, 0.017178, 1.1159, 0.059112, -1.0765, 0.03238, -0.29843, -10.449, 0.13098, -14.325)
+
+[node name="Grave_Wooden_Mini_01a_07" parent="Graves" unique_id=955254368]
+transform = Transform3D(0.35552, -0.069929, 1.057, -0.10327, 1.1073, 0.10799, -1.0543, -0.13205, 0.34586, -14.221, -0.20043, -13.969)
+
+[node name="Grave_Stone_Mini_01a_09" parent="Graves" unique_id=1921174852]
+transform = Transform3D(0.27367, -0.026106, -0.85633, 0.029826, 0.8987, -0.017866, 0.85621, -0.022962, 0.27433, -15.55, -0.32899, -14.261)
+
+[node name="Grave_Stone_Mini_01b_05" parent="Graves" unique_id=1126016579]
+transform = Transform3D(-0.033572, 0.018699, 1.0443, 0.020058, 1.0447, -0.018061, -1.0443, 0.019465, -0.03392, -18.235, -0.52691, -14.433)
+
+[node name="Grave_Wooden_Mini_01a_08" parent="Graves" unique_id=562888991]
+transform = Transform3D(-0.21036, -0.023552, 1.0776, 0.028908, 1.0974, 0.029628, -1.0775, 0.034041, -0.20959, -21.065, -0.73754, -14.442)
+
+[node name="Grave_Sand_Mini_02c_01" parent="Graves" unique_id=1105121985]
+transform = Transform3D(0.17163, 0.048044, -0.9475, -0.11469, 0.95687, 0.027744, 0.94176, 0.10777, 0.17606, 7.7832, 0.61904, -16.693)
+
+[node name="Grave_Sand_Mini_03c_01" parent="Graves" unique_id=1867986712]
+transform = Transform3D(0.20462, -0.038019, -0.86607, -0.069742, 0.88627, -0.055383, 0.8641, 0.080534, 0.20062, 10.66, 0.49301, -16.866)
+
+[node name="Grave_Sand_Mini_01f_01" parent="Graves" unique_id=90286735]
+transform = Transform3D(-0.29412, -0.023976, -0.94614, -0.1104, 0.98487, 0.0093606, 0.93998, 0.10817, -0.29495, 22.608, -0.007281, -17.076)
+
+[node name="Grave_Sand_Mini_01a_01" parent="Graves" unique_id=142778896]
+transform = Transform3D(0.20321, -0.074796, 0.92716, 0.09348, 0.94586, 0.055817, -0.92546, 0.079117, 0.20922, 15.062, 0.073026, -20.185)
+
+[node name="Grave_Sand_Mini_02d_01" parent="Graves" unique_id=909522329]
+transform = Transform3D(-0.17857, 0.11329, -1.0494, 0.0883, 1.0622, 0.09965, 1.0518, -0.069938, -0.18653, 18.57, -0.12117, -20.111)
+
+[node name="Grave_Stone_Mini_02a_04" parent="Graves" unique_id=408794434]
+transform = Transform3D(0.024963, -0.0074524, -0.91781, -0.067906, 0.91562, -0.0092815, 0.91533, 0.068131, 0.024342, 3.6549, 0.8205, -22.826)
+
+[node name="Grave_Sand_Mini_03c_02" parent="Graves" unique_id=2132470589]
+transform = Transform3D(-0.079241, 0.056331, -0.99178, -0.054597, 0.99318, 0.060772, 0.99188, 0.059169, -0.075888, 5.1945, 0.76948, -22.721)
+
+[node name="Grave_Modern_Mini_01c_04" parent="Graves" unique_id=235753401]
+transform = Transform3D(0.23176, -0.012041, -0.91322, -0.012191, 0.94204, -0.015515, 0.91322, 0.015632, 0.23155, 12.545, 0.41932, -22.824)
+
+[node name="Grave_Sand_Mini_02a_01" parent="Graves" unique_id=594934697]
+transform = Transform3D(-0.24254, 0.11209, 0.94593, 0.11697, 0.97223, -0.085215, -0.94534, 0.091542, -0.25324, 21.277, -0.26612, -26.323)
+
+[node name="Grave_Modern_Mini_01c_05" parent="Graves" unique_id=616360534]
+transform = Transform3D(0.26787, -0.012642, -1.02, 0.020086, 1.0544, -0.0077933, 1.0198, -0.017446, 0.26805, 3.8778, 0.50211, -29.353)
+
+[node name="Grave_Sand_Mini_03d_01" parent="Graves" unique_id=1398888247]
+transform = Transform3D(-0.2915, -0.018694, -0.9927, 0.079257, 1.0309, -0.042686, 0.98971, -0.088058, -0.28896, 8.5129, 0.063424, -32.298)
+
+[node name="Grave_Sand_Mini_02a_02" parent="Graves" unique_id=903119528]
+transform = Transform3D(-0.0037659, 0.045673, -0.90797, 0.10076, 0.9024, 0.044975, 0.90352, -0.10045, -0.0088003, 19.922, -0.18989, -32.93)
+
+[node name="Grave_Sand_Mini_03c_03" parent="Graves" unique_id=2026703978]
+transform = Transform3D(-0.091078, 0.065942, -1.1026, 0.094738, 1.1027, 0.058124, 1.1005, -0.089473, -0.096256, 23.534, -0.18071, -32.918)
+
+[node name="Grave_Sand_Mini_02a_03" parent="Graves" unique_id=1945348809]
+transform = Transform3D(0.15375, -0.029445, 1.0209, 0.0080938, 1.0325, 0.028558, -1.0213, 0.0037493, 0.15392, 17.059, -0.31382, -35.279)
+
+[node name="Grave_Sand_Mini_01d_01" parent="Graves" unique_id=1146657400]
+transform = Transform3D(0.29637, -0.019635, -1.0186, 0.11576, 1.0546, 0.013351, 1.0122, -0.11486, 0.29672, -1.9388, 0.69299, -17.067)
+
+[node name="Grave_Sand_Mini_01c_01" parent="Graves" unique_id=68386455]
+transform = Transform3D(-0.13641, -0.062848, 0.94539, -0.045297, 0.95448, 0.056917, -0.94639, -0.036625, -0.13899, -8.7725, 0.25795, -16.65)
+
+[node name="Grave_Broken_Half_01d_01" parent="Graves" unique_id=1676981631]
+transform = Transform3D(-0.0079037, 0.059791, 0.94346, 0.01737, 0.94334, -0.059638, -0.94519, 0.016836, -0.0089852, -11.022, -0.024736, -17.159)
+
+[node name="Grave_Broken_Half_01b_01" parent="Graves" unique_id=464455418]
+transform = Transform3D(0.23429, -0.057751, -0.89438, 0.045955, 0.924, -0.047625, 0.89507, -0.032323, 0.23656, -14.997, -0.29304, -17.041)
+
+[node name="Grave_Sand_Mini_01d_02" parent="Graves" unique_id=1511863635]
+transform = Transform3D(-0.028235, -0.052534, 0.90571, -0.013869, 0.90606, 0.052123, -0.90712, -0.012217, -0.028988, -20.518, -0.71852, -16.705)
+
+[node name="Grave_Broken_Full_01d_01" parent="Graves" unique_id=1941981103]
+transform = Transform3D(0.32133, -0.0074995, 1.0385, 0.042161, 1.0863, -0.0052004, -1.0377, 0.041814, 0.32137, -6.4337, 0.34829, -20.182)
+
+[node name="Grave_Broken_Full_01e_01" parent="Graves" unique_id=2064087985]
+transform = Transform3D(-0.16569, -0.065557, 1.0922, 0.12315, 1.0966, 0.084498, -1.0873, 0.13419, -0.15688, -9.7974, 0.063268, -20.317)
+
+[node name="Grave_Wooden_Mini_01a_09" parent="Graves" unique_id=498615039]
+transform = Transform3D(0.080979, 0.0099368, 1.137, 0.088235, 1.1363, -0.016216, -1.1336, 0.089161, 0.079959, -13.514, -0.12641, -20.366)
+
+[node name="Grave_Sand_Mini_01d_03" parent="Graves" unique_id=539994077]
+transform = Transform3D(0.079165, -0.084172, 1.076, -0.034832, 1.0781, 0.086901, -1.0787, -0.04099, 0.076159, -18.264, -0.49722, -19.984)
+
+[node name="Grave_Broken_Half_01d_02" parent="Graves" unique_id=792858639]
+transform = Transform3D(-0.22283, -0.047705, 0.96683, 0.055679, 0.98984, 0.061674, -0.9664, 0.068029, -0.21938, -21.598, -0.67882, -19.984)
+
+[node name="Grave_Broken_Half_01c_01" parent="Graves" unique_id=704651737]
+transform = Transform3D(0.051126, -0.070652, 1.0711, 0.013653, 1.0723, 0.070077, -1.0733, 0.010274, 0.051911, -11.422, -0.0083571, -22.992)
+
+[node name="Grave_Broken_Half_01c_02" parent="Graves" unique_id=90282836]
+transform = Transform3D(0.11263, 0.06376, -0.91378, 0.099648, 0.91435, 0.076081, 0.91057, -0.10795, 0.1047, -18.724, -0.32644, -23.1)
+
+[node name="Grave_Broken_Full_01a_01" parent="Graves" unique_id=527863210]
+transform = Transform3D(-0.046754, -0.045093, 0.9539, -0.070153, 0.95262, 0.041594, -0.95238, -0.067957, -0.049892, -21.533, -0.38364, -23.45)
+
+[node name="Grave_Broken_Half_01c_03" parent="Graves" unique_id=377204872]
+transform = Transform3D(-0.18227, 0.033196, -1.095, 0.045132, 1.1093, 0.026118, 1.0945, -0.040213, -0.18342, -14.625, -0.0059334, -26.613)
+
+[node name="Grave_Stone_Mini_01e_05" parent="Graves" unique_id=1515147184]
+transform = Transform3D(-0.066928, 0.066695, 0.88814, 0.069447, 0.88832, -0.061475, -0.88793, 0.064451, -0.071752, -17.648, 0.021435, -26.674)
+
+[node name="Grave_Broken_Half_01c_04" parent="Graves" unique_id=808641775]
+transform = Transform3D(0.14992, -0.056407, 1.1181, -0.11886, 1.1209, 0.072485, -1.1132, -0.12728, 0.14284, -1.1358, 0.38983, -29.639)
+
+[node name="Grave_Wooden_Mini_01a_10" parent="Graves" unique_id=343689457]
+transform = Transform3D(-0.078186, -0.057325, 0.91018, 0.01577, 0.9133, 0.058876, -0.91185, 0.02071, -0.077024, -3.7833, 0.39768, -29.819)
+
+[node name="Grave_Wooden_Mini_01a_11" parent="Graves" unique_id=1701046782]
+transform = Transform3D(-0.095333, 0.11229, 1.0105, 0.099416, 1.0111, -0.10298, -1.0119, 0.088762, -0.10532, -1.4902, 0.37254, -33.224)
+
+[node name="Grave_Broken_Full_01e_02" parent="Graves" unique_id=292600870]
+transform = Transform3D(-0.15423, 0.017482, -1.0872, 0.022884, 1.0979, 0.014407, 1.0871, -0.02063, -0.15455, -3.3334, 0.36769, -32.911)
+
+[node name="Grave_Broken_Half_01d_03" parent="Graves" unique_id=94073970]
+transform = Transform3D(-0.11264, 0.044665, -0.9317, 0.0883, 0.93477, 0.034136, 0.92858, -0.08347, -0.11627, -6.2723, 0.39139, -33.188)
+
+[node name="Grave_Broken_Half_01b_02" parent="Graves" unique_id=632952173]
+transform = Transform3D(-0.24619, -0.015524, 0.94606, 0.0091131, 0.97748, 0.018411, -0.94614, 0.013454, -0.24599, -9.9751, 0.42696, -32.907)
+
+[node name="Grave_Broken_Full_01e_03" parent="Graves" unique_id=244596893]
+transform = Transform3D(-0.11075, -0.084223, 1.0745, 0.0684, 1.0774, 0.091503, -1.0756, 0.077187, -0.10481, -1.7912, 0.29633, -36.344)
+
+[node name="Grave_Broken_Half_01a_01" parent="Graves" unique_id=2125454007]
+transform = Transform3D(-0.19971, 0.068963, 1.0889, -0.11151, 1.0999, -0.090113, -1.0853, -0.1257, -0.1911, -5.6979, 0.5202, -36.507)
+
+[node name="Grave_Broken_Half_01b_03" parent="Graves" unique_id=1226200144]
+transform = Transform3D(-0.15125, -0.041175, 1.0454, -0.094902, 1.0525, 0.027723, -1.0419, -0.089886, -0.15428, -8.7978, 0.69581, -36.447)
+
+[node name="Grave_Sand_Mini_01d_04" parent="Graves" unique_id=2013215143]
+transform = Transform3D(0.24117, 0.014914, -1.0095, 0.098719, 1.0325, 0.03884, 1.0047, -0.10503, 0.23849, -11.193, 1.4957, -36.313)
+
+[node name="Grave_Sand_Mini_01d_05" parent="Graves" unique_id=1282395615]
+transform = Transform3D(0.27261, -0.070362, 1.0797, -0.029747, 1.1125, 0.080013, -1.0815, -0.048334, 0.26994, -17.088, 2.3993, -36.074)
+
+[node name="Grave_Mud_Flat_01a_02" parent="Graves" unique_id=1867357871]
+transform = Transform3D(0.91992, 0.11352, -0.37532, -0.085451, 0.99221, 0.090667, 0.38269, -0.051335, 0.92245, -11.18, 1.8103, -39.688)
+
+[node name="Grave_Broken_Half_01b_04" parent="Graves" unique_id=639089350]
+transform = Transform3D(-0.73484, -0.030127, 0.67757, -0.096984, 0.99341, -0.061011, -0.67127, -0.11055, -0.73293, 21.783, 0.64895, 4.6855)
+
+[node name="Grave_Broken_Half_01a_02" parent="Graves" unique_id=381659743]
+transform = Transform3D(0.97826, 0.06417, -0.19722, -0.053811, 0.9969, 0.057449, 0.20029, -0.045588, 0.97868, 16.581, 0.58264, 3.5461)
+
+[node name="Grave_Wooden_Mini_01b_02" parent="Graves" unique_id=789630576]
+transform = Transform3D(-0.71409, 0.073348, 0.69621, 0.046192, 0.99727, -0.057688, -0.69853, -0.0090349, -0.71552, -10.17, 0.74834, -34.527)
+
+[node name="Grave_Wooden_Mini_01b_03" parent="Graves" unique_id=1836355867]
+transform = Transform3D(-0.87322, -0.028312, 0.4865, -0.068476, 0.99553, -0.064974, -0.48249, -0.09005, -0.87126, -16.143, -0.30935, -20.811)
+
+[node name="Grave_Sand_Mini_01d_06" parent="Graves" unique_id=548042792]
+transform = Transform3D(-0.8997, 0.023826, -0.43586, 0.068735, 0.99379, -0.087557, 0.43107, -0.10873, -0.89574, 7.5378, -0.13473, -38.325)
+
+[node name="Grave_Broken_Half_01c_05" parent="Graves" unique_id=1974625200]
+transform = Transform3D(0.22285, -0.014084, -0.97475, -0.13327, 0.99007, -0.044773, 0.9657, 0.13988, 0.21876, 6.6153, -0.029589, -35.852)
+
+[node name="Grave_Broken_Half_01c_06" parent="Graves" unique_id=482997405]
+transform = Transform3D(-0.17482, -0.020037, 0.9844, 0.06138, 0.99763, 0.031207, -0.98269, 0.065878, -0.17318, -2.1828, 0.45648, -40.097)
+
+[node name="Grave_Broken_Half_01a_03" parent="Graves" unique_id=461973526]
+transform = Transform3D(-0.82649, -0.15562, -0.54101, -0.14152, 0.98761, -0.06787, 0.54486, 0.020472, -0.83827, 22.026, 0.5243, -4.7438)
+
+[node name="Grave_Broken_Full_01e_04" parent="Graves" unique_id=390863947]
+transform = Transform3D(-0.40932, -0.0047519, -0.91238, -0.11963, 0.99163, 0.048506, 0.90451, 0.12901, -0.40646, 16.45, -0.13467, -4.6942)
+
+[node name="Grave_Wooden_Mini_01b_04" parent="Graves" unique_id=128574303]
+transform = Transform3D(0.42437, -0.058568, 0.90359, 0.083744, 0.99617, 0.025238, -0.90161, 0.06496, 0.42765, 13.503, -0.48278, -39.782)
+
+[node name="Grave_Broken_Half_01b_05" parent="Graves" unique_id=2061539001]
+transform = Transform3D(-0.40309, -0.074588, 0.91212, 0.046183, 0.99375, 0.10167, -0.914, 0.083107, -0.39712, 18.451, -0.086037, -24.399)
+
+[node name="Grave_Broken_Half_01d_04" parent="Graves" unique_id=1609546431]
+transform = Transform3D(-0.70346, -0.14573, -0.69563, -0.14712, 0.98741, -0.058069, 0.69534, 0.061495, -0.71605, 20.914, -0.55177, -39.505)
+
+[node name="Grave_Broken_Full_01c_01" parent="Graves" unique_id=1728721936]
+transform = Transform3D(0.84229, 0.1037, 0.52896, -0.065251, 0.99372, -0.090912, -0.53506, 0.042059, 0.84376, -15.585, -0.20236, -23.872)
+
+[node name="Grave_Broken_Half_01a_04" parent="Graves" unique_id=1500855364]
+transform = Transform3D(-0.53316, -0.10989, -0.83885, -0.10841, 0.99223, -0.061077, 0.83904, 0.058374, -0.54093, -12.885, -0.76011, 0.060865)
+
+[node name="Grave_Broken_Half_01a_05" parent="Graves" unique_id=403528118]
+transform = Transform3D(0.36094, -0.015982, -0.93245, 0.014569, 0.99983, -0.011497, 0.93247, -0.0094352, 0.36111, 12.561, -0.34715, -37.492)
+
+[node name="Grave_Wooden_Mini_01b_05" parent="Graves" unique_id=357342488]
+transform = Transform3D(0.81717, 0.020454, 0.57604, -0.10088, 0.98902, 0.10798, -0.5675, -0.14635, 0.81026, 11.734, -0.42706, -40.335)
+
+[node name="Grave_Wooden_Mini_01b_06" parent="Graves" unique_id=1938173561]
+transform = Transform3D(-0.74684, -0.10261, 0.65704, -0.13993, 0.99015, -0.0044243, -0.65011, -0.095247, -0.75385, 12.101, 0.32913, -27.359)
+
+[node name="Grave_Broken_Half_01b_06" parent="Graves" unique_id=751630585]
+transform = Transform3D(0.69987, -0.15901, 0.69634, 0.11316, 0.98728, 0.11172, -0.70525, 0.00060695, 0.70896, -23.816, -0.84292, -17.388)
+
+[node name="Grave_Broken_Half_01a_06" parent="Graves" unique_id=1493029011]
+transform = Transform3D(-0.21207, -0.038289, 0.9765, -0.092899, 0.9955, 0.018858, -0.97283, -0.086717, -0.21468, 20.168, -0.14063, -28.237)
+
+[node name="Grave_Wooden_Mini_01b_07" parent="Graves" unique_id=1494428967]
+transform = Transform3D(-0.9968, -0.052505, 0.060329, -0.046369, 0.99401, 0.098949, -0.065163, 0.095835, -0.99326, 24.112, -0.24405, -29.155)
+
+[node name="Grave_Sand_Mini_01c_02" parent="Graves" unique_id=460984836]
+transform = Transform3D(-0.98202, -0.16019, 0.099913, -0.14823, 0.98195, 0.11747, -0.11693, 0.10055, -0.98804, 9.4704, -0.2858, -38.91)
+
+[node name="Grave_Wooden_Mini_01b_08" parent="Graves" unique_id=1505729171]
+transform = Transform3D(0.54785, -0.028962, 0.83608, 0.13927, 0.98861, -0.057009, -0.82491, 0.14767, 0.54564, 22.878, -0.21448, -22.96)
+
+[node name="Grave_Broken_Full_01e_05" parent="Graves" unique_id=1486852813]
+transform = Transform3D(0.74276, 0.026962, 0.66902, -0.023439, 0.99962, -0.014263, -0.66915, -0.0050874, 0.74311, 14.447, 0.32112, -15.934)
+
+[node name="Grave_Sand_Mini_01c_03" parent="Graves" unique_id=743979146]
+transform = Transform3D(0.93302, 0.062021, 0.35444, -0.070717, 0.99743, 0.011619, -0.35281, -0.035906, 0.93501, 19.497, 0.20488, -15.136)
+
+[node name="Grave_Broken_Half_01c_07" parent="Graves" unique_id=1556914765]
+transform = Transform3D(-0.97965, 0.080839, 0.18374, 0.087799, 0.99568, 0.030053, -0.18052, 0.045574, -0.98252, 19.162, 0.28647, 0.13565)
+
+[node name="Grave_Broken_Full_01c_02" parent="Graves" unique_id=766783833]
+transform = Transform3D(0.11669, 0.051989, -0.99181, 0.020179, 0.9983, 0.054704, 0.99296, -0.026397, 0.11544, -15.01, 0.14998, -29.158)
+
+[node name="Grave_Broken_Half_01c_08" parent="Graves" unique_id=1711272562]
+transform = Transform3D(0.9882, -0.14409, 0.051896, 0.14769, 0.98627, -0.073873, -0.04054, 0.080666, 0.99592, -23.652, -0.94404, -7.7028)
+
+[node name="Grave_Stone_Mini_01a_10" parent="Graves" unique_id=1965320451]
+transform = Transform3D(0.18018, -0.060065, -0.9818, 0.14102, 0.9894, -0.034649, 0.97347, -0.13221, 0.18675, 13.618, 0.26154, -25.837)
+
+[node name="Grave_Broken_Half_01b_07" parent="Graves" unique_id=2029934960]
+transform = Transform3D(-0.96094, 0.054261, 0.27137, 0.065705, 0.99728, 0.033257, -0.26883, 0.049788, -0.9619, 12.335, -0.12435, -34.427)
+
+[node name="Grave_Sand_Mini_01d_07" parent="Graves" unique_id=1278923913]
+transform = Transform3D(0.66724, 0.010821, 0.74476, 0.01822, 0.99936, -0.030843, -0.74462, 0.034149, 0.66661, 15.493, 0.080923, -23.007)
+
+[node name="Grave_Sand_Mini_01c_04" parent="Graves" unique_id=208396323]
+transform = Transform3D(0.94209, 0.06916, 0.32814, -0.11153, 0.98742, 0.11208, -0.31626, -0.14219, 0.93796, -22.401, -0.88687, -12.777)
+
+[node name="Grave_Sand_Mini_01c_05" parent="Graves" unique_id=845511675]
+transform = Transform3D(-0.2898, 0.041952, -0.95617, 0.0089967, 0.99911, 0.04111, 0.95705, 0.0033111, -0.28992, -8.5462, 0.49199, -34.591)
+
+[node name="Grave_Broken_Half_01a_07" parent="Graves" unique_id=841818778]
+transform = Transform3D(-0.95711, 0.08678, -0.27641, 0.087482, 0.99612, 0.0098132, 0.27619, -0.014789, -0.96099, 15.178, 0.21469, -17.867)
+
+[node name="Grave_Broken_Half_01a_08" parent="Graves" unique_id=1245939441]
+transform = Transform3D(-0.57157, -0.0081663, -0.82051, 0.1433, 0.98359, -0.10961, 0.80794, -0.18023, -0.56102, 19.772, 0.37943, -12.834)
+
+[node name="Grave_Broken_Half_01d_05" parent="Graves" unique_id=1745455861]
+transform = Transform3D(-0.86039, -0.0028105, -0.50962, -0.038328, 0.99751, 0.059208, 0.50819, 0.070475, -0.85836, -21.122, 1.5235, -39.915)
+
+[node name="Grave_Wooden_Mini_01b_09" parent="Graves" unique_id=472316582]
+transform = Transform3D(0.64076, 0.14364, -0.75419, -0.15246, 0.98658, 0.058371, 0.75245, 0.077579, 0.65406, -15.129, -0.30519, -13.036)
+
+[node name="Grave_Sand_Mini_01d_08" parent="Graves" unique_id=1921004165]
+transform = Transform3D(-0.60142, -0.022017, 0.79863, 0.036814, 0.99779, 0.05523, -0.79809, 0.062617, -0.59928, -13.776, 2.6768, -39.603)
+
+[node name="Grave_Broken_Half_01c_09" parent="Graves" unique_id=1501962424]
+transform = Transform3D(-0.94619, 0.036008, -0.32161, 0.024047, 0.99887, 0.041087, 0.32272, 0.031142, -0.94598, 19.98, 0.64843, 3.0029)
+
+[node name="Grave_Broken_Half_01c_10" parent="Graves" unique_id=1084643390]
+transform = Transform3D(0.99747, 0.045685, -0.054411, -0.043777, 0.9984, 0.035756, 0.055957, -0.033284, 0.99788, 17.794, -0.57149, -40.178)
+
+[node name="Grave_Wooden_Mini_01b_10" parent="Graves" unique_id=1373329314]
+transform = Transform3D(-0.95463, 0.096064, 0.28187, 0.069555, 0.99229, -0.10262, -0.28955, -0.078355, -0.95395, 16.794, -0.4174, -37.857)
+
+[node name="Grave_Wooden_Mini_01b_11" parent="Graves" unique_id=1062313987]
+transform = Transform3D(-0.46028, 0.13145, 0.87799, 0.09481, 0.9906, -0.098611, -0.8827, 0.037854, -0.46842, -20.873, -0.78507, -5.6661)
+
+[node name="Grave_Broken_Half_01a_09" parent="Graves" unique_id=642608144]
+transform = Transform3D(-0.17312, -0.045125, 0.98387, 0.11607, 0.99105, 0.065878, -0.97804, 0.1256, -0.16633, 21.246, -0.24766, -35.661)
+
+[node name="Grave_Wooden_Mini_01b_12" parent="Graves" unique_id=488721767]
+transform = Transform3D(-0.50942, 0.051695, 0.85897, 0.042528, 0.99849, -0.03487, -0.85947, 0.018767, -0.51084, -14.774, -0.47659, -6.5225)
+
+[node name="Grave_Sand_Mini_01c_06" parent="Graves" unique_id=2016556746]
+transform = Transform3D(-0.82734, 0.099772, 0.55276, 0.11712, 0.99311, -0.0039558, -0.54935, 0.061467, -0.83333, 22.753, -0.20976, -34.898)
+
+[node name="Grave_Broken_Half_01a_10" parent="Graves" unique_id=1396773849]
+transform = Transform3D(0.98161, 0.02492, -0.18929, -0.046514, 0.99279, -0.11051, 0.18517, 0.11728, 0.97568, 24.462, 0.35817, -11.575)
+
+[node name="Grave_Sand_Mini_01d_09" parent="Graves" unique_id=1563893907]
+transform = Transform3D(-0.96861, 0.12234, 0.21638, 0.14964, 0.98208, 0.11461, -0.19848, 0.14339, -0.96956, 5.6839, -0.039819, -39.979)
+
+[node name="Grave_Broken_Half_01c_11" parent="Graves" unique_id=609229167]
+transform = Transform3D(0.95799, 0.038297, 0.28424, -0.048352, 0.99843, 0.02844, -0.2827, -0.040989, 0.95833, -19.993, -0.72991, -13.204)
+
+[node name="Grave_Broken_Half_01a_11" parent="Graves" unique_id=428227882]
+transform = Transform3D(-0.63114, -0.096283, -0.76967, -0.074062, 0.99521, -0.063766, 0.77213, 0.016758, -0.63525, 8.4241, -0.2404, -40.533)
+
+[node name="Grave_Sand_Mini_01c_07" parent="Graves" unique_id=1866025387]
+transform = Transform3D(0.92532, -0.14905, 0.34866, 0.14315, 0.98878, 0.042801, -0.35113, 0.010305, 0.93627, -13.663, 2.4936, -36.696)
+
+[node name="Grave_Broken_Half_01c_12" parent="Graves" unique_id=1307042279]
+transform = Transform3D(0.54034, -0.11652, -0.83334, 0.12423, 0.99056, -0.057957, 0.83223, -0.072209, 0.54971, 22.857, 0.44181, -1.9114)
+
+[node name="Grave_Sand_Mini_01c_08" parent="Graves" unique_id=340140113]
+transform = Transform3D(0.0843, -0.062596, 0.99447, 0.012439, 0.99801, 0.061764, -0.99636, 0.0071632, 0.084912, 17.397, -0.0039028, -27.048)
+
+[node name="Grave_Wooden_Mini_01b_13" parent="Graves" unique_id=469746941]
+transform = Transform3D(-0.90734, 0.15965, 0.3889, 0.145, 0.98716, -0.066934, -0.39459, -0.0043394, -0.91885, 23.548, 0.53298, 2.6243)
+
+[node name="Grave_Wooden_Mini_01b_14" parent="Graves" unique_id=190512508]
+transform = Transform3D(-0.79719, 0.12721, 0.59018, 0.14982, 0.98866, -0.010735, -0.58485, 0.079861, -0.8072, 19.52, 0.086151, -17.533)
+
+[node name="Grave_Wooden_Mini_01b_15" parent="Graves" unique_id=457490591]
+transform = Transform3D(0.25281, 0.027965, 0.96711, 0.0092687, 0.99947, -0.031323, -0.96747, 0.016883, 0.25242, -3.9783, 0.53944, -38.89)
+
+[node name="Grave_Sand_Mini_01d_10" parent="Graves" unique_id=2069892822]
+transform = Transform3D(0.897, 0.011366, 0.44188, 0.034509, 0.99482, -0.09564, -0.44068, 0.10104, 0.89196, -7.2496, 0.61039, -40.449)
+
+[node name="Grave_Broken_Full_01e_06" parent="Graves" unique_id=2084695798]
+transform = Transform3D(-0.83469, -0.11821, 0.53788, -0.15241, 0.98813, -0.019349, -0.52921, -0.098127, -0.8428, 22.464, -0.1931, -30.912)
+
+[node name="Grave_Broken_Half_01a_12" parent="Graves" unique_id=753528133]
+transform = Transform3D(-0.46241, 0.019532, 0.88645, -0.0058217, 0.99967, -0.025063, -0.88665, -0.01675, -0.46214, -24.199, -0.96214, -4.714)
+
+[node name="Grave_Sand_Mini_01c_09" parent="Graves" unique_id=1867622476]
+transform = Transform3D(0.84969, 0.023865, -0.52674, -0.061923, 0.99658, -0.054737, 0.52363, 0.079126, 0.84826, -12.218, -0.083078, -14.051)
+
+[node name="Grave_Wooden_Mini_01b_16" parent="Graves" unique_id=629107823]
+transform = Transform3D(-0.68077, 0.060191, 0.73002, 0.071865, 0.9973, -0.015212, -0.72896, 0.042107, -0.68326, -23.057, 0.83404, -38.182)
+
+[node name="Grave_Sand_Mini_01c_10" parent="Graves" unique_id=284057111]
+transform = Transform3D(-0.084215, 0.10104, 0.99131, -0.096371, 0.98936, -0.10903, -0.99178, -0.10472, -0.073581, -5.1176, 0.56503, -40.09)
+
+[node name="Grave_Broken_Half_01a_13" parent="Graves" unique_id=2005560245]
+transform = Transform3D(0.55813, 0.026991, 0.82931, -0.044459, 0.99901, -0.0025931, -0.82856, -0.035423, 0.55878, 24.253, -0.22358, -36.997)
+
+[node name="Fence" type="Node3D" parent="." unique_id=565110401]
+
+[node name="Grave_Railing_01a_02" parent="Fence" unique_id=36056507]
+transform = Transform3D(-0.016311, -0.0079695, -0.99984, -0.02244, 0.99972, -0.0076024, 0.99962, 0.022312, -0.016486, -26, -1.3917, 5.21)
+
+[node name="Grave_Railing_01a_03" parent="Fence" unique_id=674045710]
+transform = Transform3D(0.026122, -0.026279, -0.99931, 0.0055583, 0.99964, -0.026142, 0.99964, -0.0048717, 0.026258, -26, -1.3092, 2.63)
+
+[node name="Grave_Railing_01a_04" parent="Fence" unique_id=881344620]
+transform = Transform3D(-0.028641, 0.0065196, -0.99957, 0.017559, 0.99983, 0.0060181, 0.99944, -0.017379, -0.02875, -26, -1.2036, 0.05)
+
+[node name="Grave_Railing_01a_05" parent="Fence" unique_id=1813060709]
+transform = Transform3D(0.094438, -0.031011, -0.99505, -0.11885, 0.99202, -0.042197, 0.98841, 0.12225, 0.089998, -26, -1.121, -2.53)
+
+[node name="Grave_Railing_01a_06" parent="Fence" unique_id=627051400]
+transform = Transform3D(-0.14069, -0.040383, -0.98923, 0.084556, 0.99503, -0.052646, 0.98644, -0.091053, -0.13658, -26, -1.1472, -10.27)
+
+[node name="Grave_Railing_01a_07" parent="Fence" unique_id=1635299385]
+transform = Transform3D(0.00134, -0.01571, -0.99988, 0.021047, 0.99966, -0.015679, 0.99978, -0.021023, 0.0016702, -26, -1.147, -12.85)
+
+[node name="Grave_Railing_01a_08" parent="Fence" unique_id=254207505]
+transform = Transform3D(-0.0045065, 0.011643, -0.99992, -0.01738, 0.99978, 0.011719, 0.99984, 0.017432, -0.0043032, -26, -1.1013, -15.43)
+
+[node name="Grave_Railing_01a_09" parent="Fence" unique_id=596402404]
+transform = Transform3D(0.031506, 0.012608, -0.99942, -0.028132, 0.99954, 0.011722, 0.99911, 0.027746, 0.031846, -26, -0.95314, -18.01)
+
+[node name="Grave_Railing_01a_10" parent="Fence" unique_id=1196909137]
+transform = Transform3D(-0.011255, -3.3379e-05, -0.99994, -0.002525, 1, -4.9603e-06, 0.99993, 0.0025247, -0.011255, -26, -0.74042, -20.59)
+
+[node name="Grave_Railing_01a_11" parent="Fence" unique_id=535380619]
+transform = Transform3D(-0.011169, 0.003861, -0.99993, 0.03058, 0.99953, 0.0035179, 0.99947, -0.030538, -0.011282, -26, -0.50246, -23.17)
+
+[node name="Grave_Railing_01a_12" parent="Fence" unique_id=243754008]
+transform = Transform3D(0.013388, 0.015912, -0.99978, -0.0099786, 0.99983, 0.015779, 0.99986, 0.0097652, 0.013545, -26, -0.28343, -25.75)
+
+[node name="Grave_Railing_01a_13" parent="Fence" unique_id=1531895200]
+transform = Transform3D(0.01739, 0.053776, -0.9984, -0.062741, 0.99664, 0.052588, 0.99788, 0.061726, 0.020705, -26, -0.11494, -28.33)
+
+[node name="Grave_Railing_01a_14" parent="Fence" unique_id=1562142934]
+transform = Transform3D(-0.1336, 0.0085866, -0.991, -0.051102, 0.99857, 0.015541, 0.98972, 0.052719, -0.13297, -26, 0.042849, -33.49)
+
+[node name="Grave_Railing_01a_15" parent="Fence" unique_id=790696537]
+transform = Transform3D(-0.032891, -0.0080585, -0.99943, 0.03041, 0.9995, -0.0090599, 0.999, -0.03069, -0.032629, -26, 0.096839, -36.07)
+
+[node name="Grave_Railing_01a_16" parent="Fence" unique_id=380886236]
+transform = Transform3D(0.026765, -0.00033996, -0.99964, 0.0043462, 0.99999, -0.00022372, 0.99963, -0.0043386, 0.026766, -26, 0.17778, -38.65)
+
+[node name="Grave_Railing_01a_17" parent="Fence" unique_id=110085496]
+transform = Transform3D(0.018635, -0.018673, -0.99965, 0.017694, 0.99968, -0.018343, 0.99967, -0.017346, 0.01896, 26, 0.53222, 5.21)
+
+[node name="Grave_Railing_01a_18" parent="Fence" unique_id=1295416949]
+transform = Transform3D(-0.025542, 0.0035966, -0.99967, 0.022356, 0.99975, 0.0030257, 0.99942, -0.022271, -0.025615, 26, 0.39678, 2.63)
+
+[node name="Grave_Railing_01a_19" parent="Fence" unique_id=1231732350]
+transform = Transform3D(-0.032707, -0.024587, -0.99916, -0.01395, 0.99961, -0.024142, 0.99937, 0.013148, -0.033037, 26, 0.30006, 0.05)
+
+[node name="Grave_Railing_01a_20" parent="Fence" unique_id=970893699]
+transform = Transform3D(0.004301, -0.018711, -0.99982, 0.018605, 0.99965, -0.018628, 0.99982, -0.018521, 0.0046476, 26, 0.2633, -2.53)
+
+[node name="Grave_Railing_01a_21" parent="Fence" unique_id=139385777]
+transform = Transform3D(-0.021869, 0.0019107, -0.99976, -0.004284, 0.99999, 0.0020049, 0.99975, 0.0043268, -0.02186, 26, 0.26376, -5.11)
+
+[node name="Grave_Railing_01a_22" parent="Fence" unique_id=1221072102]
+transform = Transform3D(0.022791, 0.022434, -0.99949, -0.02335, 0.99949, 0.021902, 0.99947, 0.022839, 0.023303, 26, 0.27175, -7.69)
+
+[node name="Grave_Railing_01a_23" parent="Fence" unique_id=1226578213]
+transform = Transform3D(-0.13998, 0.055645, -0.98859, -0.076742, 0.99481, 0.066861, 0.98718, 0.085225, -0.13498, 26, 0.28814, -10.27)
+
+[node name="Grave_Railing_01a_24" parent="Fence" unique_id=350906041]
+transform = Transform3D(-0.084692, 0.06142, -0.99451, 0.093115, 0.99422, 0.053472, 0.99205, -0.088076, -0.089921, 26, 0.11015, -15.43)
+
+[node name="Grave_Railing_01a_25" parent="Fence" unique_id=760982938]
+transform = Transform3D(0.023307, 0.0073549, -0.9997, -0.0073325, 0.99995, 0.0071857, 0.9997, 0.0071629, 0.023359, 26, -0.043932, -18.01)
+
+[node name="Grave_Railing_01a_26" parent="Fence" unique_id=1132959004]
+transform = Transform3D(-0.034264, -0.023673, -0.99913, 0.016545, 0.99957, -0.024251, 0.99928, -0.017362, -0.033858, 26, -0.18716, -20.59)
+
+[node name="Grave_Railing_01a_27" parent="Fence" unique_id=682391590]
+transform = Transform3D(-0.026004, -0.022052, -0.99942, -0.018513, 0.9996, -0.021574, 0.99949, 0.017941, -0.026402, 26, -0.27371, -23.17)
+
+[node name="Grave_Railing_01a_28" parent="Fence" unique_id=1362718166]
+transform = Transform3D(-0.022943, 0.00062183, -0.99974, 0.011504, 0.99993, 0.00035794, 0.99967, -0.011493, -0.022949, 26, -0.29773, -25.75)
+
+[node name="Grave_Railing_01a_29" parent="Fence" unique_id=1780957409]
+transform = Transform3D(-0.01508, 0.024726, -0.99958, 0.02638, 0.99936, 0.024323, 0.99954, -0.026002, -0.015723, 26, -0.29767, -28.33)
+
+[node name="Grave_Railing_01a_30" parent="Fence" unique_id=1569512639]
+transform = Transform3D(-0.0091243, -0.012648, -0.99988, 0.031495, 0.99942, -0.012929, 0.99946, -0.031609, -0.0087207, 26, -0.26882, -30.91)
+
+[node name="Grave_Railing_01a_31" parent="Fence" unique_id=184979124]
+transform = Transform3D(0.010319, -0.019332, -0.99976, -0.020786, 0.99959, -0.019543, 0.99973, 0.020983, 0.0099125, 26, -0.20732, -33.49)
+
+[node name="Grave_Railing_01a_32" parent="Fence" unique_id=1945618545]
+transform = Transform3D(-0.056816, -0.023477, -0.99811, 0.029146, 0.99926, -0.025163, 0.99796, -0.03052, -0.05609, 26, -0.19981, -36.07)
+
+[node name="Grave_Railing_01a_33" parent="Fence" unique_id=2054774051]
+transform = Transform3D(-0.99942, -0.033991, -0.0003252, -0.033984, 0.99933, -0.013898, 0.0007974, -0.013879, -0.9999, -24.71, -1.4041, 6.5)
+
+[node name="Grave_Railing_01a_34" parent="Fence" unique_id=503955784]
+transform = Transform3D(-0.9997, 0.0042945, -0.024294, 0.0048481, 0.99973, -0.022775, 0.02419, -0.022886, -0.99945, -22.13, -1.363, 6.5)
+
+[node name="Grave_Railing_01a_35" parent="Fence" unique_id=791283062]
+transform = Transform3D(-0.99769, 0.045504, 0.050357, 0.042824, 0.99767, -0.053075, -0.052655, -0.050796, -0.99732, -19.55, -1.2854, 6.5)
+
+[node name="Grave_Railing_01a_36" parent="Fence" unique_id=1252727481]
+transform = Transform3D(-0.99621, -0.064514, -0.058367, -0.061389, 0.99666, -0.053839, 0.061646, -0.050052, -0.99684, -14.39, -0.99695, 6.5)
+
+[node name="Grave_Railing_01a_37" parent="Fence" unique_id=1861024409]
+transform = Transform3D(-0.99958, 0.028945, -0.0010458, 0.028918, 0.99938, 0.019988, 0.0016238, 0.01995, -0.9998, -11.81, -0.76616, 6.5)
+
+[node name="Grave_Railing_01a_38" parent="Fence" unique_id=1757393647]
+transform = Transform3D(-0.99967, 0.018792, 0.017671, 0.019219, 0.99952, 0.024347, -0.017205, 0.024678, -0.99955, -9.23, -0.49317, 6.5)
+
+[node name="Grave_Railing_01a_39" parent="Fence" unique_id=88039953]
+transform = Transform3D(-0.99942, -0.033517, 0.0057622, -0.03363, 0.99922, -0.020859, -0.0050585, -0.02104, -0.99977, -6.65, -0.20259, 6.5)
+
+[node name="Grave_Railing_01a_40" parent="Fence" unique_id=5178418]
+transform = Transform3D(-0.99955, 0.0052682, 0.029398, 0.005397, 0.99998, 0.0043012, -0.029374, 0.0044579, -0.99956, 5.49, 0.79161, 6.5)
+
+[node name="Grave_Railing_01a_41" parent="Fence" unique_id=541590715]
+transform = Transform3D(-0.99904, -0.027265, -0.034201, -0.027298, 0.99963, 0.00048507, 0.034175, 0.0014182, -0.99941, 8.07, 0.87127, 6.5)
+
+[node name="Grave_Railing_01a_42" parent="Fence" unique_id=1154726952]
+transform = Transform3D(-0.99999, -0.0033108, -0.0033235, -0.0032605, 0.99988, -0.015014, 0.0033728, -0.015003, -0.99988, 10.65, 0.91019, 6.5)
+
+[node name="Grave_Railing_01a_43" parent="Fence" unique_id=1431660517]
+transform = Transform3D(-0.99996, -0.0056, 0.0068148, -0.0057109, 0.99985, -0.016365, -0.0067221, -0.016404, -0.99984, 13.23, 0.88713, 6.5)
+
+[node name="Grave_Railing_01a_44" parent="Fence" unique_id=659939355]
+transform = Transform3D(-0.99661, 0.078399, -0.025134, 0.076752, 0.99519, 0.060892, 0.029787, 0.058756, -0.99783, 15.81, 0.81604, 6.5)
+
+[node name="Grave_Railing_01a_45" parent="Fence" unique_id=400188064]
+transform = Transform3D(-0.99873, -0.031843, -0.039091, -0.029708, 0.9981, -0.054038, 0.040737, -0.052808, -0.99777, 23.55, 0.64479, 6.5)
+
+[node name="Grave_Railing_01a_46" parent="Fence" unique_id=1599760685]
+transform = Transform3D(-0.96479, 0.03143, -0.26114, 0.033662, 0.99942, -0.0040771, 0.26087, -0.012724, -0.96529, -24.76, 0.38364, -42.354)
+
+[node name="Grave_Railing_01a_47" parent="Fence" unique_id=1347850542]
+transform = Transform3D(-0.95699, -0.022011, -0.2893, -0.025056, 0.99966, 0.0068275, 0.28905, 0.013782, -0.95722, -22.279, 0.76364, -43.063)
+
+[node name="Grave_Railing_01a_48" parent="Fence" unique_id=1458673108]
+transform = Transform3D(-0.9641, 0.010688, -0.26531, 0.01527, 0.99977, -0.015214, 0.26509, -0.018719, -0.96404, -19.798, 1.507, -43.772)
+
+[node name="Grave_Railing_01a_49" parent="Fence" unique_id=202172384]
+transform = Transform3D(-0.95645, -0.0021682, -0.29189, -0.0051907, 0.99994, 0.0095807, 0.29186, 0.010679, -0.9564, -17.317, 1.9541, -44.481)
+
+[node name="Grave_Railing_01a_50" parent="Fence" unique_id=1488649906]
+transform = Transform3D(-0.96286, -0.030322, -0.26829, -0.029664, 0.99954, -0.0065059, 0.26837, 0.0016944, -0.96332, -14.837, 1.4132, -45.19)
+
+[node name="Grave_Railing_01a_51" parent="Fence" unique_id=241917724]
+transform = Transform3D(0.94864, -0.024013, -0.31545, 0.017584, 0.99958, -0.023213, 0.31588, 0.016474, 0.94866, 24.767, -0.52226, -42.379)
+
+[node name="Grave_Railing_01a_52" parent="Fence" unique_id=413891314]
+transform = Transform3D(0.93847, 0.12734, -0.32103, -0.11451, 0.99169, 0.0586, 0.32582, -0.018232, 0.94526, 22.301, -0.66286, -43.138)
+
+[node name="Grave_Railing_01a_53" parent="Fence" unique_id=1539075514]
+transform = Transform3D(0.98067, -0.045434, -0.19033, 0.051269, 0.99835, 0.025842, 0.18884, -0.0351, 0.98138, 17.369, -0.71633, -44.656)
+
+[node name="Grave_Railing_01a_54" parent="Fence" unique_id=1486624606]
+transform = Transform3D(0.95356, 0.025211, -0.30014, -0.026536, 0.99965, -0.00034109, 0.30002, 0.0082897, 0.9539, 14.903, -0.67251, -45.414)
+
+[node name="Silhouettes" type="Node3D" parent="." unique_id=961958408]
+
+[node name="FarPlane_A_01_Stone" parent="Silhouettes" unique_id=2107858752]
+transform = Transform3D(-0.89972, 0, -0.23716, 0, 0.93045, 0, 0.23716, 0, -0.89972, -48.31, 2.635, -57.59)
+
+[node name="FarPlane_A_02_Stone" parent="Silhouettes" unique_id=1015621762]
+transform = Transform3D(-0.716, 0, 0.5432, 0, 0.89873, 0, -0.5432, 0, -0.716, 32.74, 0.189, -53.84)
+
+[node name="FarPlane_A_03_Stone" parent="Silhouettes" unique_id=2033885382]
+transform = Transform3D(0.78069, 0, -0.50041, 0, 0.9273, 0, 0.50041, 0, 0.78069, -15.01, 0.785, -53.13)
+
+[node name="FarPlane_A_04_Stone" parent="Silhouettes" unique_id=217131452]
+transform = Transform3D(0.93137, 0, 0.23863, 0, 0.96145, 0, -0.23863, 0, 0.93137, 21.17, -0.428, -50.23)
+
+[node name="FarPlane_A_05_Stone" parent="Silhouettes" unique_id=2089627973]
+transform = Transform3D(0.3804, 0, -0.79873, 0, 0.88468, 0, 0.79873, 0, 0.3804, -17.51, 0.783, -49.74)
+
+[node name="FarPlane_A_06_Stone" parent="Silhouettes" unique_id=137170095]
+transform = Transform3D(0.73924, 0, 0.60376, 0, 0.95447, 0, -0.60376, 0, 0.73924, 7.23, 0.083, -48.59)
+
+[node name="FarPlane_A_07_Stone" parent="Silhouettes" unique_id=497158476]
+transform = Transform3D(-0.95509, 0, -0.40714, 0, 1.03825, 0, 0.40714, 0, -0.95509, 46.25, 1.234, -54.02)
+
+[node name="FarPlane_A_08_Stone" parent="Silhouettes" unique_id=209385872]
+transform = Transform3D(-0.53961, 0, -0.82421, 0, 0.98514, 0, 0.82421, 0, -0.53961, 2.73, 0.298, -48.53)
+
+[node name="FarPlane_A_09_Stone" parent="Silhouettes" unique_id=223931422]
+transform = Transform3D(-0.73999, 0, -0.44186, 0, 0.86187, 0, 0.44186, 0, -0.73999, 52.37, 2.027, -50.67)
+
+[node name="FarPlane_A_10_Stone" parent="Silhouettes" unique_id=1495107349]
+transform = Transform3D(-0.81628, 0, -0.5234, 0, 0.96967, 0, 0.5234, 0, -0.81628, 1.4, -0.048, -55.72)
+
+[node name="FarPlane_A_11_Stone" parent="Silhouettes" unique_id=519760627]
+transform = Transform3D(-0.31267, 0, 0.79423, 0, 0.85356, 0, -0.79423, 0, -0.31267, -56.93, 1.601, -47.03)
+
+[node name="FarPlane_A_12_Stone" parent="Silhouettes" unique_id=882255122]
+transform = Transform3D(0.72769, 0, -0.57039, 0, 0.9246, 0, 0.57039, 0, 0.72769, -9.67, 0.527, -47.34)
+
+[node name="FarPlane_A_13_Stone" parent="Silhouettes" unique_id=1776494123]
+transform = Transform3D(0.6247, 0, -0.59204, 0, 0.86067, 0, 0.59204, 0, 0.6247, 34.59, 0.439, -47.56)
+
+[node name="FarPlane_A_14_Stone" parent="Silhouettes" unique_id=1041494823]
+transform = Transform3D(0.39109, 0, -0.88772, 0, 0.97004, 0, 0.88772, 0, 0.39109, 54.61, 3.37, -54.07)
+
+[node name="FarPlane_A_15_Stone" parent="Silhouettes" unique_id=507084937]
+transform = Transform3D(0.77736, 0, 0.55321, 0, 0.95411, 0, -0.55321, 0, 0.77736, 18.55, -0.304, -54.48)
+
+[node name="FarPlane_A_16_Stone" parent="Silhouettes" unique_id=1958505474]
+transform = Transform3D(0.19058, 0, -0.9429, 0, 0.96197, 0, 0.9429, 0, 0.19058, -22.26, 1.224, -56.85)
+
+[node name="FarPlane_A_17_Tree" parent="Silhouettes" unique_id=1761108920]
+transform = Transform3D(-1.00675, 0, 0.03346, 0, 1.0073, 0, -0.03346, 0, -1.00675, -40.21, 0.81, -47.67)
+
+[node name="FarPlane_A_18_Big" parent="Silhouettes" unique_id=816283599]
+transform = Transform3D(0.54329, 0, -0.66363, 0, 0.85765, 0, 0.66363, 0, 0.54329, 17.28, -0.425, -49.15)
+
+[node name="FarPlane_A_19_Stone" parent="Silhouettes" unique_id=692385757]
+transform = Transform3D(0.34278, 0, -0.8204, 0, 0.88913, 0, 0.8204, 0, 0.34278, 6.15, -0.003, -51.95)
+
+[node name="FarPlane_A_20_Stone" parent="Silhouettes" unique_id=1844409396]
+transform = Transform3D(0.85701, 0, -0.4959, 0, 0.99015, 0, 0.4959, 0, 0.85701, 43.66, 0.887, -49.81)
+
+[node name="FarPlane_A_21_Stone" parent="Silhouettes" unique_id=1601845513]
+transform = Transform3D(0.7563, 0, -0.54904, 0, 0.93458, 0, 0.54904, 0, 0.7563, -6.31, 0.42, -49.19)
+
+[node name="FarPlane_A_22_Stone" parent="Silhouettes" unique_id=1509203320]
+transform = Transform3D(-0.43927, 0, 0.84813, 0, 0.95514, 0, -0.84813, 0, -0.43927, -26.01, 1.318, -57.91)
+
+[node name="FarPlane_A_23_Stone" parent="Silhouettes" unique_id=1167319338]
+transform = Transform3D(-0.95374, 0, -0.3074, 0, 1.00206, 0, 0.3074, 0, -0.95374, -49.55, 0.294, -48.41)
+
+[node name="FarPlane_A_24_Big" parent="Silhouettes" unique_id=246067803]
+transform = Transform3D(-0.93121, 0, -0.14044, 0, 0.94174, 0, 0.14044, 0, -0.93121, 39.11, 0.738, -48.12)
+
+[node name="FarPlane_A_25_Stone" parent="Silhouettes" unique_id=549341447]
+transform = Transform3D(0.61404, 0, 0.82143, 0, 1.02557, 0, -0.82143, 0, 0.61404, 42.12, 1.085, -59.04)
+
+[node name="FarPlane_A_26_Stone" parent="Silhouettes" unique_id=678375192]
+transform = Transform3D(0.67817, 0, 0.53691, 0, 0.86498, 0, -0.53691, 0, 0.67817, 22.24, -0.139, -58.25)
+
+[node name="FarPlane_A_27_Stone" parent="Silhouettes" unique_id=135293717]
+transform = Transform3D(0.13397, 0, 0.93546, 0, 0.94501, 0, -0.93546, 0, 0.13397, -30.15, 1.156, -46.75)
+
+[node name="FarPlane_A_28_Stone" parent="Silhouettes" unique_id=393231869]
+transform = Transform3D(0.869, 0, 0.54414, 0, 1.02531, 0, -0.54414, 0, 0.869, 13.77, -0.384, -57.34)
+
+[node name="FarPlane_A_29_Stone" parent="Silhouettes" unique_id=110598786]
+transform = Transform3D(0.45034, 0, -0.93214, 0, 1.03522, 0, 0.93214, 0, 0.45034, 15.11, -0.299, -53.59)
+
+[node name="FarPlane_A_30_Stone" parent="Silhouettes" unique_id=1564161253]
+transform = Transform3D(0.97766, 0, 0.1823, 0, 0.99451, 0, -0.1823, 0, 0.97766, 25.2, -0.334, -47.95)
+
+[node name="FarPlane_A_31_Stone" parent="Silhouettes" unique_id=846975168]
+transform = Transform3D(0.73306, 0, -0.6166, 0, 0.9579, 0, 0.6166, 0, 0.73306, -45.17, 0.728, -52.23)
+
+[node name="FarPlane_A_32_Stone" parent="Silhouettes" unique_id=663329]
+transform = Transform3D(0.8245, 0, -0.23643, 0, 0.85773, 0, 0.23643, 0, 0.8245, -29.03, 1.382, -52.19)
+
+[node name="FarPlane_A_33_Stone" parent="Silhouettes" unique_id=1555373107]
+transform = Transform3D(-0.92056, 0, 0.28273, 0, 0.963, 0, -0.28273, 0, -0.92056, -11, 0.54, -52.66)
+
+[node name="FarPlane_A_34_Stone" parent="Silhouettes" unique_id=1226104088]
+transform = Transform3D(0.70213, 0, -0.56373, 0, 0.90043, 0, 0.56373, 0, 0.70213, 30.15, 0.132, -56.24)
+
+[node name="FarPlane_A_35_Big" parent="Silhouettes" unique_id=1493071927]
+transform = Transform3D(-0.35991, 0, -0.79593, 0, 0.87352, 0, 0.79593, 0, -0.35991, -20.11, 1.098, -53.41)
+
+[node name="FarPlane_A_36_Stone" parent="Silhouettes" unique_id=1302046084]
+transform = Transform3D(0.2844, 0, -0.99619, 0, 1.03599, 0, 0.99619, 0, 0.2844, -48.98, 0.982, -51.85)
+
+[node name="FarPlane_A_37_Stone" parent="Silhouettes" unique_id=106215055]
+transform = Transform3D(0.46216, 0, 0.74927, 0, 0.88034, 0, -0.74927, 0, 0.46216, -3.71, 0.546, -46.47)
+
+[node name="FarPlane_A_38_Stone" parent="Silhouettes" unique_id=513062934]
+transform = Transform3D(-0.22718, 0, 0.93115, 0, 0.95846, 0, -0.93115, 0, -0.22718, 6.43, -0.368, -59.39)
+
+[node name="FarPlane_A_39_Stone" parent="Silhouettes" unique_id=1714345607]
+transform = Transform3D(0.78352, 0, -0.35046, 0, 0.85833, 0, 0.35046, 0, 0.78352, -44.77, 2.487, -59.2)
+
+[node name="FarPlane_A_40_Stone" parent="Silhouettes" unique_id=460818188]
+transform = Transform3D(0.73548, 0, 0.6852, 0, 1.0052, 0, -0.6852, 0, 0.73548, -38.1, 1.213, -54.32)
+
+[node name="FarPlane_A_41_Stone" parent="Silhouettes" unique_id=1074612235]
+transform = Transform3D(0.74014, 0, -0.6354, 0, 0.97547, 0, 0.6354, 0, 0.74014, -25.6, 1.284, -51.25)
+
+[node name="FarPlane_A_42_Stone" parent="Silhouettes" unique_id=790428851]
+transform = Transform3D(0.84749, 0, -0.20897, 0, 0.87287, 0, 0.20897, 0, 0.84749, -8.68, 0.493, -55.74)
+
+[node name="FarPlane_A_43_Stone" parent="Silhouettes" unique_id=1225837647]
+transform = Transform3D(-0.34997, 0, -0.7896, 0, 0.86368, 0, 0.7896, 0, -0.34997, -5.93, 0.42, -59.49)
+
+[node name="FarPlane_A_44_Stone" parent="Silhouettes" unique_id=621215417]
+transform = Transform3D(0.96529, 0, 0.2264, 0, 0.99148, 0, -0.2264, 0, 0.96529, 55.62, 4.241, -57.91)
+
+[node name="FarPlane_A_45_Stone" parent="Silhouettes" unique_id=1462877275]
+transform = Transform3D(0.88819, 0, 0.2593, 0, 0.92526, 0, -0.2593, 0, 0.88819, -41.11, 1.77, -58.7)
+
+[node name="FarPlane_A_46_Stone" parent="Silhouettes" unique_id=241107827]
+transform = Transform3D(-0.59755, 0, 0.70323, 0, 0.92283, 0, -0.70323, 0, -0.59755, -53.73, 1.24, -49.13)
+
+[node name="FarPlane_A_47_Stone" parent="Silhouettes" unique_id=654443769]
+transform = Transform3D(0.79158, 0, 0.65823, 0, 1.0295, 0, -0.65823, 0, 0.79158, 36.05, 0.406, -56.77)
+
+[node name="FarPlane_A_48_Big" parent="Silhouettes" unique_id=1507115026]
+transform = Transform3D(0.31126, 0, -0.96192, 0, 1.01103, 0, 0.96192, 0, 0.31126, 14.47, -0.374, -46.32)
+
+[node name="FarPlane_A_49_Stone" parent="Silhouettes" unique_id=1482966865]
+transform = Transform3D(0.4928, 0, 0.69896, 0, 0.85522, 0, -0.69896, 0, 0.4928, -53.41, 3.156, -55.77)
+
+[node name="FarPlane_A_50_Stone" parent="Silhouettes" unique_id=1738479594]
+transform = Transform3D(-0.21464, 0, 0.85113, 0, 0.87778, 0, -0.85113, 0, -0.21464, -36.43, 1.144, -49.7)
+
+[node name="FarPlane_A_51_Tree" parent="Silhouettes" unique_id=1758691375]
+transform = Transform3D(-0.82808, 0, 0.51884, 0, 0.9772, 0, -0.51884, 0, -0.82808, 22.46, -0.274, -53.77)
+
+[node name="FarPlane_A_52_Stone" parent="Silhouettes" unique_id=1040750876]
+transform = Transform3D(-0.88384, 0, 0.32232, 0, 0.94078, 0, -0.32232, 0, -0.88384, -20.24, 1.085, -59.92)
+
+[node name="FarPlane_A_53_Stone" parent="Silhouettes" unique_id=1064211775]
+transform = Transform3D(0.90403, 0, 0.16257, 0, 0.91853, 0, -0.16257, 0, 0.90403, 55.8, 2.197, -47.34)
+
+[node name="FarPlane_A_54_Stone" parent="Silhouettes" unique_id=517709289]
+transform = Transform3D(0.01678, 0, 0.89082, 0, 0.89098, 0, -0.89082, 0, 0.01678, 48.12, 2.228, -57.46)
+
+[node name="FarPlane_A_55_Big" parent="Silhouettes" unique_id=1851058078]
+transform = Transform3D(0.80091, 0, -0.51773, 0, 0.95368, 0, 0.51773, 0, 0.80091, 50.22, 0.866, -46.27)
+
+[node name="FarPlane_A_56_Stone" parent="Silhouettes" unique_id=1804724984]
+transform = Transform3D(0.05149, 0, 0.9099, 0, 0.91136, 0, -0.9099, 0, 0.05149, 29.17, 0.268, -59.89)
+
+[node name="FarPlane_A_57_Stone" parent="Silhouettes" unique_id=1876102530]
+transform = Transform3D(-0.43982, 0, -0.84444, 0, 0.95211, 0, 0.84444, 0, -0.43982, -15.43, 0.927, -59.23)
+
+[node name="FarPlane_A_58_Stone" parent="Silhouettes" unique_id=317241872]
+transform = Transform3D(0.90475, 0, -0.52086, 0, 1.04397, 0, 0.52086, 0, 0.90475, 39.69, 0.553, -55.97)
+
+[node name="FarPlane_A_59_Stone" parent="Silhouettes" unique_id=547960588]
+transform = Transform3D(0.74066, 0, -0.70639, 0, 1.0235, 0, 0.70639, 0, 0.74066, 18.43, -0.335, -59.96)
+
+[node name="FarPlane_A_60_Tree" parent="Silhouettes" unique_id=2116355870]
+transform = Transform3D(0.82447, 0, -0.28965, 0, 0.87387, 0, 0.28965, 0, 0.82447, 29.63, 0.047, -46.08)
+
+[node name="FarPlane_A_61_Stone" parent="Silhouettes" unique_id=522380425]
+transform = Transform3D(-0.80887, 0, -0.60363, 0, 1.00927, 0, 0.60363, 0, -0.80887, 10.31, -0.164, -52.48)
+
+[node name="FarPlane_A_62_Stone" parent="Silhouettes" unique_id=2132869823]
+transform = Transform3D(0.06721, 0, -1.02259, 0, 1.0248, 0, 1.02259, 0, 0.06721, -0.24, 0.204, -51.49)
+
+[node name="FarPlane_A_63_Stone" parent="Silhouettes" unique_id=34845688]
+transform = Transform3D(0.19819, 0, 0.91316, 0, 0.93442, 0, -0.91316, 0, 0.19819, -17.19, 1, -55.83)
+
+[node name="FarPlane_A_64_Tree" parent="Silhouettes" unique_id=1535174962]
+transform = Transform3D(0.86552, 0, -0.38509, 0, 0.94732, 0, 0.38509, 0, 0.86552, -19.86, 1.477, -46.36)
+
+[node name="FarPlane_A_65_Stone" parent="Silhouettes" unique_id=2116895082]
+transform = Transform3D(-0.22504, 0, 0.95638, 0, 0.9825, 0, -0.95638, 0, -0.22504, -13.8, 0.601, -49.56)
+
+[node name="FarPlane_A_66_Stone" parent="Silhouettes" unique_id=1202961143]
+transform = Transform3D(0.42607, 0, 0.80815, 0, 0.91359, 0, -0.80815, 0, 0.42607, 51.51, 3.435, -58.9)
+
+[node name="FarPlane_A_67_Stone" parent="Silhouettes" unique_id=1405684380]
+transform = Transform3D(0.83718, 0, 0.27494, 0, 0.88117, 0, -0.27494, 0, 0.83718, -10.98, 0.722, -59.5)
+
+[node name="FarPlane_A_68_Stone" parent="Silhouettes" unique_id=1078142226]
+transform = Transform3D(-0.67829, 0, -0.74488, 0, 1.00743, 0, 0.74488, 0, -0.67829, -53.49, 4.156, -59.64)
+
+[node name="FarPlane_A_69_Stone" parent="Silhouettes" unique_id=595988213]
+transform = Transform3D(-0.90274, 0, 0.12905, 0, 0.91192, 0, -0.12905, 0, -0.90274, -12.8, 0.756, -56.1)
+
+[node name="FarPlane_A_70_Stone" parent="Silhouettes" unique_id=718473967]
+transform = Transform3D(-0.9845, 0, -0.25359, 0, 1.01663, 0, 0.25359, 0, -0.9845, -57.47, 3.925, -55.92)
+
+[node name="FarPlane_A_71_Big" parent="Silhouettes" unique_id=1476986519]
+transform = Transform3D(-0.83449, 0, 0.52967, 0, 0.98839, 0, -0.52967, 0, -0.83449, 9.13, -0.315, -56.32)
+
+[node name="FarPlane_A_72_Big" parent="Silhouettes" unique_id=893839298]
+transform = Transform3D(-0.85964, 0, -0.03393, 0, 0.8603, 0, 0.03393, 0, -0.85964, 30.61, 0.041, -49.56)
+
+[node name="FarPlane_A_73_Stone" parent="Silhouettes" unique_id=135561276]
+transform = Transform3D(0.17368, 0, -0.95013, 0, 0.96588, 0, 0.95013, 0, 0.17368, 20.22, -0.503, -46.34)
+
+[node name="FarPlane_A_74_Big" parent="Silhouettes" unique_id=1680700778]
+transform = Transform3D(0.2058, 0, 1.01783, 0, 1.03843, 0, -1.01783, 0, 0.2058, -41.86, 0.969, -53.46)
+
+[node name="FarPlane_A_75_Stone" parent="Silhouettes" unique_id=558190389]
+transform = Transform3D(-0.62775, 0, 0.80164, 0, 1.01818, 0, -0.80164, 0, -0.62775, 4.8, -0.204, -56.33)
+
+[node name="FarPlane_A_76_Stone" parent="Silhouettes" unique_id=2095763467]
+transform = Transform3D(0.98425, 0, -0.188, 0, 1.00204, 0, 0.188, 0, 0.98425, -45.23, 0.395, -48.35)
+
+[node name="FarPlane_A_77_Stone" parent="Silhouettes" unique_id=1305644571]
+transform = Transform3D(0.3001, 0, -0.94231, 0, 0.98895, 0, 0.94231, 0, 0.3001, 1.07, -0.066, -59.77)
+
+[node name="FarPlane_A_78_Stone" parent="Silhouettes" unique_id=983197396]
+transform = Transform3D(-0.77986, 0, -0.38346, 0, 0.86904, 0, 0.38346, 0, -0.77986, -29.98, 1.408, -58.09)
+
+[node name="FarPlane_B_01_Big" parent="Silhouettes" unique_id=1971288473]
+transform = Transform3D(0.10556, 0, -1.13989, 0, 1.14476, 0, 1.13989, 0, 0.10556, -22.56, 1.062, -65.56)
+
+[node name="FarPlane_B_02_Stone" parent="Silhouettes" unique_id=1359394900]
+transform = Transform3D(-0.36586, 0, 1.03973, 0, 1.10222, 0, -1.03973, 0, -0.36586, 18.37, -0.467, -65.59)
+
+[node name="FarPlane_B_03_Stone" parent="Silhouettes" unique_id=693236223]
+transform = Transform3D(0.88078, 0, -0.62824, 0, 1.08188, 0, 0.62824, 0, 0.88078, 45.04, 4.318, -69.97)
+
+[node name="FarPlane_B_04_Stone" parent="Silhouettes" unique_id=1407187248]
+transform = Transform3D(-0.57524, 0, 0.96104, 0, 1.12005, 0, -0.96104, 0, -0.57524, -41.79, 5.79, -72.87)
+
+[node name="FarPlane_B_05_Stone" parent="Silhouettes" unique_id=616790205]
+transform = Transform3D(-0.97569, 0, 0.00128, 0, 0.97569, 0, -0.00128, 0, -0.97569, -45.58, 5.263, -68.2)
+
+[node name="FarPlane_B_06_Stone" parent="Silhouettes" unique_id=813099867]
+transform = Transform3D(-1.18204, 0, 0.00846, 0, 1.18207, 0, -0.00846, 0, -1.18204, 58.08, 4.538, -61.23)
+
+[node name="FarPlane_B_07_Stone" parent="Silhouettes" unique_id=830391774]
+transform = Transform3D(0.83292, 0, -0.63322, 0, 1.04629, 0, 0.63322, 0, 0.83292, 21.03, 0.789, -73.58)
+
+[node name="FarPlane_B_08_Big" parent="Silhouettes" unique_id=1369723162]
+transform = Transform3D(-0.42888, 0, -0.8591, 0, 0.9602, 0, 0.8591, 0, -0.42888, 0.33, 0.165, -70.37)
+
+[node name="FarPlane_B_09_Stone" parent="Silhouettes" unique_id=640685711]
+transform = Transform3D(1.13613, 0, -0.22407, 0, 1.15802, 0, 0.22407, 0, 1.13613, -21.39, 1.654, -72.04)
+
+[node name="FarPlane_B_10_Big" parent="Silhouettes" unique_id=813362077]
+transform = Transform3D(-1.12409, 0, 0.29614, 0, 1.16245, 0, -0.29614, 0, -1.12409, 8.94, 0.28, -74.41)
+
+[node name="FarPlane_B_11_Stone" parent="Silhouettes" unique_id=288087641]
+transform = Transform3D(-0.21389, 0, -1.06006, 0, 1.08142, 0, 1.06006, 0, -0.21389, 9.84, -0.517, -61.27)
+
+[node name="FarPlane_B_12_Big" parent="Silhouettes" unique_id=1186986409]
+transform = Transform3D(-0.62452, 0, -0.98196, 0, 1.16373, 0, 0.98196, 0, -0.62452, -32.37, 4.099, -71.84)
+
+[node name="FarPlane_B_13_Stone" parent="Silhouettes" unique_id=1960574537]
+transform = Transform3D(-0.50272, 0, -0.94029, 0, 1.06624, 0, 0.94029, 0, -0.50272, -65.62, 4.04, -62.58)
+
+[node name="FarPlane_B_14_Stone" parent="Silhouettes" unique_id=1129016170]
+transform = Transform3D(0.17005, 0, 1.03104, 0, 1.04497, 0, -1.03104, 0, 0.17005, -5.19, 0.449, -64.23)
+
+[node name="FarPlane_B_15_Big" parent="Silhouettes" unique_id=708899189]
+transform = Transform3D(1.03016, 0, 0.29696, 0, 1.07211, 0, -0.29696, 0, 1.03016, -10.45, 0.677, -74.04)
+
+[node name="FarPlane_B_16_Stone" parent="Silhouettes" unique_id=1817931821]
+transform = Transform3D(0.42648, 0, -1.02986, 0, 1.11467, 0, 1.02986, 0, 0.42648, -60.74, 4.646, -69.87)
+
+[node name="FarPlane_B_17_Stone" parent="Silhouettes" unique_id=997540472]
+transform = Transform3D(0.78993, 0, -0.56032, 0, 0.96847, 0, 0.56032, 0, 0.78993, -3.83, 0.353, -74.16)
+
+[node name="FarPlane_B_18_Stone" parent="Silhouettes" unique_id=7170515]
+transform = Transform3D(-0.65557, 0, 0.86341, 0, 1.08409, 0, -0.86341, 0, -0.65557, 47.38, 3.288, -63.47)
+
+[node name="FarPlane_B_19_Stone" parent="Silhouettes" unique_id=973664371]
+transform = Transform3D(-0.06838, 0, -0.96151, 0, 0.96394, 0, 0.96151, 0, -0.06838, -35.98, 3.377, -67.1)
+
+[node name="FarPlane_B_20_Stone" parent="Silhouettes" unique_id=868547388]
+transform = Transform3D(0.74659, 0, 0.91094, 0, 1.17779, 0, -0.91094, 0, 0.74659, 52.3, 4.217, -66.5)
+
+[node name="FarPlane_B_21_Stone" parent="Silhouettes" unique_id=561536087]
+transform = Transform3D(-0.78089, 0, 0.75997, 0, 1.08965, 0, -0.75997, 0, -0.78089, 12.73, -0.581, -63.33)
+
+[node name="FarPlane_B_22_Stone" parent="Silhouettes" unique_id=2000516881]
+transform = Transform3D(-0.97223, 0, 0.09849, 0, 0.97721, 0, -0.09849, 0, -0.97223, -64.57, 4.843, -74.32)
+
+[node name="FarPlane_B_23_Stone" parent="Silhouettes" unique_id=2144683478]
+transform = Transform3D(-0.7886, 0, 0.58806, 0, 0.98372, 0, -0.58806, 0, -0.7886, -63.88, 4.362, -67.29)
+
+[node name="FarPlane_B_24_Tree" parent="Silhouettes" unique_id=593670113]
+transform = Transform3D(-0.36706, 0, -0.97912, 0, 1.04566, 0, 0.97912, 0, -0.36706, 17.49, -0.437, -69.52)
+
+[node name="FarPlane_B_25_Stone" parent="Silhouettes" unique_id=1394074689]
+transform = Transform3D(-1.0086, 0, 0.46174, 0, 1.10927, 0, -0.46174, 0, -1.0086, 61.51, 4.223, -69.66)
+
+[node name="FarPlane_B_26_Stone" parent="Silhouettes" unique_id=1039085169]
+transform = Transform3D(0.95041, 0, -0.48398, 0, 1.06654, 0, 0.48398, 0, 0.95041, 60.9, 4.151, -75.04)
+
+[node name="FarPlane_B_27_Big" parent="Silhouettes" unique_id=302361952]
+transform = Transform3D(-0.63871, 0, -0.84409, 0, 1.05851, 0, 0.84409, 0, -0.63871, -32.68, 1.749, -63.12)
+
+[node name="FarPlane_B_28_Stone" parent="Silhouettes" unique_id=490258871]
+transform = Transform3D(-0.69877, 0, 0.84561, 0, 1.09697, 0, -0.84561, 0, -0.69877, 61.45, 4.577, -62.04)
+
+[node name="FarPlane_B_29_Tree" parent="Silhouettes" unique_id=840765573]
+transform = Transform3D(-0.44888, 0, -0.84043, 0, 0.95279, 0, 0.84043, 0, -0.44888, 0.11, 0.315, -74.48)
+
+[node name="FarPlane_B_30_Tree" parent="Silhouettes" unique_id=1930310301]
+transform = Transform3D(-0.37912, 0, 1.07796, 0, 1.14268, 0, -1.07796, 0, -0.37912, -35.43, 5.407, -74.49)
+
+[node name="FarPlane_B_31_Stone" parent="Silhouettes" unique_id=1934171535]
+transform = Transform3D(-0.36557, 0, -0.95748, 0, 1.0249, 0, 0.95748, 0, -0.36557, -53.51, 5.008, -69.76)
+
+[node name="FarPlane_B_32_Stone" parent="Silhouettes" unique_id=1527266530]
+transform = Transform3D(0.61516, 0, 0.81013, 0, 1.01722, 0, -0.81013, 0, 0.61516, 57.36, 4.165, -68.74)
+
+[node name="FarPlane_B_33_Stone" parent="Silhouettes" unique_id=1505799823]
+transform = Transform3D(-0.41658, 0, -0.85945, 0, 0.95509, 0, 0.85945, 0, -0.41658, 51.33, 4.251, -70.19)
+
+[node name="FarPlane_B_34_Stone" parent="Silhouettes" unique_id=170812802]
+transform = Transform3D(0.82818, 0, -0.64868, 0, 1.05199, 0, 0.64868, 0, 0.82818, 40.19, 1.694, -63.19)
+
+[node name="FarPlane_B_35_Stone" parent="Silhouettes" unique_id=1024969765]
+transform = Transform3D(-0.33637, 0, -1.07298, 0, 1.12447, 0, 1.07298, 0, -0.33637, -7.04, 0.336, -70.21)
+
+[node name="FarPlane_B_36_Big" parent="Silhouettes" unique_id=2030286400]
+transform = Transform3D(1.11032, 0, -0.31946, 0, 1.15536, 0, 0.31946, 0, 1.11032, 4.11, -0.196, -63.65)
+
+[node name="FarPlane_B_37_Stone" parent="Silhouettes" unique_id=1542561628]
+transform = Transform3D(0.00702, 0, 1.16584, 0, 1.16586, 0, -1.16584, 0, 0.00702, 12.99, -0.274, -71.47)
+
+[node name="FarPlane_B_38_Stone" parent="Silhouettes" unique_id=761354504]
+transform = Transform3D(-0.95169, 0, -0.68892, 0, 1.17487, 0, 0.68892, 0, -0.95169, 65.98, 4.609, -60.85)
+
+[node name="FarPlane_B_39_Stone" parent="Silhouettes" unique_id=1208030346]
+transform = Transform3D(-0.95669, 0, -0.09463, 0, 0.96136, 0, 0.09463, 0, -0.95669, -0.12, 0.178, -65.95)
+
+[node name="FarPlane_B_40_Stone" parent="Silhouettes" unique_id=1866191237]
+transform = Transform3D(0.82793, 0, 0.62766, 0, 1.03896, 0, -0.62766, 0, 0.82793, 3.11, 0.069, -72.51)
+
+[node name="FarPlane_B_41_Stone" parent="Silhouettes" unique_id=1682237532]
+transform = Transform3D(-0.70598, 0, 0.96948, 0, 1.19929, 0, -0.96948, 0, -0.70598, 44.04, 2.34, -62.63)
+
+[node name="FarPlane_B_42_Big" parent="Silhouettes" unique_id=1304955868]
+transform = Transform3D(0.37271, 0, 1.00642, 0, 1.07322, 0, -1.00642, 0, 0.37271, -3.6, 0.259, -70.7)
+
+[node name="FarPlane_B_43_Stone" parent="Silhouettes" unique_id=1930742533]
+transform = Transform3D(0.16334, 0, 0.96293, 0, 0.97669, 0, -0.96293, 0, 0.16334, -30.51, 1.915, -65.86)
+
+[node name="FarPlane_B_44_Stone" parent="Silhouettes" unique_id=492167820]
+transform = Transform3D(0.07774, 0, -1.14166, 0, 1.1443, 0, 1.14166, 0, 0.07774, -15.96, 0.83, -72.07)
+
+[node name="FarPlane_B_45_Big" parent="Silhouettes" unique_id=1425476878]
+transform = Transform3D(-0.93124, 0, 0.21732, 0, 0.95627, 0, -0.21732, 0, -0.93124, 3.29, -0.02, -67.01)
+
+[node name="FarPlane_B_46_Stone" parent="Silhouettes" unique_id=1516217412]
+transform = Transform3D(0.9231, 0, 0.72645, 0, 1.17467, 0, -0.72645, 0, 0.9231, -41.79, 4.961, -68.6)
+
+[node name="FarPlane_B_47_Stone" parent="Silhouettes" unique_id=1432457955]
+transform = Transform3D(1.03536, 0, -0.58484, 0, 1.18912, 0, 0.58484, 0, 1.03536, 46.8, 4.473, -73.25)
+
+[node name="FarPlane_B_48_Stone" parent="Silhouettes" unique_id=1822043537]
+transform = Transform3D(-1.04227, 0, 0.55909, 0, 1.18276, 0, -0.55909, 0, -1.04227, 65.87, 4.361, -70.22)
+
+[node name="FarPlane_B_49_Stone" parent="Silhouettes" unique_id=1034482383]
+transform = Transform3D(-0.6053, 0, 0.97347, 0, 1.14631, 0, -0.97347, 0, -0.6053, -9.27, 0.516, -66.91)
+
+[node name="FarPlane_B_50_Big" parent="Silhouettes" unique_id=1443896404]
+transform = Transform3D(0.74701, 0, -0.92573, 0, 1.18954, 0, 0.92573, 0, 0.74701, -56.89, 4.747, -69.13)
+
+[node name="FarPlane_B_51_Stone" parent="Silhouettes" unique_id=14359732]
+transform = Transform3D(0.40372, 0, -0.89332, 0, 0.98031, 0, 0.89332, 0, 0.40372, 56.97, 4.2, -75.86)
+
+[node name="FarPlane_B_52_Stone" parent="Silhouettes" unique_id=864699898]
+transform = Transform3D(-0.33565, 0, 0.89151, 0, 0.9526, 0, -0.89151, 0, -0.33565, 33.37, 1.302, -66.48)
+
+[node name="FarPlane_B_53_Stone" parent="Silhouettes" unique_id=487084882]
+transform = Transform3D(-0.51232, 0, 0.81888, 0, 0.96593, 0, -0.81888, 0, -0.51232, -40.69, 3.151, -63.48)
+
+[node name="FarPlane_B_54_Stone" parent="Silhouettes" unique_id=1174049209]
+transform = Transform3D(-0.54394, 0, -0.80113, 0, 0.96834, 0, 0.80113, 0, -0.54394, 9.62, -0.42, -66.93)
+
+[node name="FarPlane_B_55_Stone" parent="Silhouettes" unique_id=100923933]
+transform = Transform3D(-0.69408, 0, -0.67397, 0, 0.96747, 0, 0.67397, 0, -0.69408, -26.59, 1.353, -64.73)
+
+[node name="FarPlane_B_56_Stone" parent="Silhouettes" unique_id=654075963]
+transform = Transform3D(0.952, 0, 0.26423, 0, 0.98799, 0, -0.26423, 0, 0.952, 23.9, 0.188, -69.89)
+
+[node name="FarPlane_B_57_Big" parent="Silhouettes" unique_id=1533562324]
+transform = Transform3D(-1.03227, 0, -0.3277, 0, 1.08304, 0, 0.3277, 0, -1.03227, 29.47, 0.987, -68.68)
+
+[node name="FarPlane_B_58_Stone" parent="Silhouettes" unique_id=1851302045]
+transform = Transform3D(0.22599, 0, -0.98138, 0, 1.00706, 0, 0.98138, 0, 0.22599, -2.27, 0.202, -60.91)
+
+[node name="FarPlane_B_59_Stone" parent="Silhouettes" unique_id=1611628485]
+transform = Transform3D(0.35613, 0, -0.89682, 0, 0.96494, 0, 0.89682, 0, 0.35613, -44, 4.043, -64.29)
+
+[node name="FarPlane_B_60_Stone" parent="Silhouettes" unique_id=1161815221]
+transform = Transform3D(0.64029, 0, -0.89246, 0, 1.09838, 0, 0.89246, 0, 0.64029, -56.79, 4.49, -63.36)
+
+[node name="FarPlane_B_61_Stone" parent="Silhouettes" unique_id=209474829]
+transform = Transform3D(-0.92654, 0, 0.60243, 0, 1.10517, 0, -0.60243, 0, -0.92654, -38.6, 5.206, -71.42)
+
+[node name="FarPlane_B_62_Stone" parent="Silhouettes" unique_id=197466621]
+transform = Transform3D(0.97926, 0, -0.23271, 0, 1.00653, 0, 0.23271, 0, 0.97926, 25.64, 2.06, -74.98)
+
+[node name="FarPlane_C_01_Stone" parent="Silhouettes" unique_id=1015394076]
+transform = Transform3D(-0.47946, 0, 1.17095, 0, 1.26531, 0, -1.17095, 0, -0.47946, 69.57, 4.311, -76.65)
+
+[node name="FarPlane_C_02_Big" parent="Silhouettes" unique_id=818775307]
+transform = Transform3D(0.96116, 0, -0.43313, 0, 1.05424, 0, 0.43313, 0, 0.96116, 42.17, 4.144, -84.66)
+
+[node name="FarPlane_C_03_Stone" parent="Silhouettes" unique_id=9042990]
+transform = Transform3D(1.14912, 0, 0.40689, 0, 1.21902, 0, -0.40689, 0, 1.14912, -30.81, 5.532, -96.85)
+
+[node name="FarPlane_C_04_Stone" parent="Silhouettes" unique_id=1801706965]
+transform = Transform3D(0.42657, 0, -1.20655, 0, 1.27973, 0, 1.20655, 0, 0.42657, 25.35, 4.437, -94.29)
+
+[node name="FarPlane_C_05_Stone" parent="Silhouettes" unique_id=2063744312]
+transform = Transform3D(1.05609, 0, 0.2703, 0, 1.09013, 0, -0.2703, 0, 1.05609, -16.3, 4.317, -93.1)
+
+[node name="FarPlane_C_06_Stone" parent="Silhouettes" unique_id=793406512]
+transform = Transform3D(-1.0347, 0, 0.2463, 0, 1.06361, 0, -0.2463, 0, -1.0347, -52.82, 5.84, -92.87)
+
+[node name="FarPlane_C_07_Stone" parent="Silhouettes" unique_id=1471884709]
+transform = Transform3D(-0.42555, 0, -1.152, 0, 1.22809, 0, 1.152, 0, -0.42555, -1.37, 4.538, -92.81)
+
+[node name="FarPlane_C_08_Stone" parent="Silhouettes" unique_id=1670947562]
+transform = Transform3D(0.80106, 0, 0.90872, 0, 1.21139, 0, -0.90872, 0, 0.80106, 61.73, 4.081, -94.36)
+
+[node name="FarPlane_C_09_Tree" parent="Silhouettes" unique_id=1487517297]
+transform = Transform3D(-1.18446, 0, 0.38084, 0, 1.24418, 0, -0.38084, 0, -1.18446, 31.6, 4.314, -80.65)
+
+[node name="FarPlane_C_10_Big" parent="Silhouettes" unique_id=1147619846]
+transform = Transform3D(1.18323, 0, -0.36919, 0, 1.23949, 0, 0.36919, 0, 1.18323, -67.18, 4.741, -78.05)
+
+[node name="FarPlane_C_11_Big" parent="Silhouettes" unique_id=344778837]
+transform = Transform3D(1.04753, 0, -0.44866, 0, 1.13957, 0, 0.44866, 0, 1.04753, -55.18, 5.759, -82.25)
+
+[node name="FarPlane_C_12_Stone" parent="Silhouettes" unique_id=184129550]
+transform = Transform3D(1.02935, 0, 0.49175, 0, 1.14078, 0, -0.49175, 0, 1.02935, 73.35, 4.64, -85.73)
+
+[node name="FarPlane_C_13_Stone" parent="Silhouettes" unique_id=35910816]
+transform = Transform3D(1.12876, 0, 0.23001, 0, 1.15195, 0, -0.23001, 0, 1.12876, 28.99, 4.629, -91.66)
+
+[node name="FarPlane_C_14_Stone" parent="Silhouettes" unique_id=1008375734]
+transform = Transform3D(-0.40739, 0, 1.09756, 0, 1.17073, 0, -1.09756, 0, -0.40739, 69.97, 4.891, -95.93)
+
+[node name="FarPlane_C_15_Big" parent="Silhouettes" unique_id=1536638217]
+transform = Transform3D(-1.06618, 0, -0.71028, 0, 1.28111, 0, 0.71028, 0, -1.06618, -71.35, 5.529, -97.24)
+
+[node name="FarPlane_C_16_Stone" parent="Silhouettes" unique_id=478723442]
+transform = Transform3D(0.61649, 0, -1.13644, 0, 1.29289, 0, 1.13644, 0, 0.61649, -59.76, 5.436, -91.07)
+
+[node name="FarPlane_C_17_Big" parent="Silhouettes" unique_id=24357430]
+transform = Transform3D(-0.77509, 0, 1.09428, 0, 1.34098, 0, -1.09428, 0, -0.77509, 39.11, 4.598, -95.23)
+
+[node name="FarPlane_C_18_Big" parent="Silhouettes" unique_id=2042668302]
+transform = Transform3D(0.30922, 0, -1.19077, 0, 1.23027, 0, 1.19077, 0, 0.30922, 8.25, 2.222, -80.68)
+
+[node name="FarPlane_C_19_Stone" parent="Silhouettes" unique_id=1055081377]
+transform = Transform3D(0.94613, 0, -0.50732, 0, 1.07356, 0, 0.50732, 0, 0.94613, 54.12, 3.907, -87.78)
+
+[node name="FarPlane_C_20_Stone" parent="Silhouettes" unique_id=1828700278]
+transform = Transform3D(-0.79361, 0, 0.98119, 0, 1.26196, 0, -0.98119, 0, -0.79361, -22.9, 4.684, -89.58)
+
+[node name="FarPlane_C_21_Stone" parent="Silhouettes" unique_id=1247797410]
+transform = Transform3D(-0.98766, 0, -0.41372, 0, 1.07081, 0, 0.41372, 0, -0.98766, -72.86, 4.326, -76.18)
+
+[node name="FarPlane_C_22_Big" parent="Silhouettes" unique_id=2146559237]
+transform = Transform3D(-1.08748, 0, 0.16786, 0, 1.10035, 0, -0.16786, 0, -1.08748, -28.5, 5.182, -88.87)
+
+[node name="FarPlane_C_23_Stone" parent="Silhouettes" unique_id=903705921]
+transform = Transform3D(-1.05725, 0, -0.56019, 0, 1.19649, 0, 0.56019, 0, -1.05725, 40.62, 4.261, -80.49)
+
+[node name="FarPlane_C_24_Stone" parent="Silhouettes" unique_id=1583743755]
+transform = Transform3D(0.67599, 0, 1.08399, 0, 1.2775, 0, -1.08399, 0, 0.67599, 43.75, 4.22, -94.77)
+
+[node name="FarPlane_C_25_Stone" parent="Silhouettes" unique_id=986962851]
+transform = Transform3D(-1.25493, 0, -0.37979, 0, 1.31114, 0, 0.37979, 0, -1.25493, 48.83, 3.972, -85)
+
+[node name="FarPlane_C_26_Stone" parent="Silhouettes" unique_id=41365596]
+transform = Transform3D(0.44293, 0, -1.1665, 0, 1.24776, 0, 1.1665, 0, 0.44293, -69.13, 4.625, -82.31)
+
+[node name="FarPlane_C_27_Stone" parent="Silhouettes" unique_id=1679328406]
+transform = Transform3D(1.09425, 0, 0.1003, 0, 1.09884, 0, -0.1003, 0, 1.09425, -37.81, 6.14, -89.86)
+
+[node name="FarPlane_C_28_Big" parent="Silhouettes" unique_id=1784903934]
+transform = Transform3D(0.86796, 0, 0.94648, 0, 1.2842, 0, -0.94648, 0, 0.86796, -46.08, 6.182, -96.21)
+
+[node name="FarPlane_C_29_Stone" parent="Silhouettes" unique_id=9467678]
+transform = Transform3D(1.02988, 0, -0.60285, 0, 1.19335, 0, 0.60285, 0, 1.02988, 36.59, 4.538, -89.08)
+
+[node name="FarPlane_C_30_Stone" parent="Silhouettes" unique_id=989160316]
+transform = Transform3D(-0.15751, 0, 1.16471, 0, 1.17531, 0, -1.16471, 0, -0.15751, -24.58, 4.684, -97.77)
+
+[node name="FarPlane_C_31_Stone" parent="Silhouettes" unique_id=1980017529]
+transform = Transform3D(1.18261, 0, 0.24109, 0, 1.20694, 0, -0.24109, 0, 1.18261, 5.94, 4.131, -90.73)
+
+[node name="FarPlane_C_32_Stone" parent="Silhouettes" unique_id=859625911]
+transform = Transform3D(-0.24152, 0, 1.06632, 0, 1.09332, 0, -1.06632, 0, -0.24152, -50.05, 6.167, -86.67)
+
+[node name="FarPlane_C_33_Big" parent="Silhouettes" unique_id=2028115276]
+transform = Transform3D(-0.16625, 0, 1.11951, 0, 1.13179, 0, -1.11951, 0, -0.16625, 14.88, 4.031, -93.35)
+
+[node name="FarPlane_C_34_Big" parent="Silhouettes" unique_id=1648096204]
+transform = Transform3D(-1.08021, 0, 0.07222, 0, 1.08262, 0, -0.07222, 0, -1.08021, -55.47, 5.542, -77.87)
+
+[node name="FarPlane_C_35_Stone" parent="Silhouettes" unique_id=1192037563]
+transform = Transform3D(0.5838, 0, -1.20138, 0, 1.33572, 0, 1.20138, 0, 0.5838, -42.03, 6.204, -83.43)
+
+[node name="FarPlane_C_36_Big" parent="Silhouettes" unique_id=1971247339]
+transform = Transform3D(-0.21824, 0, 1.04577, 0, 1.0683, 0, -1.04577, 0, -0.21824, -56.16, 5.602, -96.11)
+
+[node name="FarPlane_C_37_Big" parent="Silhouettes" unique_id=389905780]
+transform = Transform3D(0.30495, 0, 1.14786, 0, 1.18768, 0, -1.14786, 0, 0.30495, -33.36, 5.701, -80.8)
+
+[node name="FarPlane_C_38_Big" parent="Silhouettes" unique_id=1936841292]
+transform = Transform3D(1.18344, 0, -0.02313, 0, 1.18367, 0, 0.02313, 0, 1.18344, -66.89, 4.889, -86.17)
+
+[node name="FarPlane_C_39_Big" parent="Silhouettes" unique_id=276666806]
+transform = Transform3D(-0.97846, 0, -0.71824, 0, 1.21377, 0, 0.71824, 0, -0.97846, 51.19, 3.638, -97.4)
+
+[node name="FarPlane_C_40_Stone" parent="Silhouettes" unique_id=1507648199]
+transform = Transform3D(1.21524, 0, 0.33232, 0, 1.25985, 0, -0.33232, 0, 1.21524, 41.84, 4.238, -89.46)
+
+[node name="FarPlane_C_41_Stone" parent="Silhouettes" unique_id=91836109]
+transform = Transform3D(-1.18743, 0, -0.19626, 0, 1.20354, 0, 0.19626, 0, -1.18743, -36.73, 6.146, -95.8)
+
+[node name="FarPlane_C_42_Big" parent="Silhouettes" unique_id=387989969]
+transform = Transform3D(-1.29996, 0, -0.28407, 0, 1.33064, 0, 0.28407, 0, -1.29996, -46.33, 6.241, -92.58)
+
+[node name="FarPlane_C_43_Stone" parent="Silhouettes" unique_id=466904898]
+transform = Transform3D(0.21504, 0, -1.18869, 0, 1.20799, 0, 1.18869, 0, 0.21504, -67.7, 5.551, -96.77)
+
+[node name="FarPlane_C_44_Stone" parent="Silhouettes" unique_id=1182346831]
+transform = Transform3D(1.04894, 0, -0.6145, 0, 1.21568, 0, 0.6145, 0, 1.04894, 16.26, 3.791, -84.28)
+
+[node name="FarPlane_C_45_Stone" parent="Silhouettes" unique_id=1265468025]
+transform = Transform3D(0.82436, 0, -0.74316, 0, 1.10989, 0, 0.74316, 0, 0.82436, -17.12, 4.532, -87.71)
+
+[node name="FarPlane_C_46_Big" parent="Silhouettes" unique_id=1873356510]
+transform = Transform3D(-0.57583, 0, -1.1852, 0, 1.31768, 0, 1.1852, 0, -0.57583, -72.95, 5.021, -91.42)
+
+[node name="Grave_Tomb_01a_02" parent="Silhouettes" unique_id=20386093]
+transform = Transform3D(0.99138, 0, 0.44139, 0, 1.0852, 0, -0.44139, 0, 0.99138, -34, 1.0676, -58)
+
+[node name="Grave_Arch_01a_02" parent="Silhouettes" unique_id=1398929015]
+transform = Transform3D(1.1659, 0, -0.37881, 0, 1.2258, 0, 0.37881, 0, 1.1659, 22, -0.79726, -62)
+
+[node name="Grave_Modern_Full_01a_01" parent="Silhouettes" unique_id=716112538]
+transform = Transform3D(1.233, 0, 0.17329, 0, 1.2452, 0, -0.17329, 0, 1.233, -14, 0.17852, -66)
+
+[node name="Grave_Modern_Full_01b_01" parent="Silhouettes" unique_id=1591923633]
+transform = Transform3D(1.0896, 0, -0.62907, 0, 1.2581, 0, 0.62907, 0, 1.0896, 6, -0.4724, -70)
+
+[node name="Grave_Pyramid_01a_02" parent="Silhouettes" unique_id=913298310]
+transform = Transform3D(1.0735, 0, 0.22818, 0, 1.0975, 0, -0.22818, 0, 1.0735, 38, 0.15422, -52)
+
+[node name="Grave_Obelisk_01a_02" parent="Silhouettes" unique_id=573640481]
+transform = Transform3D(1.0536, 0, 0, 0, 1.0536, 0, 0, 0, 1.0536, -46, -0.13044, -44)
+
+[node name="Grave_Slab_Tall_01a_02" parent="Silhouettes" unique_id=297437512]
+transform = Transform3D(1.0135, 0, 0.85046, 0, 1.3231, 0, -0.85046, 0, 1.0135, -25, 1.1325, -70)
+
+[node name="Grave_Lantern_Stone_01a_02" parent="Silhouettes" unique_id=1961025472]
+transform = Transform3D(1.0548, 0, -0.22421, 0, 1.0784, 0, 0.22421, 0, 1.0548, 30, 1.8215, -74)
+
+[node name="Grave_Columbarium_01a_02" parent="Silhouettes" unique_id=1287843864]
+transform = Transform3D(0.58856, 0, -1.1069, 0, 1.2537, 0, 1.1069, 0, 0.58856, 45, 0.1377, -34)
+
+[node name="Grave_RockStack_01a_02" parent="Silhouettes" unique_id=1307023947]
+transform = Transform3D(1.1057, 0, 0.63838, 0, 1.2768, 0, -0.63838, 0, 1.1057, -52, -1.5525, -26)
+
+[node name="Grave_Archway_Wood_01a_02" parent="Silhouettes" unique_id=1782918948]
+transform = Transform3D(1.2343, 0, 0.12973, 0, 1.2411, 0, -0.12973, 0, 1.2343, 16, 0.67359, -78)
+
+[node name="Grave_Monu_01a_02" parent="Silhouettes" unique_id=1848281383]
+transform = Transform3D(1.2468, 0, -0.45381, 0, 1.3269, 0, 0.45381, 0, 1.2468, -40, 5.3605, -76)
+
+[node name="Grave_Railing_01a_55" parent="Silhouettes" unique_id=2109704026]
+transform = Transform3D(1.1099, 0, 0.07761, 0, 1.1126, 0, -0.07761, 0, 1.1099, -8, 1.6597, -80)
+
+[node name="Grave_Railing_01a_56" parent="Silhouettes" unique_id=1970798884]
+transform = Transform3D(1.2704, 0, 0.088838, 0, 1.2735, 0, -0.088838, 0, 1.2704, -5.4, 1.4686, -80.2)
+
+[node name="Grave_Railing_01a_57" parent="Silhouettes" unique_id=28765367]
+transform = Transform3D(1.1339, 0, 0.079292, 0, 1.1367, 0, -0.079292, 0, 1.1339, -2.8, 1.4723, -80.4)
+
+[node name="Grave_Tomb_01a_03" parent="Silhouettes" unique_id=442366108]
+transform = Transform3D(0.82078, 0, -0.68871, 0, 1.0714, 0, 0.68871, 0, 0.82078, 40, 1.9216, -68)
+
+[node name="Grave_Arch_01a_03" parent="Silhouettes" unique_id=1087436817]
+transform = Transform3D(1.0727, 0, 0.26744, 0, 1.1055, 0, -0.26744, 0, 1.0727, -32, 4.7359, -88)
+
+[node name="Grave_Modern_Full_01d_01" parent="Silhouettes" unique_id=780755597]
+transform = Transform3D(0.40509, 0, -1.113, 0, 1.1844, 0, 1.113, 0, 0.40509, 52, -0.079117, -20)
+
+[node name="Grave_Obelisk_01a_03" parent="Silhouettes" unique_id=763756539]
+transform = Transform3D(1.3247, 0, 0, 0, 1.3247, 0, 0, 0, 1.3247, 12, 3.0143, -84)
+
+[node name="Grave_Slab_Tall_01a_03" parent="Silhouettes" unique_id=1252098649]
+transform = Transform3D(1.1563, 0, 0.56397, 0, 1.2865, 0, -0.56397, 0, 1.1563, 44, 4.014, -78)
+
+[node name="Grave_Pyramid_01a_03" parent="Silhouettes" unique_id=1528584737]
+transform = Transform3D(1.1292, 0, 0.411, 0, 1.2017, 0, -0.411, 0, 1.1292, -58, 3.9414, -60)
+
+[node name="Grave_Lantern_Stone_01a_03" parent="Silhouettes" unique_id=690778980]
+transform = Transform3D(1.2789, 0, -0.17974, 0, 1.2915, 0, 0.17974, 0, 1.2789, -20, 3.7531, -82)
+
+[node name="Grave_Monu_01a_03" parent="Silhouettes" unique_id=1798704797]
+transform = Transform3D(1.1632, 0, 0.20511, 0, 1.1812, 0, -0.20511, 0, 1.1632, 34, 4.3011, -92)
+
+[node name="Grave_Columbarium_01a_03" parent="Silhouettes" unique_id=987496113]
+transform = Transform3D(0.68511, 0, 0.97844, 0, 1.1945, 0, -0.97844, 0, 0.68511, -48, 4.9235, -74)
+
+[node name="Grave_Obelisk_01a_04" parent="Silhouettes" unique_id=1361147989]
+transform = Transform3D(1.1667, 0, 0, 0, 1.1667, 0, 0, 0, 1.1667, 26, -0.16252, -66)
+
+[node name="Trees" type="Node3D" parent="." unique_id=624197585]
+
+[node name="Environment_Nature_Tree_3b_01" parent="Trees" unique_id=390188368]
+transform = Transform3D(-0.43326, -0.0087347, -0.44341, 0.013454, 0.61934, -0.025346, 0.44329, -0.027334, -0.4326, -19, -1.477, 1)
+
+[node name="Environment_Nature_Tree_3b_02" parent="Trees" unique_id=1616391315]
+transform = Transform3D(-0.52732, -0.0017687, -0.15631, 0.0039704, 0.54964, -0.019614, 0.15627, -0.019933, -0.52696, 20, -0.34114, -3)
+
+[node name="Environment_Nature_Tree_3b_03" parent="Trees" unique_id=618236056]
+transform = Transform3D(-0.71228, -0.024123, -0.10232, -0.023418, 0.71959, -0.0066305, 0.10248, -0.0032314, -0.71266, -25.5, -1.3589, -20)
+
+[node name="Environment_Nature_Tree_3b_04" parent="Trees" unique_id=259138010]
+transform = Transform3D(0.47829, 0.023389, 0.033093, -0.023793, 0.47938, 0.0050626, -0.032803, -0.0066849, 0.47883, 25.5, -0.47936, -21)
+
+[node name="Environment_Nature_Tree_3b_05" parent="Trees" unique_id=396831121]
+transform = Transform3D(-0.78561, -0.029246, 0.1482, -0.022883, 0.79885, 0.036342, -0.14931, 0.031449, -0.78531, -24, 0.30971, -47)
+
+[node name="Environment_Nature_Tree_3b_06" parent="Trees" unique_id=257472724]
+transform = Transform3D(-0.33686, 0.0069104, -0.56752, 0.001044, 0.65996, 0.0074164, 0.56756, 0.0028876, -0.33685, 13, -0.86208, -50)
+
+[node name="Environment_Nature_Tree_3b_07" parent="Trees" unique_id=2114415652]
+transform = Transform3D(-0.39232, 0.021444, 0.42665, 0.016448, 0.5796, -0.014006, -0.42687, 0.0026253, -0.39265, -5, -0.39142, -55)
+
+[node name="Environment_Nature_Tree_3b_08" parent="Trees" unique_id=426192201]
+transform = Transform3D(0.17442, 0.017384, -0.38167, -0.010735, 0.41962, 0.014207, 0.38192, 0.0038554, 0.17471, -31, -0.5201, -34)
+
+[node name="Environment_Nature_Tree_3b_09" parent="Trees" unique_id=56755690]
+transform = Transform3D(-0.23921, -0.026192, -0.46097, -0.0013565, 0.5192, -0.028797, 0.46171, -0.012045, -0.23891, 23, -0.9075, -42)
+
+[node name="Environment_Nature_Tree_3b_10" parent="Trees" unique_id=1143078157]
+transform = Transform3D(0.057242, 0.016667, -0.37529, 0.0097184, 0.37943, 0.018333, 0.37554, -0.01236, 0.05673, -12, -1.0445, 12)
+
+[node name="Environment_Nature_Tree_3b_11" parent="Trees" unique_id=1915776265]
+transform = Transform3D(0.22083, 0.033985, -0.50257, -0.0083156, 0.54892, 0.033465, 0.50365, -0.0058375, 0.2209, 28, -0.75359, -52)
+
+[node name="Environment_Nature_Tree_3b_12" parent="Trees" unique_id=1997121635]
+transform = Transform3D(-0.27724, 0.01825, -0.4157, 0.020513, 0.49951, 0.0082494, 0.41559, -0.01248, -0.27771, -36, -1.9823, -8)
+
+[node name="Environment_Nature_Tree_3b_13" parent="Trees" unique_id=1249054927]
+transform = Transform3D(-0.14086, -0.011036, 0.4167, 0.0033258, 0.4398, 0.012772, -0.41683, 0.0072385, -0.14071, -28.2, -1.6078, 3.5)
+
+[node name="Environment_Nature_Tree_3b_14" parent="Trees" unique_id=1972893912]
+transform = Transform3D(-0.54823, 0.0075671, -0.40222, 0.013152, 0.67985, -0.005136, 0.40208, -0.01192, -0.54826, 28.4, -0.13464, -12)
+
+[node name="Environment_Nature_Tree_3b_15" parent="Trees" unique_id=698108807]
+transform = Transform3D(-0.25552, 0.00070488, -0.25359, -0.0080301, 0.3598, 0.0090912, 0.25347, 0.012109, -0.25536, -27.8, -0.4159, -31)
+
+[node name="Environment_Nature_Tree_3b_16" parent="Trees" unique_id=2055519233]
+transform = Transform3D(0.28386, -0.0057217, -0.50576, 0.009084, 0.57993, -0.0014622, 0.50571, -0.0072055, 0.28392, 27.6, -0.50189, -33.5)
+
+[node name="Environment_Nature_Tree_3b_17" parent="Trees" unique_id=1250228112]
+transform = Transform3D(0.053731, -0.01523, 0.34552, 0.018047, 0.34931, 0.012591, -0.34538, 0.015883, 0.05441, -14.5, -1.1484, 15.5)
+
+[node name="Environment_Nature_Tree_3b_18" parent="Trees" unique_id=1707468686]
+transform = Transform3D(-0.14839, -0.0014397, -0.37145, -0.0038093, 0.39998, -2.8454e-05, 0.37144, 0.0035269, -0.1484, 15.5, 0.71041, 13)
+
+[node name="Environment_Nature_Tree_3b_19" parent="Trees" unique_id=796134695]
+transform = Transform3D(-0.10802, -0.043312, -0.84199, -0.011313, 0.84888, -0.042215, 0.84303, 0.0058418, -0.10846, -33, 0.4849, -52)
+
+[node name="Environment_Nature_Tree_3b_20" parent="Trees" unique_id=954694530]
+transform = Transform3D(-0.14606, 0.020049, -0.76594, 0.0097007, 0.77972, 0.01856, 0.76614, -0.0060502, -0.14626, 34, -0.37385, -60)
+
+[node name="Environment_Nature_Tree_3b_21" parent="Trees" unique_id=1749680042]
+transform = Transform3D(-0.36861, -0.0072757, 0.49847, 0.036757, 0.61785, 0.0362, -0.49716, 0.051074, -0.3669, -44, -1.7531, -18)
+
+[node name="Environment_Nature_Tree_3b_22" parent="Trees" unique_id=379769199]
+transform = Transform3D(0.15792, 0.010957, -0.52673, 0.013344, 0.54962, 0.015434, 0.52667, -0.017211, 0.15755, 41, -0.25628, -6)
+
+[node name="Environment_Nature_Tree_3b_23" parent="Trees" unique_id=1644329013]
+transform = Transform3D(-0.77184, -0.035937, -0.20728, -0.025152, 0.79835, -0.044755, 0.20886, -0.036663, -0.77138, -26, 0.4621, -72)
+
+[node name="Environment_Nature_Tree_3b_24" parent="Trees" unique_id=1552946534]
+transform = Transform3D(0.46388, 0.039647, -0.52273, -0.027927, 0.69887, 0.028224, 0.52349, 0.002151, 0.46471, 18, -0.83119, -76)
+
+[node name="Environment_Nature_Tree_3b_25" parent="Trees" unique_id=297797014]
+transform = Transform3D(0.10151, -0.03179, -0.74242, 0.0067623, 0.74932, -0.031161, 0.74307, -0.0024762, 0.10171, -48, -0.9798, -40)
+
+[node name="Environment_Nature_Tree_3b_26" parent="Trees" unique_id=1949873229]
+transform = Transform3D(0.59769, 0.017178, 0.27941, -0.0070662, 0.65947, -0.02543, -0.27985, 0.020038, 0.5974, 46, 0.18218, -46)
+
+[node name="Environment_Nature_Tree_3b_27" parent="Trees" unique_id=802828209]
+transform = Transform3D(-0.23224, 0.0031482, 0.46525, -0.0029767, 0.51997, -0.0050044, -0.46525, -0.0048983, -0.23221, 2, -0.49885, 24)
+
+[node name="Environment_Nature_Tree_3b_28" parent="Trees" unique_id=306587967]
+transform = Transform3D(-0.50675, -0.0080595, -0.32116, -0.025347, 0.59894, 0.024964, 0.32026, 0.034652, -0.5062, -14, -1.3405, 22)
+
+[node name="Environment_Nature_Tree_3b_29" parent="Trees" unique_id=810549740]
+transform = Transform3D(0.088285, -0.023317, 0.44064, 0.015445, 0.44926, 0.020678, -0.44098, 0.011067, 0.08894, 17, 0.49908, 20)
+
+[node name="Environment_Nature_Tree_3b_30" parent="Trees" unique_id=906022810]
+transform = Transform3D(0.56081, 0.016717, -0.14701, -0.012154, 0.57954, 0.019534, 0.14746, -0.015807, 0.56072, -38, -1.6092, 12)
+
+[node name="Environment_Nature_Tree_3b_31" parent="Trees" unique_id=1864847765]
+transform = Transform3D(-0.22279, -0.032278, 0.44646, -0.018838, 0.49893, 0.026672, -0.44723, -0.0049368, -0.22353, 36, -0.086779, 14)
+
+[node name="Environment_Nature_Tree_3b_32" parent="Trees" unique_id=279673099]
+transform = Transform3D(0.81967, -0.0033208, -0.023199, 0.0044332, 0.81904, 0.039389, 0.023013, -0.039498, 0.81872, -6, 2.5709, -88)
+
+[node name="Environment_Nature_Tree_3b_33" parent="Trees" unique_id=1898145567]
+transform = Transform3D(-0.11082, -0.035924, 0.71051, 0.027366, 0.71833, 0.040588, -0.71089, 0.033252, -0.1092, 24, 3.0683, -86)
+
+[node name="Environment_Nature_Tree_3b_34" parent="Trees" unique_id=886166028]
+transform = Transform3D(-0.087418, 0.012735, -0.63387, -0.029284, 0.63911, 0.016878, 0.63332, 0.031309, -0.086714, -30, 4.4952, -84)
+
+[node name="Vegetation" type="Node3D" parent="." unique_id=543921696]
+
+[node name="Environment_Nature_Grass_1c_01" parent="Vegetation" unique_id=1407897032]
+transform = Transform3D(0.45266, 0, -0.76081, 0, 0.88529, 0, 0.76081, 0, 0.45266, -2.1576, 0.65857, -23.514)
+
+[node name="Environment_Nature_Grass_1c_02" parent="Vegetation" unique_id=1053423562]
+transform = Transform3D(-0.57521, 0, 0.57366, 0, 0.81238, 0, -0.57366, 0, -0.57521, 5.3125, 0.27723, -32.373)
+
+[node name="Environment_Nature_Grass_1c_03" parent="Vegetation" unique_id=1378570535]
+transform = Transform3D(-0.96263, 0, 0.025783, 0, 0.96298, 0, -0.025783, 0, -0.96263, 9.3188, 0.73856, -11.562)
+
+[node name="Environment_Nature_Grass_1c_04" parent="Vegetation" unique_id=2046147331]
+transform = Transform3D(0.41814, 0, -0.75638, 0, 0.86426, 0, 0.75638, 0, 0.41814, -6.7132, 0.32425, -25.864)
+
+[node name="Environment_Nature_Grass_1c_05" parent="Vegetation" unique_id=1560876942]
+transform = Transform3D(-0.73139, 0, -0.23495, 0, 0.7682, 0, 0.23495, 0, -0.73139, -5.3279, 0.19585, -7.2624)
+
+[node name="Environment_Nature_Grass_1c_06" parent="Vegetation" unique_id=1251829527]
+transform = Transform3D(-0.48726, 0, -0.82125, 0, 0.95492, 0, 0.82125, 0, -0.48726, 1.6296, 0.62692, -7.2542)
+
+[node name="Environment_Nature_Grass_1c_07" parent="Vegetation" unique_id=1729398683]
+transform = Transform3D(0.35591, 0, -0.87091, 0, 0.94083, 0, 0.87091, 0, 0.35591, 11.135, 0.47779, -24.776)
+
+[node name="Environment_Nature_Grass_1c_08" parent="Vegetation" unique_id=1198010153]
+transform = Transform3D(-0.17277, 0, -0.79789, 0, 0.81638, 0, 0.79789, 0, -0.17277, -7.6091, -0.19221, 2.0508)
+
+[node name="Environment_Nature_Grass_1c_09" parent="Vegetation" unique_id=38408565]
+transform = Transform3D(-0.75407, 0, 0.60823, 0, 0.9688, 0, -0.60823, 0, -0.75407, -17.268, -0.5066, -7.2635)
+
+[node name="Environment_Nature_Grass_1b_01" parent="Vegetation" unique_id=1460696144]
+transform = Transform3D(0.74182, 0, -0.47177, 0, 0.87913, 0, 0.47177, 0, 0.74182, 14.088, 0.29386, 2.4357)
+
+[node name="Environment_Nature_Grass_1b_02" parent="Vegetation" unique_id=1937487886]
+transform = Transform3D(-0.66936, 0, -0.91675, 0, 1.1351, 0, 0.91675, 0, -0.66936, 6.5724, 0.80838, 10.432)
+
+[node name="Environment_Nature_Grass_1b_03" parent="Vegetation" unique_id=1306732294]
+transform = Transform3D(-0.85818, 0, 0.24628, 0, 0.89282, 0, -0.24628, 0, -0.85818, 9.0221, 0.69504, -14.626)
+
+[node name="Environment_Nature_Grass_1b_04" parent="Vegetation" unique_id=413790597]
+transform = Transform3D(0.87782, 0, -0.77046, 0, 1.168, 0, 0.77046, 0, 0.87782, -0.64045, 0.66851, -26.103)
+
+[node name="Environment_Nature_Grass_1b_05" parent="Vegetation" unique_id=1492412745]
+transform = Transform3D(0.75882, 0, 0.30211, 0, 0.81675, 0, -0.30211, 0, 0.75882, -1.9755, 0.22753, 11.182)
+
+[node name="Environment_Nature_Grass_1b_06" parent="Vegetation" unique_id=621235828]
+transform = Transform3D(0.78739, 0, 0.32486, 0, 0.85177, 0, -0.32486, 0, 0.78739, 4.0746, 0.83113, -8.4034)
+
+[node name="Environment_Nature_Grass_1b_07" parent="Vegetation" unique_id=370186865]
+transform = Transform3D(1.0208, 0, 0.58339, 0, 1.1757, 0, -0.58339, 0, 1.0208, -10.517, -0.12543, -7.3304)
+
+[node name="Environment_Nature_Grass_1b_08" parent="Vegetation" unique_id=464306663]
+transform = Transform3D(0.69731, 0, 0.82411, 0, 1.0795, 0, -0.82411, 0, 0.69731, 1.599, 0.79319, -14.298)
+
+[node name="Environment_Nature_Grass_1b_09" parent="Vegetation" unique_id=1113086151]
+transform = Transform3D(-0.9355, 0, 0.17502, 0, 0.95173, 0, -0.17502, 0, -0.9355, 0.82231, 0.68409, -3.7185)
+
+[node name="Environment_Nature_Grass_1b_10" parent="Vegetation" unique_id=1809438160]
+transform = Transform3D(0.48099, 0, 0.83414, 0, 0.96288, 0, -0.83414, 0, 0.48099, -1.517, 0.55993, 5.8212)
+
+[node name="Environment_Nature_Grass_1b_11" parent="Vegetation" unique_id=899892194]
+transform = Transform3D(-1.0448, 0, 0.26076, 0, 1.0769, 0, -0.26076, 0, -1.0448, -6.3598, 0.42635, -28.943)
+
+[node name="Environment_Nature_Grass_1b_12" parent="Vegetation" unique_id=1735085064]
+transform = Transform3D(-0.49255, 0, -0.78799, 0, 0.92927, 0, 0.78799, 0, -0.49255, -3.7347, 0.18014, 9.6082)
+
+[node name="Ground" type="Node3D" parent="." unique_id=1293687449]
+
+[node name="Environment_Mud_05a_01" parent="Ground" unique_id=806133551]
+transform = Transform3D(-0.80156, 0, -0.8213, 0, 1.1476, 0, 0.8213, 0, -0.80156, 13.048, -0.052857, -7.7765)
+
+[node name="Environment_Mud_05a_02" parent="Ground" unique_id=1966022442]
+transform = Transform3D(-0.78756, 0, -0.15645, 0, 0.80295, 0, 0.15645, 0, -0.78756, 8.9808, 0.34965, -27.494)

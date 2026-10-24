@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dtwbd8wrjbx4"
-path="res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Metallic-CageCandle_lp_CageCandle_Roughness.png-1e80d86d4a2b3c38ff1cf81c04cf00d4.ctex"
+path.s3tc="res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Metallic-CageCandle_lp_CageCandle_Roughness.png-1e80d86d4a2b3c38ff1cf81c04cf00d4.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "02081c17ca47b8e2aa196cc7b050dc10"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://models/cemetery/lamps/cage_lamp_CageCandle_lp_CageCandle_Metallic-CageCandle_lp_CageCandle_Roughness.png"
-dest_files=["res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Metallic-CageCandle_lp_CageCandle_Roughness.png-1e80d86d4a2b3c38ff1cf81c04cf00d4.ctex"]
+dest_files=["res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Metallic-CageCandle_lp_CageCandle_Roughness.png-1e80d86d4a2b3c38ff1cf81c04cf00d4.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

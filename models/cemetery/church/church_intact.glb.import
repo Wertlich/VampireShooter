@@ -42,7 +42,7 @@ materials/extract_path=""
 _subresources={
 "nodes": {
 "PATH:OldChurch1_001": {
-"generate/physics": false
+"generate/physics": true
 }
 }
 }

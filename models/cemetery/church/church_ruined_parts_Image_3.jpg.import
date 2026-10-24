@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cujuo502dqfwt"
-path="res://.godot/imported/church_ruined_parts_Image_3.jpg-c1266256b7793f8e0c727f8a3b656d73.ctex"
+path.s3tc="res://.godot/imported/church_ruined_parts_Image_3.jpg-c1266256b7793f8e0c727f8a3b656d73.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "0045cb3deb188806fdaf8e2c933b56da"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://models/cemetery/church/church_ruined_parts_Image_3.jpg"
-dest_files=["res://.godot/imported/church_ruined_parts_Image_3.jpg-c1266256b7793f8e0c727f8a3b656d73.ctex"]
+dest_files=["res://.godot/imported/church_ruined_parts_Image_3.jpg-c1266256b7793f8e0c727f8a3b656d73.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

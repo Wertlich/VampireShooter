@@ -1,2 +1,5 @@
-res://scenes/player.tscn
-res://scripts/player/player.gd
+res://scenes/level_1.tscn
+res://shaders/EA_FogVolume.gdshader
+res://shaders/EA_GrassWind.gdshader
+res://shaders/EA_Skybox.gdshader
+res://shaders/EA_TerrainMud.gdshader

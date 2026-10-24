@@ -22,6 +22,10 @@ window/size/viewport_width=1600
 window/size/viewport_height=900
 window/stretch/mode="canvas_items"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/asset_placer/plugin.cfg")
+
 [filesystem]
 
 import/blender/enabled=false

@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://kw16b0n586pf"
-path="res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Emissive.png-66b165e5b9c10e466cf4e5b96acf5732.ctex"
+path.s3tc="res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Emissive.png-66b165e5b9c10e466cf4e5b96acf5732.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "cc4ec205ff90bc02a882a5de803fc2a5"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://models/cemetery/lamps/cage_lamp_CageCandle_lp_CageCandle_Emissive.png"
-dest_files=["res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Emissive.png-66b165e5b9c10e466cf4e5b96acf5732.ctex"]
+dest_files=["res://.godot/imported/cage_lamp_CageCandle_lp_CageCandle_Emissive.png-66b165e5b9c10e466cf4e5b96acf5732.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

@@ -1,1 +1,10 @@
+TerraBrush
+Node2D
+Node3D
+OmniLight3D
+SpotLight3D
+DirectionalLight3D
+AreaLight3D
+CharacterBody3D
+WorldEnvironment
 Skeleton3D

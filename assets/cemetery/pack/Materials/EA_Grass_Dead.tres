@@ -1,0 +1,50 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/cemetery/pack/Shaders/EA_GrassWind.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/cemetery/pack/Textures/GRASS_DIFF.tga" id="2_diff"]
+[ext_resource type="Texture2D" path="res://assets/cemetery/pack/Textures/GRASS_NMAP.tga" id="3_nmap"]
+
+[resource]
+resource_name = "EA_Grass_Dead"
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo_texture = ExtResource("2_diff")
+shader_parameter/base_color = Color(0.42, 0.45, 0.3, 1)
+shader_parameter/alpha_cutoff = 0.594
+shader_parameter/normal_texture = ExtResource("3_nmap")
+shader_parameter/normal_strength = 0.5
+shader_parameter/smoothness = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/wind_strength = 0.24
+shader_parameter/wind_speed = 0.98
+shader_parameter/wind_frequency = 0.8
+shader_parameter/wind_direction_x = 1.0
+shader_parameter/wind_direction_z = 0.0
+shader_parameter/anchor_height = 1.0
+shader_parameter/gust_use_texture = false
+shader_parameter/gust_strength = 0.5
+shader_parameter/gust_scale = 0.05
+shader_parameter/gust_speed = 0.4
+shader_parameter/tint_color_small = Color(0.68, 0.46, 0.18, 1)
+shader_parameter/stripes_mode_small = false
+shader_parameter/tint_scale_small_blob = 0.814
+shader_parameter/tint_intensity_small_blob = 0.6
+shader_parameter/tint_width_small_blob = 0.867
+shader_parameter/tint_speed_small_blob = 0.806
+shader_parameter/tint_scale_small_stripes = 0.22
+shader_parameter/tint_intensity_small_stripes = 0.595
+shader_parameter/tint_width_small_stripes = 0.941
+shader_parameter/tint_speed_small_stripes = 1.378
+shader_parameter/tint_color_large = Color(0.16, 0.24, 0.24, 1)
+shader_parameter/stripes_mode_large = true
+shader_parameter/tint_scale_large_blob = 0.175
+shader_parameter/tint_intensity_large_blob = 0.655
+shader_parameter/tint_width_large_blob = 0.553
+shader_parameter/tint_speed_large_blob = 1.046
+shader_parameter/tint_scale_large_stripes = 0.1458
+shader_parameter/tint_intensity_large_stripes = 1.0
+shader_parameter/tint_width_large_stripes = 0.62
+shader_parameter/tint_speed_large_stripes = 0.534
+shader_parameter/ambient_lift = 0.35
+shader_parameter/ambient_tint = Color(0.32, 0.5, 0.62, 1)
+shader_parameter/normal_up_bias = 0.75

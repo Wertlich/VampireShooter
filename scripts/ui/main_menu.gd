@@ -2,7 +2,7 @@ extends Control
 ## Front screen: play, online (host or join), settings, quit.
 ## Built in code, like the rest of the UI in this project.
 
-const ARENA := "res://scenes/main.tscn"
+const ARENA := "res://scenes/level_1.tscn"
 
 const GOLD := Color(1.0, 0.86, 0.55, 1.0)
 const TEXT := Color(0.92, 0.9, 0.95, 1.0)

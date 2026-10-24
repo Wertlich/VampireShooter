@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dfhjp3tdhri4"
-path="res://.godot/imported/EA_Grave_LogPile_01a_T_colorPalette2048_CGT.png-94cdc19ccbb9ffa9b40841908986d298.ctex"
+path.s3tc="res://.godot/imported/EA_Grave_LogPile_01a_T_colorPalette2048_CGT.png-94cdc19ccbb9ffa9b40841908986d298.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "d83e77a3cdf8d8f1c7e6da2f1f6555a5"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://models/cemetery/props/EA_Grave_LogPile_01a_T_colorPalette2048_CGT.png"
-dest_files=["res://.godot/imported/EA_Grave_LogPile_01a_T_colorPalette2048_CGT.png-94cdc19ccbb9ffa9b40841908986d298.ctex"]
+dest_files=["res://.godot/imported/EA_Grave_LogPile_01a_T_colorPalette2048_CGT.png-94cdc19ccbb9ffa9b40841908986d298.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
