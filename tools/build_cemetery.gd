@@ -14,6 +14,7 @@ const CHURCH_INTACT := preload("res://scenes/cemetery/church_intact.tscn")
 const CHURCH_RUINED := preload("res://scenes/cemetery/church_ruined.tscn")
 const STANDING_LAMP := preload("res://scenes/cemetery/standing_lamp.tscn")
 const HANGING_LAMP := preload("res://scenes/cemetery/hanging_lamp.tscn")
+const LADDER_SCRIPT := preload("res://scripts/world/ladder_zone.gd")
 
 const FENCE_SCENES: Array[PackedScene] = [
 	preload("res://models/cemetery/fence/fence_a.glb"),
@@ -81,6 +82,7 @@ func _initialize() -> void:
 	_build_fence()
 	_build_graves()
 	_build_churches()
+	_build_church_access()
 	_build_lamps()
 	_build_props()
 	_build_trees()
@@ -373,6 +375,75 @@ func _build_churches() -> void:
 				rng.randf_range(-0.2, 0.2))
 		root.add_child(block)
 		block.owner = scene
+
+
+# --- Church access ---------------------------------------------------------
+
+## Ladder-like wooden runs found inside the nave/tower, in church-local space.
+## The box is a climb trigger, not a solid obstacle: the player's controller
+## moves vertically while inside it.
+const LADDER_SPECS := [
+	{"name": "FrontLadder", "center": Vector3(-6.82, 2.8, 3.35), "size": Vector3(1.0, 4.8, 0.8)},
+]
+
+## Solid landings at the top of those runs. They deliberately sit just to the
+## side of the climb column so the player can step off at the top.
+const LANDING_SPECS := [
+	{"center": Vector3(-5.7, 4.55, 3.1), "size": Vector3(0.8, 0.3, 1.6)},
+]
+
+
+func _build_church_access() -> void:
+	var ladders := Node3D.new()
+	ladders.name = "Ladders"
+	scene.add_child(ladders)
+	ladders.owner = scene
+
+	var platforms := StaticBody3D.new()
+	platforms.name = "PlatformCollision"
+	platforms.collision_layer = 1
+	platforms.collision_mask = 0
+	scene.add_child(platforms)
+	platforms.owner = scene
+
+	for church in [scene.get_node("Churches/ChurchIntact"), scene.get_node("Churches/ChurchRuined")]:
+		var church_node := church as Node3D
+		var prefix: String = church_node.name
+		for spec in LADDER_SPECS:
+			var area := Area3D.new()
+			area.set_script(LADDER_SCRIPT)
+			area.name = "Ladder_%s_%s" % [prefix, spec.name]
+			area.position = church_node.position + church_node.basis * (spec.center as Vector3)
+			area.rotation = church_node.rotation
+			for landing in LANDING_SPECS:
+				var landing_center := landing.center as Vector3
+				var delta := landing_center - (spec.center as Vector3)
+				delta.y = 0.0
+				if delta.length_squared() > 0.01:
+					area.set("exit_direction", (church_node.basis * delta).normalized())
+					area.set("exit_height", church_node.position.y
+							+ landing_center.y + (landing.size as Vector3).y * 0.5 + 0.15)
+					break
+			var box := BoxShape3D.new()
+			box.size = spec.size as Vector3
+			var shape := CollisionShape3D.new()
+			shape.name = "ClimbShape"
+			shape.shape = box
+			area.add_child(shape)
+			ladders.add_child(area)
+			area.owner = scene
+			shape.owner = scene
+		for spec in LANDING_SPECS:
+			var platform_shape := BoxShape3D.new()
+			platform_shape.size = spec.size as Vector3
+			var collider := CollisionShape3D.new()
+			collider.name = "Landing_%s_%d" % [prefix, platforms.get_child_count()]
+			collider.shape = platform_shape
+			collider.transform = Transform3D(
+					church_node.basis.orthonormalized(),
+					church_node.position + church_node.basis * (spec.center as Vector3))
+			platforms.add_child(collider)
+			collider.owner = scene
 
 
 # --- Lamps -----------------------------------------------------------------

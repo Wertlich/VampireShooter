@@ -62,6 +62,16 @@ $godot = 'D:\GodotMCP\Godot\Godot_v4.7.2-stable_win64_console.exe'
 `cemetery.tscn` пропадут при следующей пересборке. Церкви и лампы вынесены в
 `scenes/cemetery/*.tscn`, поэтому их можно править отдельно.
 
+Если меняются GLB церквей, пересобери их точную коллизию:
+
+```powershell
+& $godot --headless --path . --script res://tools/build_church_trimesh.gd
+```
+
+Лестница и верхняя площадка описаны в `LADDER_SPECS` / `LANDING_SPECS` внутри
+`build_cemetery.gd`; вход в церковь вырезан из trimesh, чтобы не застревать на
+ступеньках. Скорость лазания настраивается в инспекторе `Player > Ladders`.
+
 ## Границы переноса
 
 Оружие уже имеет собственные сцены и экспортируемые параметры. Интерфейс,

@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="PackedScene" path="res://models/cemetery/church/church_intact.glb" id="1_model"]
+[ext_resource type="ConcavePolygonShape3D" path="res://models/cemetery/church/church_intact_trimesh.res" id="2_trimesh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(15.3, 0.5, 8.4)
@@ -59,3 +60,6 @@ shape = SubResource("BoxShape3D_ramp")
 [node name="NaveWall" type="CollisionShape3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 4.5, 0)
 shape = SubResource("BoxShape3D_nave")
+
+[node name="ExactMesh" type="CollisionShape3D" parent="Collision"]
+shape = ExtResource("2_trimesh")

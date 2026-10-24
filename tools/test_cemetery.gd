@@ -115,6 +115,35 @@ func _initialize() -> void:
 			Vector3(0, 1.2, 42), Vector3(0, 1.2, 46), 1))
 	_check(gate_probe.is_empty(), "gate opening stays passable")
 
+	print("--- church access ---")
+	var ladders := cemetery.get_node_or_null("Ladders")
+	_check(ladders != null and ladders.get_child_count() >= 2,
+			"ladder triggers exist in both churches (%d)" % (ladders.get_child_count() if ladders else 0))
+	var platforms := cemetery.get_node_or_null("PlatformCollision") as StaticBody3D
+	_check(platforms != null and platforms.get_child_count() >= 2,
+			"landings at the top of the ladders are solid (%d)" % (platforms.get_child_count() if platforms else 0))
+	var climb_zone: LadderZone = null
+	if ladders:
+		climb_zone = ladders.get_node_or_null("Ladder_ChurchIntact_FrontLadder") as LadderZone
+	_check(climb_zone != null, "the church ladder has a climb trigger")
+	if climb_zone and player:
+		player.global_position = Vector3(
+				climb_zone.global_position.x, climb_zone.global_position.y - 1.4,
+				climb_zone.global_position.z)
+		player.velocity = Vector3.ZERO
+		await physics_frame
+		var climb_start := player.global_position.y
+		Input.action_press("move_forward")
+		await create_timer(0.8).timeout
+		var climb_mid := player.global_position.y
+		_check(climb_mid > climb_start + 0.8,
+				"holding forward climbs the ladder (y %.2f -> %.2f)" % [climb_start, climb_mid])
+		await create_timer(0.5).timeout
+		Input.action_release("move_forward")
+		await create_timer(0.6).timeout
+		_check(player.global_position.y > 3.8,
+				"the climb ends on the wooden loft (y=%.2f)" % player.global_position.y)
+
 	# Walk up the entrance steps and stop at the visible nave wall instead of
 	# clipping through the church's solid core.
 	if player:

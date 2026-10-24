@@ -38,6 +38,10 @@ const CHEAT_CODE: Array[int] = [
 ## Grounded time after which the hop streak resets.
 @export var hop_streak_timeout: float = 0.35
 
+@export_group("Ladders")
+## Vertical speed while holding forward/jump inside a LadderZone.
+@export var climb_speed: float = 3.4
+
 @export_group("Look")
 @export var mouse_sensitivity: float = 0.0021
 @export var max_pitch_degrees: float = 88.0
@@ -90,6 +94,8 @@ var _grounded_time: float = 0.0
 
 var _pitch: float = 0.0
 var _yaw: float = 0.0
+## Trigger under the player's feet currently offering a climb.
+var _ladder_zone: LadderZone
 var _recoil_pitch: float = 0.0
 var _recoil_yaw: float = 0.0
 var _bob_time: float = 0.0
@@ -282,7 +288,49 @@ func _on_weapon_fired() -> void:
 	_flash_left = 0.06
 
 
+## Called by a LadderZone when the player steps into it.
+func enter_ladder(zone: LadderZone) -> void:
+	_ladder_zone = zone
+
+
+## Called by a LadderZone when the player leaves it.
+func exit_ladder(zone: LadderZone) -> void:
+	if _ladder_zone == zone:
+		_ladder_zone = null
+
+
+func _handle_climb() -> bool:
+	if _ladder_zone == null or not is_instance_valid(_ladder_zone):
+		_ladder_zone = null
+		return false
+	var wants_up := Input.is_action_pressed("move_forward") \
+			or Input.is_action_pressed("jump")
+	var wants_down := Input.is_action_pressed("move_back")
+	if not wants_up and not wants_down:
+		return false
+	# Step off onto the landing instead of climbing into the loft ceiling.
+	if wants_up and _ladder_zone.exit_height > 0.0 \
+			and global_position.y >= _ladder_zone.exit_height - 0.05 \
+			and _ladder_zone.exit_direction.length_squared() > 0.01:
+		velocity.y = 0.0
+		velocity.x = _ladder_zone.exit_direction.x * 2.4
+		velocity.z = _ladder_zone.exit_direction.z * 2.4
+		move_and_slide()
+		planar_speed = 0.0
+		return true
+	velocity.y = climb_speed if wants_up else -climb_speed
+	# Stay in the trigger column while climbing. Moving forward here would
+	# leave the Area3D before the player reaches the top.
+	velocity.x = 0.0
+	velocity.z = 0.0
+	move_and_slide()
+	planar_speed = 0.0
+	return true
+
+
 func _handle_movement(delta: float) -> void:
+	if _handle_climb():
+		return
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	var speed_scale := lerpf(1.0, aim_speed_scale, viewmodel.aim_blend)

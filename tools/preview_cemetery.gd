@@ -65,6 +65,13 @@ func _initialize() -> void:
 	await create_timer(0.4).timeout
 	await _shot("04_church_interior.png")
 
+	# The climbable wooden ladder just right of the entrance, seen from the nave.
+	player.global_position = Vector3(0.6, 0.2, -3.6)
+	player._yaw = deg_to_rad(-134.0)
+	player._pitch = 0.18
+	await create_timer(0.4).timeout
+	await _shot("09_church_ladder.png")
+
 	# The ruined church across the diagonal path.
 	player.global_position = Vector3(17, 0.2, -16)
 	player._yaw = deg_to_rad(-45.0)
@@ -94,7 +101,7 @@ func _initialize() -> void:
 	camera.look_at(Vector3(0, 0, -4), Vector3.UP)
 	camera.current = true
 	await create_timer(0.4).timeout
-	await _shot("08_aerial.png")
+	await _shot("11_aerial.png")
 
 	quit()
 
