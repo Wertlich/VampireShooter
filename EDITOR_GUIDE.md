@@ -52,12 +52,22 @@ WaveComposition. Номера должны быть уникальными: ис
 - Ночное небо, туман и направленный свет луны находятся в `main.tscn`
   (`WorldEnvironment` и `Moon`).
 
+У всех этих инстансов включены **Editable Children**: раскрываешь группу в
+дереве сцены и выбираешь любой дочерний меш (надгробие, секцию забора, лампу,
+дерево, часть церкви) прямо в `main.tscn`.
+
+Внутри церкви `Model` — это `church_*_parts.glb` с 2824 отдельными
+`MeshInstance3D` (`Part_000_*` и т.д.), а не один объединённый меш. Полный флат
+всех узлов в один `main.tscn` занимает 26 МБ и подвешивает редактор, поэтому
+используются редактируемые инстансы.
+
 Чтобы пересобрать карту после правок Blender-ассетов или расстановки:
 
 ```powershell
 $blender = 'D:\Steam\steamapps\common\Blender\blender.exe'
 $godot = 'D:\GodotMCP\Godot\Godot_v4.7.2-stable_win64_console.exe'
 & $blender --background --factory-startup --python tools\blender_cemetery.py
+& $blender --background --factory-startup --python tools\blender_split_church.py
 & $godot --headless --path . --script res://tools/build_cemetery.gd
 ```
 

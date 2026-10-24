@@ -49,32 +49,45 @@ light_color = Color(0.3, 0.36, 0.62, 1)
 light_energy = 0.4
 
 [node name="Ground" parent="." instance=ExtResource("4_ground")]
+editable_instance = true
 
 [node name="Paths" parent="." instance=ExtResource("4_paths")]
+editable_instance = true
 
 [node name="Fence" parent="." instance=ExtResource("4_fence")]
+editable_instance = true
 
 [node name="Graves" parent="." instance=ExtResource("4_graves")]
+editable_instance = true
 
 [node name="ChurchIntact" parent="." instance=ExtResource("4_church_intact")]
+editable_instance = true
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.5, -7)
 
 [node name="ChurchRuined" parent="." instance=ExtResource("4_church_ruined")]
+editable_instance = true
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 27, -0.5, -27)
 
 [node name="RuinRubble" parent="." instance=ExtResource("4_ruin_rubble")]
+editable_instance = true
 
 [node name="Lamps" parent="." instance=ExtResource("4_lamps")]
+editable_instance = true
 
 [node name="Props" parent="." instance=ExtResource("4_props")]
+editable_instance = true
 
 [node name="Trees" parent="." instance=ExtResource("4_trees")]
+editable_instance = true
 
 [node name="Fireflies" parent="." instance=ExtResource("4_fireflies")]
+editable_instance = true
 
 [node name="ChurchFireflies" parent="." instance=ExtResource("4_church_fireflies")]
+editable_instance = true
 
 [node name="PropCollision" parent="." instance=ExtResource("4_prop_collision")]
+editable_instance = true
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 35)

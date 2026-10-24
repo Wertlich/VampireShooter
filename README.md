@@ -164,13 +164,21 @@ lobby members: 1
 
 Церковь собрана из отдельных сцен, а не из одного меша:
 
-- `Model` — визуальный GLB;
+- `Model` — `church_intact_parts.glb` / `church_ruined_parts.glb`: меш разрезан
+  на 2824 отдельных `MeshInstance3D` (`Part_000_*`, `Part_001_*`, ...), а не
+  лежит одним объектом;
 - `Collision` — `church_intact_collision.tscn` / `church_ruined_collision.tscn`,
   внутри каждый элемент отдельным `CollisionShape3D`: `Floor`, `BackWall`,
   `NorthWall`, `SouthWall`, `FrontNorth`, `FrontSouth`, `EntranceRamp`,
   `NaveWall`;
 - `LadderAccess` — `church_ladder.tscn`, внутри отдельно `Climb` (`Area3D`)
   и `Landing` (`StaticBody3D`).
+
+В `main.tscn` у всех групп карты и у `Model` включены **Editable Children**.
+Разверни нужный инстанс в дереве сцены — и каждый камень, секция забора, лампа,
+бревно или часть церкви выбирается и правится отдельно. Полный флат всех 6500
+узлов в один `main.tscn` (26 МБ) вешает редактор, поэтому инстансы оставлены
+редактируемыми, а не разложены в плоский список.
 
 Любую стену, пол или площадку можно двигать и растягивать прямо в инспекторе.
 Лестница: подойди и держи `W` (или `Space`) — вверх, `S` — вниз; у верхней
@@ -505,6 +513,7 @@ tools/
   test_cemetery.gd         проверка кладбища: коллизии, лампы, небо, лестница
   build_cemetery.gd        сборка отдельных сцен карты в cemetery/groups/
   blender_cemetery.py      церкви, лампы и модульный забор (Blender → GLB)
+  blender_split_church.py  режет церкви на отдельные Part_* меши
   test_levelup.gd          проверка гема, опыта и меню карточек
   blender_analyze.py       обмер меша скелета перед постройкой рига
   blender_rig.py           арматура + скининг скелета (Blender)

@@ -1,12 +1,13 @@
 [gd_scene load_steps=4 format=3]
 
-[ext_resource type="PackedScene" path="res://models/cemetery/church/church_intact.glb" id="1_model"]
+[ext_resource type="PackedScene" path="res://models/cemetery/church/church_intact_parts.glb" id="1_model"]
 [ext_resource type="PackedScene" path="res://scenes/cemetery/church_intact_collision.tscn" id="2_collision"]
 [ext_resource type="PackedScene" path="res://scenes/cemetery/church_ladder.tscn" id="3_ladder"]
 
 [node name="ChurchIntact" type="Node3D"]
 
 [node name="Model" parent="." instance=ExtResource("1_model")]
+editable_instance = true
 
 [node name="Collision" parent="." instance=ExtResource("2_collision")]
 

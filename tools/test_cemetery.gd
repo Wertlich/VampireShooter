@@ -142,13 +142,19 @@ func _initialize() -> void:
 		await physics_frame
 		var climb_start := player.global_position.y
 		Input.action_press("move_forward")
-		await create_timer(0.8).timeout
+		for i in 240:
+			await physics_frame
+			if player.global_position.y >= 4.2:
+				# Let the ladder's top step-off trigger before releasing input.
+				for j in 20:
+					await physics_frame
+				break
 		var climb_mid := player.global_position.y
 		_check(climb_mid > climb_start + 0.8,
 				"holding forward climbs the ladder (y %.2f -> %.2f)" % [climb_start, climb_mid])
-		await create_timer(0.5).timeout
 		Input.action_release("move_forward")
-		await create_timer(0.6).timeout
+		for i in 40:
+			await physics_frame
 		_check(player.global_position.y > 3.8,
 				"the climb ends on the wooden loft (y=%.2f)" % player.global_position.y)
 
@@ -160,7 +166,10 @@ func _initialize() -> void:
 		player._yaw = 0.0
 		player._pitch = 0.0
 		Input.action_press("move_forward")
-		await create_timer(2.4).timeout
+		for i in 600:
+			await physics_frame
+			if player.global_position.z <= -3.5:
+				break
 		Input.action_release("move_forward")
 		await physics_frame
 		var z := player.global_position.z
