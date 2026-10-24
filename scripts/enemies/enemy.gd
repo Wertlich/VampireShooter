@@ -32,6 +32,12 @@ static var ai_frozen: bool = false
 @export var headshot_multiplier: float = 2.0
 @export var gem_count: int = 1
 
+@export_group("Loot")
+## XP per crystal. Slimes use a higher-value tier than the basic enemies.
+@export var gem_xp_value: float = 8.0
+@export var gem_tier: int = 1
+@export var gem_color: Color = Color(0.45, 0.95, 1.0, 1.0)
+
 @export_group("Behaviour")
 @export var mode: Mode = Mode.MELEE
 ## Ranged enemies try to sit at this distance from the player.
@@ -45,6 +51,18 @@ static var ai_frozen: bool = false
 @export var projectile_scene: PackedScene
 @export var projectile_speed: float = 18.0
 @export var projectile_spawn_height: float = 1.3
+
+@export_group("Flight")
+## Body-centre altitude above the player's feet when far away. 0 keeps the old
+## ground-based hover behaviour.
+@export var flight_altitude: float = 0.0
+## Altitude once the enemy is right on top of the player.
+@export var flight_low_altitude: float = 1.5
+## Start descending when the horizontal distance drops below this.
+@export var flight_descent_radius: float = 12.0
+## Distance at which the low altitude is reached.
+@export var flight_close_distance: float = 2.5
+@export var flight_speed: float = 6.0
 
 @export_group("Animations")
 @export var walk_anim: StringName = &"Run"
@@ -111,6 +129,8 @@ var _strafe: float = 1.0
 var _strafe_timer: float = 0.0
 ## Seconds until the enemy looks for a closer player again.
 var _retarget: float = 0.0
+## First flight tick snaps the body from the spawn point up to its cruise height.
+var _flight_ready: bool = false
 var behavior: EnemyBehavior
 
 
@@ -247,6 +267,7 @@ func _physics_process(delta: float) -> void:
 		to_player.y = 0.0
 
 	var distance := to_player.length()
+	_update_flight(delta, distance)
 	if distance > 0.05:
 		var dir := to_player / distance
 		# Model front is +Z, so aim +Z at the player.
@@ -276,6 +297,31 @@ func _physics_process(delta: float) -> void:
 
 
 # --- Movement ---------------------------------------------------------------
+
+func _uses_descent_flight() -> bool:
+	return flying and flight_altitude > 0.0
+
+
+## Cruise high above the arena, then glide down as the player gets closer.
+func _update_flight(delta: float, distance: float) -> void:
+	if not _uses_descent_flight():
+		return
+	var base_y := _player.global_position.y if is_instance_valid(_player) else 0.0
+	if not _flight_ready:
+		global_position.y = base_y + flight_altitude
+		velocity.y = 0.0
+		_flight_ready = true
+		return
+
+	var target_y := base_y + _flight_target_altitude(distance)
+	velocity.y = clampf((target_y - global_position.y) * 4.0, -flight_speed, flight_speed)
+
+
+func _flight_target_altitude(distance: float) -> float:
+	var span := maxf(flight_descent_radius - flight_close_distance, 0.01)
+	var blend := clampf((distance - flight_close_distance) / span, 0.0, 1.0)
+	return lerpf(flight_low_altitude, flight_altitude, blend)
+
 
 func _move_melee(dir: Vector3, distance: float, _delta: float) -> void:
 	var wants_to_move := _stagger <= 0.0 and distance > attack_range * 0.85 and not _attacking
@@ -404,7 +450,9 @@ func _update_visual(delta: float) -> void:
 		_model.position.y = lerpf(-1.6, hover_height, ease(_rise, 0.4))
 		return
 
-	if hover_height > 0.0:
+	if _uses_descent_flight():
+		_model.position.y = sin(Time.get_ticks_msec() * 0.0024) * 0.08
+	elif hover_height > 0.0:
 		var bob := 0.07 + minf(hover_height * 0.05, 0.1)
 		_model.position.y = hover_height + sin(Time.get_ticks_msec() * 0.002) * bob
 
@@ -467,7 +515,10 @@ func _drop_gems() -> void:
 	if scene == null:
 		return
 	for i in maxi(1, gem_count):
-		var gem := XP_GEM.instantiate() as Node3D
+		var gem := XP_GEM.instantiate() as Area3D
+		gem.set("xp_value", gem_xp_value)
+		gem.set("tier", gem_tier)
+		gem.set("gem_color", gem_color)
 		var spread := Vector3.ZERO
 		if gem_count > 1:
 			var angle := TAU * float(i) / float(gem_count)

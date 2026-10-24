@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cqtknyttd26yr" path="res://scripts/enemies/enemy_behavior.gd" id="3_1trss"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ahhtf"]
+radius = 1.2
 
 [node name="Slime" type="CharacterBody3D" unique_id=1654769095 groups=["enemies"]]
 collision_layer = 4
@@ -16,15 +17,24 @@ damage = 20.0
 attack_range = 2.2
 attack_cooldown = 1.8
 attack_hit_delay = 0.5
+head_zone_height = 0.45
 gem_count = 3
+gem_xp_value = 16.0
+gem_tier = 2
+gem_color = Color(1, 0.16, 0.12, 1)
 walk_anim = &""
 attack_anim = &""
 rise_from_ground = false
 flying = true
-hover_height = 1.4
+flight_altitude = 4.5
+flight_low_altitude = 1.5
+flight_descent_radius = 12.0
+flight_close_distance = 2.5
+flight_speed = 6.0
+hover_height = 0.0
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=1803861801]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018945456, 0.09262538, 0.043102026)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018945456, 0, 0.043102026)
 shape = SubResource("SphereShape3D_ahhtf")
 
 [node name="Model" type="Node3D" parent="." unique_id=18010396]
