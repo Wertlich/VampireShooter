@@ -37,6 +37,11 @@ const IMPACT_SCENE := preload("res://scenes/fx/impact.tscn")
 @export var reload_time: float = 2.1
 @export var auto_reload: bool = true
 
+@export_group("Handling")
+## Multiplier for the owner's walk and sprint speed while this gun is in hand.
+## Heavy weapons use values below 1.0; light guns stay at 1.0.
+@export_range(0.1, 1.0, 0.01) var move_speed_multiplier: float = 1.0
+
 @export_group("View Model Feel")
 @export var kick_back: float = 0.055
 @export var kick_up_degrees: float = 9.0

@@ -36,6 +36,7 @@ recoil_yaw = 0.7
 max_ammo = 100
 reload_time = 5.0
 auto_reload = true
+move_speed_multiplier = 0.75
 kick_back = 0.035
 kick_up_degrees = 6.0
 kick_roll_degrees = 3.0

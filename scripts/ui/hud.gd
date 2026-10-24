@@ -106,6 +106,9 @@ func _update_weapon_stats() -> void:
 		_weapon.reload_time,
 		_weapon.spread_degrees,
 	]
+	# Heavy guns show their mobility cost next to the damage numbers.
+	if _weapon.move_speed_multiplier < 0.999:
+		text += "\nход %d%%" % roundi(_weapon.move_speed_multiplier * 100.0)
 	if text != _stats_text:
 		_stats_text = text
 		stats_label.text = text

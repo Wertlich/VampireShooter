@@ -286,6 +286,9 @@ func _handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	var speed_scale := lerpf(1.0, aim_speed_scale, viewmodel.aim_blend)
+	# Heavy guns (the RPD) slow the owner down; switching back restores speed at once.
+	if weapon:
+		speed_scale *= weapon.move_speed_multiplier
 
 	if is_on_floor():
 		_grounded_time += delta

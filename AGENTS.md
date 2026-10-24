@@ -17,6 +17,7 @@ godot --headless --path . --script res://tools/test_waves.gd
 godot --headless --path . --script res://tools/test_enemies.gd
 godot --headless --path . --script res://tools/test_arena_settings.gd
 godot --headless --path . --script res://tools/test_bhop.gd
+godot --headless --path . --script res://tools/test_weapon_movement.gd
 godot --headless --path . --script res://tools/test_weakpoint.gd
 ```
 
