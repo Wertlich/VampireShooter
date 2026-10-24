@@ -1,10 +1,10 @@
 extends SceneTree
 
-# Builds scenes/cemetery.tscn from the imported kit, the two Blender-extracted
-# church variants and the modular fence/lamp assets. Run headless:
+# Builds the separate cemetery group scenes from the imported kit, the two
+# Blender-extracted church variants and the modular fence/lamp assets. Run:
 #   godot --headless --path . --script res://tools/build_cemetery.gd
 
-const OUT_SCENE := "res://scenes/cemetery.tscn"
+const OUT_DIR := "res://scenes/cemetery/groups"
 const GROUND_MAT := preload("res://assets/cemetery/materials/grass_ground.tres")
 const PATH_MAT := preload("res://assets/cemetery/materials/path_mud.tres")
 const STONE_MAT := preload("res://assets/cemetery/materials/stone_palette.tres")
@@ -86,7 +86,7 @@ func _initialize() -> void:
 	_build_trees()
 	_build_fireflies()
 	_build_prop_collisions()
-	_save_scene()
+	_save_groups()
 	quit()
 
 
@@ -686,17 +686,50 @@ func _add_box_shape(body: StaticBody3D, node_name: String, pos: Vector3, size: V
 	collider.owner = scene
 
 
-func _save_scene() -> void:
-	DirAccess.make_dir_recursive_absolute("res://scenes")
+func _save_groups() -> void:
+	DirAccess.make_dir_recursive_absolute(OUT_DIR)
+	var ok := true
+	for group in scene.get_children():
+		var group_name := String(group.name)
+		if group_name == "Churches":
+			ok = _save_group(_extract_ruin_rubble(group), "ruin_rubble") and ok
+			continue
+		ok = _save_group(group, group_name.to_snake_case()) and ok
+	print("TOTAL GROUPS saved=", scene.get_child_count() - 1)
+	quit(0 if ok else 1)
+
+
+func _extract_ruin_rubble(churches: Node3D) -> Node3D:
+	var root := Node3D.new()
+	root.name = "RuinRubble"
+	scene.add_child(root)
+	for child in churches.get_children():
+		if String(child.name).begins_with("RuinBeam_") \
+				or String(child.name).begins_with("RuinStone_"):
+			child.owner = null
+			churches.remove_child(child)
+			root.add_child(child)
+	return root
+
+
+func _save_group(group: Node, file_name: String) -> bool:
+	group.owner = null
+	_set_owner_recursive(group, group)
 	var packed := PackedScene.new()
-	var err := packed.pack(scene)
+	var err := packed.pack(group)
 	if err != OK:
-		push_error("PackedScene.pack failed: %d" % err)
-		quit(1)
-		return
-	err = ResourceSaver.save(packed, OUT_SCENE)
-	print("SAVED ", OUT_SCENE, " err=", err, " nodes=", _count_nodes(scene))
-	quit(0 if err == OK else 1)
+		push_error("PackedScene.pack failed for %s: %d" % [group.name, err])
+		return false
+	var path := "%s/%s.tscn" % [OUT_DIR, file_name]
+	err = ResourceSaver.save(packed, path)
+	print("SAVED ", path, " err=", err, " nodes=", _count_nodes(group))
+	return err == OK
+
+
+func _set_owner_recursive(node: Node, owner: Node) -> void:
+	for child in node.get_children():
+		child.owner = owner
+		_set_owner_recursive(child, owner)
 
 
 func _count_nodes(node: Node) -> int:

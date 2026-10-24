@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/cemetery/materials/grass_ground.tres" id="1_0ilsy"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wdk55"]
+size = Vector2(200, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3un03"]
+size = Vector3(200, 1, 200)
+
+[node name="Ground" type="Node3D" unique_id=534793922]
+
+[node name="Grass" type="MeshInstance3D" parent="." unique_id=103135126]
+material_override = ExtResource("1_0ilsy")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_wdk55")
+
+[node name="GroundCollision" type="StaticBody3D" parent="." unique_id=1106557653]
+collision_mask = 0
+
+[node name="Floor" type="CollisionShape3D" parent="GroundCollision" unique_id=1809180569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_3un03")

@@ -1,0 +1,153 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/cemetery/materials/pew_wood.tres" id="1_w3teh"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_6648q"]
+size = Vector3(0.24, 0.24, 2.798169)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cou30"]
+size = Vector3(0.24, 0.24, 2.9958744)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wsbnn"]
+size = Vector3(0.24, 0.24, 3.3956923)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bs04q"]
+size = Vector3(0.24, 0.24, 2.816081)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iv7nn"]
+size = Vector3(0.24, 0.24, 3.1050751)
+
+[sub_resource type="BoxMesh" id="BoxMesh_31uqx"]
+size = Vector3(0.24, 0.24, 3.9842973)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jo3bf"]
+size = Vector3(0.24, 0.24, 3.9851975)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gbdw3"]
+size = Vector3(0.24, 0.24, 2.6407628)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2geo8"]
+albedo_color = Color(0.17, 0.17, 0.16, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BoxMesh_6s70l"]
+size = Vector3(0.70979416, 0.7797018, 0.8090439)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yiv13"]
+size = Vector3(1.2266028, 0.7819747, 1.0962)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3q47s"]
+size = Vector3(0.75258046, 0.77714664, 1.3046868)
+
+[sub_resource type="BoxMesh" id="BoxMesh_et1pt"]
+size = Vector3(1.2958528, 0.57007873, 1.3625926)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3xcqw"]
+size = Vector3(0.97466063, 0.7636751, 0.56590074)
+
+[sub_resource type="BoxMesh" id="BoxMesh_co33a"]
+size = Vector3(0.6661414, 0.45131642, 1.0736244)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oeh3j"]
+size = Vector3(0.7722984, 0.76582414, 0.966836)
+
+[sub_resource type="BoxMesh" id="BoxMesh_k1ewe"]
+size = Vector3(0.7647995, 0.5479257, 0.7189875)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wqq8i"]
+size = Vector3(0.9847658, 0.41848654, 0.5969773)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iei0s"]
+size = Vector3(0.74205065, 0.6101812, 0.91992605)
+
+[node name="RuinRubble" type="Node3D" unique_id=1727304755]
+
+[node name="RuinBeam_0" type="MeshInstance3D" parent="." unique_id=48999845]
+transform = Transform3D(-0.808609, -0.055866685, -0.58568805, -0.07039875, 0.9975168, 0.0020439313, 0.58411944, 0.042884447, -0.81053406, 34.76129, 0.25, -30.716589)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_6648q")
+
+[node name="RuinBeam_1" type="MeshInstance3D" parent="." unique_id=1384906154]
+transform = Transform3D(-0.80207384, 0.06829404, 0.59330726, 0.035052117, 0.9971109, -0.067388944, -0.59619534, -0.033254236, -0.8021504, 18.559994, 0.25, -24.97847)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_cou30")
+
+[node name="RuinBeam_2" type="MeshInstance3D" parent="." unique_id=1720684057]
+transform = Transform3D(-0.020361844, 0.06754539, -0.9975084, 0.092459604, 0.9935669, 0.065391146, 0.99550813, -0.09089774, -0.026476074, 36.92695, 0.25, -28.199865)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_wsbnn")
+
+[node name="RuinBeam_3" type="MeshInstance3D" parent="." unique_id=1908877009]
+transform = Transform3D(-0.9266576, 0.047069706, 0.3729479, 0.027008018, 0.99790215, -0.058838718, -0.37493503, -0.04445076, -0.92598486, 31.615786, 0.25, -31.383307)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_bs04q")
+
+[node name="RuinBeam_4" type="MeshInstance3D" parent="." unique_id=1678372658]
+transform = Transform3D(-0.9407951, 0.027826838, 0.33783174, 0.00023974321, 0.99667925, -0.08142776, -0.33897576, -0.076525845, -0.93767756, 29.749792, 0.25, -31.648123)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_iv7nn")
+
+[node name="RuinBeam_5" type="MeshInstance3D" parent="." unique_id=421368871]
+transform = Transform3D(-0.7672838, 0.0063845664, 0.64127594, 0.060501795, 0.99621123, 0.06247181, -0.63844746, 0.086731955, -0.76476306, 34.684834, 0.25, -20.836536)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_31uqx")
+
+[node name="RuinBeam_6" type="MeshInstance3D" parent="." unique_id=1048653995]
+transform = Transform3D(-0.148727, -0.013638447, -0.98878425, 0.08133554, 0.9963482, -0.025976783, 0.9855277, -0.08428675, -0.1470746, 25.95242, 0.25, -20.641264)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_jo3bf")
+
+[node name="RuinBeam_7" type="MeshInstance3D" parent="." unique_id=274113746]
+transform = Transform3D(0.40015298, -0.095614046, 0.9114469, 0.08874905, 0.99391115, 0.0653013, -0.91214097, 0.054759543, 0.40620217, 33.399784, 0.25, -29.440296)
+material_override = ExtResource("1_w3teh")
+mesh = SubResource("BoxMesh_gbdw3")
+
+[node name="RuinStone_0" type="MeshInstance3D" parent="." unique_id=1992654473]
+transform = Transform3D(-0.038171016, -0.18832679, -0.98136437, -0.059735615, 0.98075384, -0.18588614, 0.9974842, 0.051526938, -0.048686184, 20.019999, 0.2, -19.157991)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_6s70l")
+
+[node name="RuinStone_1" type="MeshInstance3D" parent="." unique_id=755343668]
+transform = Transform3D(0.74476266, 0.014672134, 0.6671682, 0.05893054, 0.99440646, -0.08765305, -0.6647224, 0.1045973, 0.73973215, 30.172745, 0.2, -17.555359)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_yiv13")
+
+[node name="RuinStone_2" type="MeshInstance3D" parent="." unique_id=358808192]
+transform = Transform3D(0.998868, -0.0475615, -0.0007366108, 0.046874296, 0.9868331, -0.15480055, 0.008089459, 0.15459079, 0.98794544, 36.936714, 0.2, -23.186382)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_3q47s")
+
+[node name="RuinStone_3" type="MeshInstance3D" parent="." unique_id=2071042469]
+transform = Transform3D(0.5446477, 0.058686107, 0.8366091, 0.03228943, 0.9953417, -0.090841815, -0.83804315, 0.07649042, 0.5402157, 22.06443, 0.2, -34.639057)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_et1pt")
+
+[node name="RuinStone_4" type="MeshInstance3D" parent="." unique_id=1479700961]
+transform = Transform3D(-0.5844236, 0.041471563, -0.81038827, -0.16377127, 0.9721132, 0.16785394, 0.7947503, 0.23081613, -0.5613341, 34.51945, 0.2, -27.546888)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_3xcqw")
+
+[node name="RuinStone_5" type="MeshInstance3D" parent="." unique_id=686494593]
+transform = Transform3D(-0.8170344, -0.104888834, -0.56696826, 0.0022720017, 0.9827214, -0.18507703, 0.57658434, -0.15250246, -0.8026789, 19.085032, 0.2, -29.651659)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_co33a")
+
+[node name="RuinStone_6" type="MeshInstance3D" parent="." unique_id=1362339122]
+transform = Transform3D(0.7591628, 0.17053947, -0.62816256, -0.07621268, 0.98171765, 0.17441945, 0.64642364, -0.084538795, 0.75828075, 25.42556, 0.2, -37.83206)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_oeh3j")
+
+[node name="RuinStone_7" type="MeshInstance3D" parent="." unique_id=404243942]
+transform = Transform3D(-0.15313007, -0.10568801, 0.98253816, 0.07196618, 0.9904317, 0.11775314, -0.9855821, 0.08874107, -0.14405893, 31.889109, 0.2, -30.326603)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_k1ewe")
+
+[node name="RuinStone_8" type="MeshInstance3D" parent="." unique_id=2104888335]
+transform = Transform3D(0.96342427, 0.17088968, 0.2064228, -0.13488434, 0.9748348, -0.17749174, -0.23155965, 0.14315665, 0.96222985, 27.438349, 0.2, -18.864483)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_wqq8i")
+
+[node name="RuinStone_9" type="MeshInstance3D" parent="." unique_id=1078205046]
+transform = Transform3D(0.42980233, -0.026354484, 0.90253836, 0.15350038, 0.9871562, -0.04427383, -0.88977957, 0.15756896, 0.42832747, 31.104628, 0.2, -34.45019)
+material_override = SubResource("StandardMaterial3D_2geo8")
+mesh = SubResource("BoxMesh_iei0s")

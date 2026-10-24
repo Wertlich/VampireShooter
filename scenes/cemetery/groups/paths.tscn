@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://assets/cemetery/materials/path_mud.tres" id="1_nmqk6"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u40hr"]
+size = Vector2(4.8, 45)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_sprcr"]
+size = Vector2(12, 8)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0v3q2"]
+size = Vector2(3.4, 30.805843)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_eyp0g"]
+size = Vector2(2.6, 22.803509)
+
+[node name="Paths" type="Node3D" unique_id=2124087207]
+
+[node name="MainPath" type="MeshInstance3D" parent="." unique_id=335883284]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 22)
+material_override = ExtResource("1_nmqk6")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_u40hr")
+
+[node name="ChurchForecourt" type="MeshInstance3D" parent="." unique_id=472472127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 3)
+material_override = ExtResource("1_nmqk6")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_sprcr")
+
+[node name="RuinPath" type="MeshInstance3D" parent="." unique_id=671735178]
+transform = Transform3D(-0.8115343, 0, 0.58430475, 0, 1, 0, -0.58430475, 0, -0.8115343, 12, 0.011, -8.5)
+material_override = ExtResource("1_nmqk6")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_0v3q2")
+
+[node name="WestPath" type="MeshInstance3D" parent="." unique_id=1733641016]
+transform = Transform3D(-0.26311743, 0, -0.9647638, 0, 1, 0, 0.9647638, 0, -0.26311743, -13, 0.011, 23)
+material_override = ExtResource("1_nmqk6")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_eyp0g")

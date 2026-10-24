@@ -16,11 +16,11 @@ func _initialize() -> void:
 	await physics_frame
 	await process_frame
 
-	var cemetery := scene.get_node_or_null("Cemetery")
-	_check(cemetery != null, "Cemetery is instanced in main.tscn")
-	if cemetery == null:
-		_finish()
-		return
+	var cemetery := scene
+	_check(cemetery.has_node("Ground") and cemetery.has_node("Fence")
+			and cemetery.has_node("Graves") and cemetery.has_node("ChurchIntact")
+			and cemetery.has_node("ChurchRuined"),
+			"map is made of separate groups in main.tscn")
 
 	var graves := cemetery.get_node_or_null("Graves")
 	_check(graves != null and graves.get_child_count() >= 60,
@@ -28,8 +28,8 @@ func _initialize() -> void:
 	var fences := cemetery.get_node_or_null("Fence")
 	_check(fences != null and fences.get_child_count() >= 40,
 			"ruined fence ring is populated (%d pieces)" % (fences.get_child_count() if fences else 0))
-	_check(cemetery.has_node("Churches/ChurchIntact"), "intact church is present")
-	_check(cemetery.has_node("Churches/ChurchRuined"), "ruined church is present")
+	_check(cemetery.has_node("ChurchIntact"), "intact church is present")
+	_check(cemetery.has_node("ChurchRuined"), "ruined church is present")
 	# Cleanup requested after the first playtest: no pews/altar glow inside, no
 	# pyramid memorial, no anchor boulder, no broadleaf canopies.
 	_check(cemetery.find_children("Pew*", "", true, false).is_empty(), "no pew furniture inside")
@@ -116,8 +116,8 @@ func _initialize() -> void:
 	_check(gate_probe.is_empty(), "gate opening stays passable")
 
 	print("--- church access ---")
-	var intact_church := cemetery.get_node("Churches/ChurchIntact")
-	var ruined_church := cemetery.get_node("Churches/ChurchRuined")
+	var intact_church := cemetery.get_node("ChurchIntact")
+	var ruined_church := cemetery.get_node("ChurchRuined")
 	var intact_collision := intact_church.get_node("Collision") as StaticBody3D
 	var ruined_collision := ruined_church.get_node("Collision") as StaticBody3D
 	_check(intact_collision.get_child_count() >= 8,
@@ -167,6 +167,8 @@ func _initialize() -> void:
 		_check(player.global_position.y > -0.2 and z < 0.5 and z > -5.2,
 				"player walks into the nave and stops at its wall (z=%.2f)" % z)
 
+	scene.queue_free()
+	await process_frame
 	_finish()
 
 

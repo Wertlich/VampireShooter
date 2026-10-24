@@ -34,20 +34,23 @@ WaveComposition. Номера должны быть уникальными: ис
 
 ## Карта
 
-Открой `scenes/cemetery.tscn` (в `main.tscn` она подключена как `Cemetery`):
+Карта в `main.tscn` больше не является одним объектом. Это отдельные
+инстансы сцен:
 
 - `Ground` — трава и её коллизия; `Paths` — земляные дорожки.
 - `Fence` — 47 модульных секций полуразрушенного забора + коллизия по периметру.
-- `Churches/ChurchIntact` и `Churches/ChurchRuined` — две церкви; внутри каждой
-  есть `Collision` с полом, стенами, алтарной стеной и входным пандусом.
-- `Lamps/StandingLamp_*` — уличные фонари (модель из `models/lamp`), а
-  `Lamps/HangingLamp_*` — подвесные клетчатые лампы из `lamp for dom`.
-  Свойства мерцания и длина цепи — в инспекторе `CemeteryLamp`.
-- `Graves` и `Props` — надгробия и крупные памятники. Их коллизия собрана в
-  общем `PropCollision` (StaticBody3D): туда же входят деревья, модели ламп,
+- `ChurchIntact` и `ChurchRuined` — две отдельные церкви; внутри каждой есть
+  `Collision` с полом, стенами, алтарной стеной и входным пандусом, а также
+  `LadderAccess`.
+- `RuinRubble` — обломки вокруг разрушенной церкви.
+- `Lamps` — уличные и подвесные лампы. Свойства мерцания и длина цепи — в
+  инспекторе `CemeteryLamp`.
+- `Graves` и `Props` — надгробия и крупные памятники. Их коллизия лежит в
+  отдельном `PropCollision` (StaticBody3D): туда же входят деревья, модели ламп,
   обломки руин и воротные столбы. У ворот оставлен проход.
+- `Trees`, `Fireflies`, `ChurchFireflies` — деревья и частицы.
 - Ночное небо, туман и направленный свет луны находятся в `main.tscn`
-  (`WorldEnvironment` и `Moon`), а не в самой карте.
+  (`WorldEnvironment` и `Moon`).
 
 Чтобы пересобрать карту после правок Blender-ассетов или расстановки:
 
@@ -58,9 +61,11 @@ $godot = 'D:\GodotMCP\Godot\Godot_v4.7.2-stable_win64_console.exe'
 & $godot --headless --path . --script res://tools/build_cemetery.gd
 ```
 
-Скрипт `tools/build_cemetery.gd` — источник расстановки; правки прямо в
-`cemetery.tscn` пропадут при следующей пересборке. Церкви и лампы вынесены в
-`scenes/cemetery/*.tscn`, поэтому их можно править отдельно.
+Скрипт `tools/build_cemetery.gd` пересобирает только сцены групп в
+`scenes/cemetery/groups/*.tscn` (Ground, Paths, Fence, Graves, Lamps, Props,
+Trees, Fireflies, ChurchFireflies, RuinRubble, PropCollision). `main.tscn` он не
+трогает: расположение групп и церквей редактируется прямо там. Церкви, их
+коллизия и лестница — отдельные сцены в `scenes/cemetery/`.
 
 Коллизия церкви лежит в отдельных сценах `church_intact_collision.tscn` и
 `church_ruined_collision.tscn`. Внутри каждый элемент — самостоятельный

@@ -153,10 +153,11 @@ lobby members: 1
 
 ## Шаг 10 — кладбище вместо замка (готово)
 
-`scenes/main.tscn` теперь собирает `scenes/cemetery.tscn`: трава вместо пола,
-полуразрушенный деревянный забор по периметру, две церкви из `models/dom`
-(целая и разрушенная), около сотни надгробий из `LowPolyCemeteryGravePack`,
-уличные лампы из `models/lamp` и подвесные клетчатые лампы из `lamp for dom`.
+`scenes/main.tscn` собирает карту из отдельных сцен: трава вместо пола,
+полуразрушенный деревянный забор по периметру, две отдельные церкви из
+`models/dom` (целая и разрушенная), около сотни надгробий из
+`LowPolyCemeteryGravePack`, уличные лампы из `models/lamp` и подвесные
+клетчатые лампы из `lamp for dom`.
 Ночное небо с облаками, звёздами и луной сделано шейдером в
 `assets/cemetery/shaders/night_sky.gdshader`; сцена пересобирается скриптом
 `tools/build_cemetery.gd`, а Blender-ассеты — `tools/blender_cemetery.py`.
@@ -422,9 +423,10 @@ cd 'D:\games godom'
 ```
 project.godot              настройки проекта, ввод, слои физики
 scenes/
-  main.tscn                мир: окружение, карта, игрок, HUD, волны
-  cemetery.tscn            кладбище: трава, забор, церкви, надгробия, лампы
-  cemetery/                церкви, уличные и подвесные лампы (PackedScene)
+  main.tscn                мир: отдельные группы карты, игрок, HUD, волны
+  cemetery/                церкви, их коллизия и лестница (PackedScene)
+  cemetery/groups/         Ground, Paths, Fence, Graves, Lamps, Props, Trees,
+                           Fireflies, PropCollision — отдельные сцены карты
   player.tscn              CharacterBody3D + камера + view-model
   viewmodel.tscn           SubViewport с оружием от первого лица
   weapon_revolver.tscn     револьвер: модель, дуло, вспышка, звуки
@@ -501,7 +503,7 @@ tools/
   preview_cemetery.gd      обзорные кадры кладбища (спавн, церкви, руины, небо)
   preview_sky.gd           отдельный кадр ночного неба
   test_cemetery.gd         проверка кладбища: коллизии, лампы, небо, лестница
-  build_cemetery.gd        сборка scenes/cemetery.tscn из ассетов
+  build_cemetery.gd        сборка отдельных сцен карты в cemetery/groups/
   blender_cemetery.py      церкви, лампы и модульный забор (Blender → GLB)
   test_levelup.gd          проверка гема, опыта и меню карточек
   blender_analyze.py       обмер меша скелета перед постройкой рига

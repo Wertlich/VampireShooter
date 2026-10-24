@@ -3,7 +3,19 @@
 [ext_resource type="Script" uid="uid://cmo8yof6souy6" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_hud"]
-[ext_resource type="PackedScene" path="res://scenes/cemetery.tscn" id="4_world"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ground.tscn" id="4_ground"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/paths.tscn" id="4_paths"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fence.tscn" id="4_fence"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/graves.tscn" id="4_graves"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/lamps.tscn" id="4_lamps"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/props.tscn" id="4_props"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/trees.tscn" id="4_trees"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/fireflies.tscn" id="4_fireflies"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/church_fireflies.tscn" id="4_church_fireflies"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/prop_collision.tscn" id="4_prop_collision"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/groups/ruin_rubble.tscn" id="4_ruin_rubble"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/church_intact.tscn" id="4_church_intact"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/church_ruined.tscn" id="4_church_ruined"]
 [ext_resource type="PackedScene" path="res://scenes/levelup_menu.tscn" id="5_menu"]
 [ext_resource type="PackedScene" path="res://scenes/run_over.tscn" id="6_run_over"]
 [ext_resource type="Script" path="res://scripts/world/wave_manager.gd" id="7_waves"]
@@ -36,7 +48,33 @@ transform = Transform3D(0.52991927, -0.31768438, 0.7862965, 0, 0.92718387, 0.374
 light_color = Color(0.3, 0.36, 0.62, 1)
 light_energy = 0.4
 
-[node name="Cemetery" parent="." unique_id=269653204 instance=ExtResource("4_world")]
+[node name="Ground" parent="." instance=ExtResource("4_ground")]
+
+[node name="Paths" parent="." instance=ExtResource("4_paths")]
+
+[node name="Fence" parent="." instance=ExtResource("4_fence")]
+
+[node name="Graves" parent="." instance=ExtResource("4_graves")]
+
+[node name="ChurchIntact" parent="." instance=ExtResource("4_church_intact")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.5, -7)
+
+[node name="ChurchRuined" parent="." instance=ExtResource("4_church_ruined")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 27, -0.5, -27)
+
+[node name="RuinRubble" parent="." instance=ExtResource("4_ruin_rubble")]
+
+[node name="Lamps" parent="." instance=ExtResource("4_lamps")]
+
+[node name="Props" parent="." instance=ExtResource("4_props")]
+
+[node name="Trees" parent="." instance=ExtResource("4_trees")]
+
+[node name="Fireflies" parent="." instance=ExtResource("4_fireflies")]
+
+[node name="ChurchFireflies" parent="." instance=ExtResource("4_church_fireflies")]
+
+[node name="PropCollision" parent="." instance=ExtResource("4_prop_collision")]
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 35)
