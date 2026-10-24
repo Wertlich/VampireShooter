@@ -8,9 +8,7 @@ const OUT_SCENE := "res://scenes/cemetery.tscn"
 const GROUND_MAT := preload("res://assets/cemetery/materials/grass_ground.tres")
 const PATH_MAT := preload("res://assets/cemetery/materials/path_mud.tres")
 const STONE_MAT := preload("res://assets/cemetery/materials/stone_palette.tres")
-const STONE_FLOOR_MAT := preload("res://assets/cemetery/materials/stone_floor.tres")
 const PEW_MAT := preload("res://assets/cemetery/materials/pew_wood.tres")
-const GLOW_MAT := preload("res://assets/cemetery/materials/lamp_glow.tres")
 
 const CHURCH_INTACT := preload("res://scenes/cemetery/church_intact.tscn")
 const CHURCH_RUINED := preload("res://scenes/cemetery/church_ruined.tscn")
@@ -42,7 +40,6 @@ const PROP_PATHS := {
 	"lantern": "res://models/cemetery/props/EA_Grave_Lantern_Stone_01a.glb",
 	"logs": "res://models/cemetery/props/EA_Grave_LogPile_01a.glb",
 	"obelisk": "res://models/cemetery/props/EA_Grave_Obelisk_01a.glb",
-	"pyramid": "res://models/cemetery/props/EA_Grave_Pyramid_01a.glb",
 	"railing": "res://models/cemetery/props/EA_Grave_Railing_01a.glb",
 	"slab": "res://models/cemetery/props/EA_Grave_Slab_Tall_01a.glb",
 	"mud_flat": "res://models/cemetery/props/EA_Grave_Mud_Flat_01a.glb",
@@ -54,8 +51,6 @@ const PROP_PATHS := {
 	"monu": "res://models/cemetery/graves/EA_Grave_Monu_01a.fbx",
 	"arch": "res://models/cemetery/graves/EA_Grave_Arch_01a.fbx",
 	"grave01": "res://models/cemetery/graves/EA_Grave_01a.fbx",
-	"rock": "res://models/cemetery/graves/EA_Grave_Rock_01a.fbx",
-	"rockstack": "res://models/cemetery/graves/EA_Grave_RockStack_01a.fbx",
 }
 
 const TREE_DEAD := preload("res://models/trees/tree_dead.glb")
@@ -67,8 +62,6 @@ var _grave_meshes: Dictionary = {}
 var _prop_meshes: Dictionary = {}
 var _name_index: int = 0
 var _stone_rubble_mat: StandardMaterial3D
-var _foliage_mesh: Mesh
-var _foliage_mat: StandardMaterial3D
 var _box_meshes: Dictionary = {}
 
 
@@ -84,12 +77,10 @@ func _initialize() -> void:
 	root.add_child(scene)
 
 	_cache_meshes()
-	_prepare_foliage()
 	_build_ground_and_paths()
 	_build_fence()
 	_build_graves()
 	_build_churches()
-	_build_interiors()
 	_build_lamps()
 	_build_props()
 	_build_trees()
@@ -103,27 +94,6 @@ func _cache_meshes() -> void:
 		_grave_meshes[path] = _extract_lod0_mesh(path)
 	for key in PROP_PATHS:
 		_prop_meshes[key] = _extract_lod0_mesh(PROP_PATHS[key])
-
-
-func _prepare_foliage() -> void:
-	_foliage_mesh = _extract_lod0_mesh("res://models/trees/tree_1.glb")
-	var packed := load("res://models/trees/tree_1.glb") as PackedScene
-	var instance := packed.instantiate()
-	var source: StandardMaterial3D = null
-	for child in instance.find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := child as MeshInstance3D
-		if mesh_instance.mesh == null:
-			continue
-		var candidate := mesh_instance.get_active_material(0)
-		if candidate is StandardMaterial3D:
-			source = candidate as StandardMaterial3D
-			break
-	instance.free()
-	_foliage_mat = source.duplicate() if source != null else StandardMaterial3D.new()
-	_foliage_mat.albedo_color = Color(0.08, 0.11, 0.06, 1)
-	_foliage_mat.roughness = 0.98
-	_foliage_mat.metallic = 0.0
-	_foliage_mat.emission_enabled = false
 
 
 func _extract_lod0_mesh(path: String) -> Mesh:
@@ -404,77 +374,6 @@ func _build_churches() -> void:
 		block.owner = scene
 
 
-# --- Interiors -------------------------------------------------------------
-
-func _build_interiors() -> void:
-	var intact := scene.get_node("Churches/ChurchIntact") as Node3D
-	var ruined := scene.get_node("Churches/ChurchRuined") as Node3D
-	_build_nave(intact, false)
-	_build_nave(ruined, true)
-
-
-func _build_nave(church: Node3D, ruined: bool) -> void:
-	var interior := Node3D.new()
-	interior.name = "RuinInterior" if ruined else "NaveInterior"
-	interior.position = church.position
-	interior.rotation = church.rotation
-	scene.add_child(interior)
-	interior.owner = scene
-
-	var seat_mesh := _box_mesh(Vector3(0.62, 0.14, 2.35))
-	var back_mesh := _box_mesh(Vector3(0.12, 0.68, 2.35))
-	var rows := [-6.1, -4.9, -3.7] if not ruined else [-5.8, -4.2]
-	for row_index in rows.size():
-		var x: float = rows[row_index]
-		for side in [-1.0, 1.0]:
-			if ruined and rng.randf() < 0.35:
-				continue
-			var seat := MeshInstance3D.new()
-			seat.name = "PewSeat_%d_%d" % [row_index, int(side)]
-			seat.mesh = seat_mesh
-			seat.material_override = PEW_MAT
-			seat.position = Vector3(x, 1.10, side * 1.45)
-			if ruined:
-				seat.rotation = Vector3(rng.randf_range(-0.2, 0.2), rng.randf_range(-0.5, 0.5),
-						rng.randf_range(-0.25, 0.25))
-				seat.position.y = 0.95
-			interior.add_child(seat)
-			seat.owner = scene
-			if not ruined or rng.randf() < 0.55:
-				var back := MeshInstance3D.new()
-				back.name = "PewBack_%d_%d" % [row_index, int(side)]
-				back.mesh = back_mesh
-				back.material_override = PEW_MAT
-				back.position = Vector3(x - 0.28, 1.46, side * 1.45)
-				if ruined:
-					back.rotation = seat.rotation
-				interior.add_child(back)
-				back.owner = scene
-
-	var altar := MeshInstance3D.new()
-	altar.name = "Altar"
-	altar.mesh = _box_mesh(Vector3(0.9, 1.0, 2.0))
-	altar.material_override = STONE_FLOOR_MAT
-	altar.position = Vector3(-2.85, 1.0, 0)
-	if ruined:
-		altar.rotation.z = -0.08
-		altar.position.y = 0.9
-	interior.add_child(altar)
-	altar.owner = scene
-
-	for i in 3:
-		var candle := MeshInstance3D.new()
-		candle.name = "AltarGlow_%d" % i
-		var sphere := SphereMesh.new()
-		sphere.radius = 0.06
-		sphere.height = 0.14
-		candle.mesh = sphere
-		candle.material_override = GLOW_MAT
-		candle.position = Vector3(-3.05, 1.58, -0.55 + i * 0.55)
-		interior.add_child(candle)
-		candle.owner = scene
-
-
 # --- Lamps -----------------------------------------------------------------
 
 func _build_lamps() -> void:
@@ -542,12 +441,9 @@ func _build_props() -> void:
 	_add_prop("Monu", "monu", Vector3(-15, 0, 5), 8.0, 1.1, root)
 	_add_prop("StoneArch", "arch", Vector3(-27, 0, 16), 12.0, 1.05, root)
 	_add_prop("DistinctiveGrave", "grave01", Vector3(15, 0, 15), 180.0, 1.05, root)
-	_add_prop("Pyramid", "pyramid", Vector3(37, 0, -3), 22.0, 1.0, root)
 	_add_prop("Obelisk", "obelisk", Vector3(-22, 0, 30), 8.0, 1.35, root)
 	_add_prop("ObeliskFar", "obelisk", Vector3(38, 0, 22), 18.0, 1.1, root)
 	_add_prop("TallSlab", "slab", Vector3(-38, 0, -18), 32.0, 1.2, root)
-	_add_prop("RockStack", "rockstack", Vector3(-11, 0, -29), 20.0, 1.25, root)
-	_add_prop("Rock", "rock", Vector3(14, 0, -36), 50.0, 1.2, root)
 	_add_prop("WoodForm", "grave01", Vector3(-34, 0, 8), 100.0, 0.9, root)
 
 	# Plot railing around the west obelisk.
@@ -556,12 +452,12 @@ func _build_props() -> void:
 		var pos := Vector3(-22, 0, 30) + Basis(Vector3.UP, deg_to_rad(angle)) * Vector3(0, 0, 3.2)
 		_add_prop("Railing_%d" % i, "railing", pos, angle, 1.0, root)
 
-	# Scattered path-side stones and old timber.
-	for z in [9.0, 16.0, 24.0, 32.0, 39.0]:
-		_add_prop("PathStoneL_%d" % int(z), "mud_flat", Vector3(-3.6, 0, z), rng.randf_range(0, 360),
-				1.0, root, _stone_rubble_mat)
-		_add_prop("PathStoneR_%d" % int(z), "mud_stones", Vector3(3.8, 0, z + 3.0),
-				rng.randf_range(0, 360), 0.9, root, _stone_rubble_mat)
+	# A few ground stones live at the fence margins. Keeping them off the path
+	# avoids the old overlap between the piles and the standing lamps.
+	_add_prop("EdgeStone_1", "mud_flat", Vector3(-41.0, 0, 8), 15.0, 1.0, root, _stone_rubble_mat)
+	_add_prop("EdgeStone_2", "mud_stones", Vector3(41.0, 0, -10), 70.0, 1.0, root, _stone_rubble_mat)
+	_add_prop("EdgeStone_3", "mud_stones", Vector3(41.0, 0, 28), 140.0, 0.9, root, _stone_rubble_mat)
+	_add_prop("EdgeStone_4", "mud_flat", Vector3(-41.0, 0, -28), 40.0, 0.9, root, _stone_rubble_mat)
 	for i in 4:
 		_add_prop("RuinPlank_%d" % i, "mud_plank",
 				Vector3(22 + rng.randf_range(-4, 4), 0, -22 + rng.randf_range(-5, 5)),
@@ -614,35 +510,6 @@ func _build_trees() -> void:
 		tree.scale = Vector3.ONE * rng.randf_range(1.5, 2.5)
 		root.add_child(tree)
 		tree.owner = scene
-
-	# A distant tree ring hides the edge of the 200 m ground plane. These use a
-	# darkened copy of the leaf material so they read as silhouettes, not neon.
-	for i in 22:
-		var angle := TAU * float(i) / 22.0 + rng.randf_range(-0.08, 0.08)
-		var radius := rng.randf_range(56.0, 74.0)
-		_add_foliage_tree(root, "DistantTree_%d" % i,
-				Vector3(cos(angle) * radius, 0, sin(angle) * radius),
-				rng.randf_range(1.7, 2.6))
-	# Keep the inside of the fence free of these broad canopies: one sat right
-	# over the south path and swallowed the player's view at spawn.
-	for i in 4:
-		var angle := TAU * float(i) / 4.0 + 0.25
-		_add_foliage_tree(root, "BorderTree_%d" % i,
-				Vector3(cos(angle) * 51.0, 0, sin(angle) * 51.0), rng.randf_range(1.5, 2.1))
-
-
-func _add_foliage_tree(root: Node3D, node_name: String, pos: Vector3, scale_value: float) -> void:
-	if _foliage_mesh == null:
-		return
-	var tree := MeshInstance3D.new()
-	tree.name = node_name
-	tree.mesh = _foliage_mesh
-	tree.material_override = _foliage_mat
-	tree.position = pos
-	tree.rotation_degrees.y = rng.randf_range(0, 360)
-	tree.scale = Vector3.ONE * scale_value
-	root.add_child(tree)
-	tree.owner = scene
 
 
 func _build_fireflies() -> void:

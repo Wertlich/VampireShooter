@@ -30,6 +30,15 @@ func _initialize() -> void:
 			"ruined fence ring is populated (%d pieces)" % (fences.get_child_count() if fences else 0))
 	_check(cemetery.has_node("Churches/ChurchIntact"), "intact church is present")
 	_check(cemetery.has_node("Churches/ChurchRuined"), "ruined church is present")
+	# Cleanup requested after the first playtest: no pews/altar glow inside, no
+	# pyramid memorial, no anchor boulder, no broadleaf canopies.
+	_check(cemetery.find_children("Pew*", "", true, false).is_empty(), "no pew furniture inside")
+	_check(cemetery.find_children("Altar*", "", true, false).is_empty(), "no altar glow spheres")
+	_check(cemetery.find_children("Pyramid*", "", true, false).is_empty(), "no pyramid memorial")
+	_check(cemetery.find_children("Rock", "", true, false).is_empty(), "no anchor boulder")
+	_check(cemetery.find_children("DistantTree*", "", true, false).is_empty()
+			and cemetery.find_children("BorderTree*", "", true, false).is_empty(),
+			"no broadleaf bush canopies")
 
 	var standing := cemetery.find_children("StandingLamp_*", "", true, false)
 	var hanging := cemetery.find_children("HangingLamp_*", "", true, false)
