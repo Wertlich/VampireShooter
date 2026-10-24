@@ -478,6 +478,14 @@ func _on_camera_recoil(pitch_degrees: float, yaw_degrees: float) -> void:
 	_punch = minf(_punch + deg_to_rad(pitch_degrees) * 0.014, 0.1)
 
 
+## Restores health without going over the maximum. Used by the AKM lifesteal.
+func heal(amount: float) -> void:
+	if is_dead or amount <= 0.0:
+		return
+	health = minf(max_health, health + amount)
+	health_changed.emit(health, max_health)
+
+
 func take_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, _direction: Vector3 = Vector3.ZERO) -> void:
 	if is_dead or god_mode:
 		return

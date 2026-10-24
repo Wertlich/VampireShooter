@@ -1,0 +1,59 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/fx/headshot_blast.gd" id="1_blast"]
+[ext_resource type="Texture2D" path="res://assets/textures/soft_dot.png" id="2_dot"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_flash"]
+size = Vector2(0.9, 0.9)
+
+[sub_resource type="StandardMaterial3D" id="Mat_flash"]
+resource_local_to_scene = true
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_dot")
+albedo_color = Color(1, 0.72, 0.25, 1)
+billboard_mode = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_spark"]
+radius = 0.03
+height = 0.06
+radial_segments = 4
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_spark"]
+shading_mode = 0
+albedo_color = Color(1, 0.85, 0.5, 1)
+emission_enabled = true
+emission = Color(1, 0.5, 0.12, 1)
+emission_energy_multiplier = 6.0
+
+[node name="HeadshotBlast" type="Node3D"]
+script = ExtResource("1_blast")
+
+[node name="Flash" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("QuadMesh_flash")
+material_override = SubResource("Mat_flash")
+
+[node name="Sparks" type="CPUParticles3D" parent="."]
+material_override = SubResource("Mat_spark")
+mesh = SubResource("SphereMesh_spark")
+emitting = true
+amount = 24
+lifetime = 0.5
+one_shot = true
+explosiveness = 1.0
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, -10, 0)
+initial_velocity_min = 2.5
+initial_velocity_max = 7.0
+scale_amount_min = 0.7
+scale_amount_max = 1.9
+
+[node name="Light" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.55, 0.2, 1)
+light_energy = 0.0
+shadow_enabled = false
+omni_range = 6.0

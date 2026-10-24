@@ -110,17 +110,25 @@ func _build(level: int) -> void:
 
 func _make_card(card: Dictionary, index: int) -> PanelContainer:
 	var accent: Color = card.get("accent", Color(0.8, 0.8, 0.9))
+	var unique := bool(card.get("unique", false))
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(300, 340)
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	panel.add_theme_stylebox_override("panel", _card_style(accent, false))
+	panel.add_theme_stylebox_override("panel", _card_style(accent, false, unique))
 	panel.mouse_entered.connect(func() -> void:
-		panel.add_theme_stylebox_override("panel", _card_style(accent, true)))
+		panel.add_theme_stylebox_override("panel", _card_style(accent, true, unique)))
 	panel.mouse_exited.connect(func() -> void:
-		panel.add_theme_stylebox_override("panel", _card_style(accent, false)))
+		panel.add_theme_stylebox_override("panel", _card_style(accent, false, unique)))
 	panel.gui_input.connect(_on_card_input.bind(index))
 	_panels.append(panel)
+	if unique:
+		# A slow golden pulse makes the rare offer read as treasure, not stats.
+		var pulse := panel.create_tween().set_loops()
+		pulse.tween_property(panel, "modulate", Color(1.0, 0.92, 0.62), 0.85) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		pulse.tween_property(panel, "modulate", Color.WHITE, 0.85) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 	var column := VBoxContainer.new()
 	column.add_theme_constant_override("separation", 12)
@@ -128,8 +136,8 @@ func _make_card(card: Dictionary, index: int) -> PanelContainer:
 	panel.add_child(column)
 
 	var tag := Label.new()
-	tag.text = String(card.get("tag", "")).to_upper()
-	tag.add_theme_font_size_override("font_size", 13)
+	tag.text = ("★ " if unique else "") + String(card.get("tag", "")).to_upper()
+	tag.add_theme_font_size_override("font_size", 14 if unique else 13)
 	tag.add_theme_color_override("font_color", accent)
 	tag.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(tag)
@@ -138,7 +146,8 @@ func _make_card(card: Dictionary, index: int) -> PanelContainer:
 	title.text = String(card.get("title", ""))
 	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	title.add_theme_font_size_override("font_size", 26)
-	title.add_theme_color_override("font_color", Color(1.0, 0.96, 0.9))
+	title.add_theme_color_override("font_color",
+		Color(1.0, 0.94, 0.72) if unique else Color(1.0, 0.96, 0.9))
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(title)
 
@@ -147,7 +156,8 @@ func _make_card(card: Dictionary, index: int) -> PanelContainer:
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	desc.add_theme_font_size_override("font_size", 16)
-	desc.add_theme_color_override("font_color", Color(0.8, 0.79, 0.84, 0.95))
+	desc.add_theme_color_override("font_color",
+		Color(0.94, 0.86, 0.67, 0.96) if unique else Color(0.8, 0.79, 0.84, 0.95))
 	desc.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(desc)
 
@@ -155,21 +165,32 @@ func _make_card(card: Dictionary, index: int) -> PanelContainer:
 	key.text = "%d" % (index + 1)
 	key.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	key.add_theme_font_size_override("font_size", 22)
-	key.add_theme_color_override("font_color", Color(accent.r, accent.g, accent.b, 0.7))
+	key.add_theme_color_override("font_color",
+		Color(accent.r, accent.g, accent.b, 0.85) if unique
+		else Color(accent.r, accent.g, accent.b, 0.7))
 	key.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	column.add_child(key)
 
 	return panel
 
 
-func _card_style(accent: Color, hover: bool) -> StyleBoxFlat:
+func _card_style(accent: Color, hover: bool, unique: bool = false) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.09, 0.08, 0.12, 0.98) if hover else Color(0.06, 0.055, 0.08, 0.97)
-	style.border_width_left = 2
-	style.border_width_right = 2
-	style.border_width_top = 2
-	style.border_width_bottom = 2
-	style.border_color = accent if hover else Color(accent.r, accent.g, accent.b, 0.45)
+	if unique:
+		style.bg_color = Color(0.16, 0.11, 0.035, 0.99) if hover else Color(0.11, 0.075, 0.02, 0.98)
+	else:
+		style.bg_color = Color(0.09, 0.08, 0.12, 0.98) if hover else Color(0.06, 0.055, 0.08, 0.97)
+	var border := 3 if unique else 2
+	style.border_width_left = border
+	style.border_width_right = border
+	style.border_width_top = border
+	style.border_width_bottom = border
+	if unique:
+		style.border_color = Color(1.0, 0.83, 0.38, 1.0 if hover else 0.8)
+		style.shadow_color = Color(1.0, 0.62, 0.12, 0.45 if hover else 0.28)
+		style.shadow_size = 22 if hover else 16
+	else:
+		style.border_color = accent if hover else Color(accent.r, accent.g, accent.b, 0.45)
 	style.corner_radius_top_left = 12
 	style.corner_radius_top_right = 12
 	style.corner_radius_bottom_left = 12

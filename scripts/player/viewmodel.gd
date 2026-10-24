@@ -79,8 +79,10 @@ func set_active(index: int) -> void:
 		var w: Weapon = weapons[i]
 		var active := i == index
 		w.visible = active
-		# Holstered guns stay frozen: no recoil animation, no reload timer.
-		w.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
+		# Holstered guns freeze their animations and reload timer, but keep
+		# processing so a headshot/kill streak can still expire while put away.
+		w.process_mode = Node.PROCESS_MODE_INHERIT
+		w.set_holstered(not active)
 		# reset_state() also cancels a reload in progress on the gun being put away.
 		w.reset_state()
 	_apply_aim_pose()

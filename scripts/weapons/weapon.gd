@@ -15,6 +15,7 @@ signal camera_recoil(pitch_degrees: float, yaw_degrees: float)
 signal hit_enemy(headshot: bool)
 
 const IMPACT_SCENE := preload("res://scenes/fx/impact.tscn")
+const HEADSHOT_BLAST_SCENE := preload("res://scenes/fx/headshot_blast.tscn")
 
 @export_group("Identity")
 @export var display_name: String = "Revolver"
@@ -74,6 +75,35 @@ const IMPACT_SCENE := preload("res://scenes/fx/impact.tscn")
 ## Spread multiplier while aiming (0.35 = much tighter groups).
 @export var aim_spread_multiplier: float = 0.35
 
+@export_group("Unique Perks")
+## Maximum enemies a piercing shot can pass through.
+@export var pierce_targets: int = 8
+## Headshot streak cap and lifetime used by the SVD/revolver cards.
+@export var headshot_stack_cap: int = 10
+@export var headshot_stack_timeout: float = 3.0
+## SVD: fire-rate bonus per headshot stack.
+@export var headshot_rate_bonus: float = 0.08
+## Revolver: damage and fire-rate bonus per burning-cross stack.
+@export var revolver_damage_bonus: float = 0.05
+@export var revolver_rate_bonus: float = 0.04
+## Revolver: headshot-kill blast, as a fraction of base damage.
+@export var blast_damage_fraction: float = 1.0 / 3.0
+@export var blast_radius: float = 2.6
+## AKM: lifesteal and kill-streak bonuses.
+@export var lifesteal_fraction: float = 0.05
+@export var kill_rate_bonus: float = 0.08
+@export var kill_reload_bonus: float = 0.06
+## AKM overheat: from this many kills the gun burns its owner every shot.
+@export var self_burn_threshold: int = 6
+@export var self_burn_per_stack: float = 0.6
+## Saiga unique: two-shot burst and the base fire rate it reaches.
+@export var burst_interval: float = 0.08
+@export var burst_fire_rate: float = 4.5
+## Double barrel unique: wider cone and the kick it applies to the player.
+@export var shotgun_spread_multiplier: float = 1.6
+@export var shotgun_knockback: float = 7.0
+@export var shotgun_knockback_lift: float = 1.8
+
 var ammo: int = 0
 var is_reloading: bool = false
 ## Set by the player while the aim button is held.
@@ -81,9 +111,22 @@ var is_aiming: bool = false
 ## Camera the hitscan originates from. Set by the player, because the weapon
 ## itself lives in the view-model SubViewport with its own camera.
 var aim_camera: Camera3D
+## Golden perks earned from level-up cards, keyed by perk id.
+var _perks: Dictionary = {}
+## Headshot streak shared by the SVD and revolver cards. Public for the HUD.
+var headshot_stacks: int = 0
+## Kill streak of the AKM overheat card. Public for the HUD.
+var kill_stacks: int = 0
 
 var _cooldown: float = 0.0
 var _reload_left: float = 0.0
+var _reload_total: float = 0.0
+var _holstered: bool = false
+var _headshot_stack_left: float = 0.0
+var _kill_stack_left: float = 0.0
+## Rounds still queued by the Saiga's two-shot burst.
+var _burst_left: int = 0
+var _burst_delay: float = 0.0
 var _flash_left: float = 0.0
 var _model: Node3D
 ## Second gun for the akimbo modification (dual MP9).
@@ -246,7 +289,13 @@ func make_dual() -> bool:
 
 
 func _process(delta: float) -> void:
+	if _holstered:
+		# The gun is put away, but its headshot/kill streak still has to run out.
+		_update_streaks(delta)
+		return
 	_cooldown = maxf(0.0, _cooldown - delta)
+	_update_burst(delta)
+	_update_streaks(delta)
 	_update_flash(delta)
 	_update_reload(delta)
 	_update_recoil(delta)
@@ -265,10 +314,28 @@ func pull_trigger() -> bool:
 		if auto_reload:
 			reload()
 		return false
+	if not _fire_round():
+		return false
+	# The Saiga unique fires a second shell a heartbeat after the first.
+	if has_unique("saiga_burst_pierce") and _burst_left <= 0 and ammo > 0:
+		_burst_left = 1
+		_burst_delay = burst_interval
+	return true
 
+
+## Fires one round, ignoring the outer trigger cooldown. Used by the burst card.
+func _fire_round() -> bool:
+	if is_reloading or ammo <= 0:
+		return false
 	ammo -= 1
-	_cooldown = 1.0 / maxf(fire_rate, 0.01)
-	_shoot()
+	_cooldown = 1.0 / maxf(effective_fire_rate(), 0.01)
+	var dealt := effective_damage()
+	var body := _owner_body()
+	if body is Player and (body as Player).one_shot_kill:
+		dealt = 1.0e9
+	var result := _shoot(dealt)
+	_apply_shot_result(result)
+	_apply_player_knockback()
 	_kick()
 	ammo_changed.emit(ammo, max_ammo)
 	fired.emit()
@@ -282,15 +349,85 @@ func reload() -> void:
 	if is_reloading or ammo >= max_ammo:
 		return
 	is_reloading = true
-	_reload_left = reload_time
+	_burst_left = 0
+	_reload_total = effective_reload_time()
+	_reload_left = _reload_total
+	# The SVD's headshot tempo is lost when the magazine comes out.
+	if has_unique("svd_headshot"):
+		_reset_headshot_streak()
 	if _reload_sound:
 		_reload_sound.pitch_scale = 1.0
 		_reload_sound.play()
-	reload_started.emit(reload_time)
+	reload_started.emit(_reload_total)
 
 
 func can_fire() -> bool:
 	return not is_reloading and _cooldown <= 0.0 and ammo > 0
+
+
+# --- Golden perks -----------------------------------------------------------
+
+## True once the matching golden card has been taken.
+func has_unique(perk: String) -> bool:
+	return _perks.has(perk)
+
+
+## Number of golden perks installed on this gun, shown in the HUD.
+func unique_count() -> int:
+	return _perks.size()
+
+
+## Installs a golden card's effect. Returns false when it was already taken.
+func grant_unique(perk: String) -> bool:
+	if _perks.has(perk):
+		return false
+	_perks[perk] = true
+	if perk == "saiga_burst_pierce":
+		fire_rate = maxf(fire_rate, burst_fire_rate)
+	elif perk == "shotgun_knockback":
+		spread_degrees *= shotgun_spread_multiplier
+	elif perk == "rpd_heavy_caliber":
+		damage *= 1.2
+		move_speed_multiplier = minf(move_speed_multiplier, 0.65)
+	elif perk == "mp9_swarm":
+		fire_rate *= 1.25
+		max_ammo = roundi(max_ammo * 1.2)
+		ammo = max_ammo
+		ammo_changed.emit(ammo, max_ammo)
+	return true
+
+
+## Current rate after headshot/kill streaks.
+func effective_fire_rate() -> float:
+	var multiplier := 1.0
+	if has_unique("svd_headshot"):
+		multiplier += headshot_rate_bonus * headshot_stacks
+	if has_unique("revolver_heat"):
+		multiplier += revolver_rate_bonus * headshot_stacks
+	if has_unique("akm_kill_heat"):
+		multiplier += kill_rate_bonus * kill_stacks
+	return fire_rate * multiplier
+
+
+## Current damage after the revolver's burning-cross stacks.
+func effective_damage() -> float:
+	var value := damage
+	if has_unique("revolver_heat"):
+		value *= 1.0 + revolver_damage_bonus * headshot_stacks
+	return value
+
+
+## Current reload duration after the AKM's kill streak.
+func effective_reload_time() -> float:
+	var value := reload_time
+	if has_unique("akm_kill_heat"):
+		value /= 1.0 + kill_reload_bonus * kill_stacks
+	return value
+
+
+## True while the AKM is hot enough to hurt its owner.
+func is_overheating() -> bool:
+	return has_unique("akm_kill_heat") and kill_stacks >= self_burn_threshold
 
 
 func cancel_reload() -> void:
@@ -298,6 +435,7 @@ func cancel_reload() -> void:
 		return
 	is_reloading = false
 	_reload_left = 0.0
+	_reload_total = 0.0
 	if _cylinder:
 		_cylinder.rotation.z = _cylinder_base_rot
 	if _reload_sound and _reload_sound.playing:
@@ -307,6 +445,8 @@ func cancel_reload() -> void:
 func reset_state() -> void:
 	"""Puts the view model back to rest, used when the weapon is holstered."""
 	cancel_reload()
+	_burst_left = 0
+	_burst_delay = 0.0
 	hide_flash()
 	_kick_pos = Vector3.ZERO
 	_kick_rot = Vector3.ZERO
@@ -322,6 +462,11 @@ func set_aim_camera(camera: Camera3D) -> void:
 	aim_camera = camera
 
 
+## Called by the view model: holstered guns only tick their streak timers.
+func set_holstered(value: bool) -> void:
+	_holstered = value
+
+
 func hide_flash() -> void:
 	_flash_left = 0.0
 	for flash in _flashes:
@@ -334,26 +479,20 @@ func hide_flash() -> void:
 
 # --- Shooting ---------------------------------------------------------------
 
-func _shoot() -> void:
+## Resolves one trigger pull. Returns counts for the golden-perk bookkeeping.
+func _shoot(dealt: float) -> Dictionary:
+	var result := {"hits": 0, "headshots": 0, "kills": 0, "damage": 0.0}
 	var camera := aim_camera
 	if camera == null or not is_instance_valid(camera):
 		camera = get_viewport().get_camera_3d()
 	if camera == null:
-		return
+		return result
 
 	var origin := camera.global_position
 	var forward := -camera.global_transform.basis.z
 	var space := camera.get_world_3d().direct_space_state
-	var exclude: Array[RID] = []
 	var body := _owner_body()
-	if body:
-		exclude.append(body.get_rid())
-
-	# The one-shot cheat turns any gun into a death ray.
-	var dealt := damage
-	if body is Player and (body as Player).one_shot_kill:
-		dealt = 1.0e9
-
+	var body_rid: RID = body.get_rid() if body else RID()
 	var spread := spread_degrees * (aim_spread_multiplier if is_aiming else 1.0)
 
 	# Online: the host resolves the shot so damage is authoritative.
@@ -361,28 +500,177 @@ func _shoot() -> void:
 		var game := get_tree().get_first_node_in_group("network_game")
 		if game != null and game.has_method("request_shot"):
 			game.call("request_shot", origin, forward, spread, pellets, dealt, max_range)
-		return
+		return result
 
 	for i in pellets:
 		var dir := _spread_direction(forward, spread)
-		var query := PhysicsRayQueryParameters3D.create(origin, origin + dir * max_range, 0b1101, exclude)
-		query.collide_with_areas = false
-		var hit := space.intersect_ray(query)
-		if hit.is_empty():
-			continue
-		_spawn_impact(hit["position"], hit["normal"])
-		var collider: Object = hit["collider"]
-		if collider and collider.has_method("take_damage"):
+		var ray_origin := origin
+		var exclude: Array[RID] = [body_rid]
+		var pierce_left := maxi(1, pierce_targets) if _has_piercing() else 1
+
+		while pierce_left > 0:
+			var query := PhysicsRayQueryParameters3D.create(
+				ray_origin, ray_origin + dir * max_range, 0b1101, exclude)
+			query.collide_with_areas = false
+			var hit := space.intersect_ray(query)
+			if hit.is_empty():
+				break
+			_spawn_impact(hit["position"], hit["normal"])
+			var collider: Object = hit["collider"]
+			if collider == null or not collider.has_method("take_damage"):
+				break
+
+			var before := _health_of(collider)
 			collider.take_damage(dealt, hit["position"], dir)
-			if collider is Node and collider.is_in_group("enemies"):
-				var headshot: bool = collider.has_method("is_weak_point_hit") \
-					and collider.is_weak_point_hit(hit["position"])
-				if headshot and _headshot_sound:
-					# Slightly different pitch every time so a streak does not
-					# machine-gun the same sample.
-					_headshot_sound.pitch_scale = randf_range(0.92, 1.08)
-					_headshot_sound.play()
+			var after := _health_of(collider)
+			result["damage"] = float(result["damage"]) + maxf(0.0, before - after)
+
+			if collider is Enemy:
+				var enemy := collider as Enemy
+				var headshot := enemy.is_weak_point_hit(hit["position"])
+				result["hits"] = int(result["hits"]) + 1
+				if headshot:
+					result["headshots"] = int(result["headshots"]) + 1
+					if _headshot_sound:
+						# Slightly different pitch every time so a streak does not
+						# machine-gun the same sample.
+						_headshot_sound.pitch_scale = randf_range(0.92, 1.08)
+						_headshot_sound.play()
+				if before > 0.0 and after <= 0.0:
+					result["kills"] = int(result["kills"]) + 1
+					if headshot and has_unique("revolver_blast"):
+						_explode_headshot(hit["position"])
 				hit_enemy.emit(headshot)
+
+			if collider is Node:
+				exclude.append((collider as Node).get_rid())
+			pierce_left -= 1
+			if pierce_left <= 0 or not _has_piercing():
+				break
+			# Step past the enemy we just hit and keep flying along the same line.
+			ray_origin = (hit["position"] as Vector3) + dir * 0.05
+	return result
+
+
+func _has_piercing() -> bool:
+	return has_unique("svd_pierce") or has_unique("saiga_burst_pierce")
+
+
+func _health_of(collider: Object) -> float:
+	if collider is Enemy:
+		return (collider as Enemy).health
+	return 0.0
+
+
+## Headshot-kill blast: 1/3 of base damage to every enemy around the corpse.
+func _explode_headshot(center: Vector3) -> void:
+	var blast_damage := damage * blast_damage_fraction
+	for node in get_tree().get_nodes_in_group("enemies"):
+		var enemy := node as Enemy
+		if enemy == null or enemy.is_queued_for_deletion():
+			continue
+		if enemy.global_position.distance_to(center) > blast_radius:
+			continue
+		if not _blast_has_line_of_sight(center, enemy):
+			continue
+		var point := enemy.global_position + Vector3.UP * minf(1.0, enemy.head_zone_height * 0.5)
+		var push := enemy.global_position - center
+		push.y = 0.0
+		enemy.take_damage(blast_damage, point, push.normalized())
+	_spawn_headshot_blast(center)
+
+
+func _blast_has_line_of_sight(center: Vector3, enemy: Enemy) -> bool:
+	var from := center + Vector3.UP * 0.5
+	var to := enemy.global_position + Vector3.UP * 1.0
+	var query := PhysicsRayQueryParameters3D.create(from, to, 1)  # walls only
+	return enemy.get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _spawn_headshot_blast(position: Vector3) -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var fx := HEADSHOT_BLAST_SCENE.instantiate() as Node3D
+	fx.position = scene.to_local(position)
+	scene.add_child(fx)
+
+
+func _apply_shot_result(result: Dictionary) -> void:
+	var headshots := int(result.get("headshots", 0))
+	if headshots > 0 and (has_unique("svd_headshot") or has_unique("revolver_heat")):
+		headshot_stacks = mini(headshot_stack_cap, headshot_stacks + headshots)
+		_headshot_stack_left = headshot_stack_timeout
+
+	if has_unique("svd_headshot") and int(result.get("hits", 0)) == 0:
+		_reset_headshot_streak()
+
+	var kills := int(result.get("kills", 0))
+	if kills > 0 and has_unique("akm_kill_heat"):
+		kill_stacks = mini(headshot_stack_cap, kill_stacks + kills)
+		_kill_stack_left = headshot_stack_timeout
+
+	var body := _owner_body()
+	if body is Player:
+		var player := body as Player
+		if has_unique("akm_lifesteal"):
+			player.heal(float(result.get("damage", 0.0)) * lifesteal_fraction)
+		if is_overheating():
+			var burn := self_burn_per_stack * float(kill_stacks - self_burn_threshold + 1)
+			player.take_damage(burn)
+
+
+func _apply_player_knockback() -> void:
+	if not has_unique("shotgun_knockback"):
+		return
+	var body := _owner_body()
+	if body == null or (body is Player and (body as Player).is_dead):
+		return
+	var back := body.global_transform.basis.z
+	if aim_camera and is_instance_valid(aim_camera):
+		back = aim_camera.global_transform.basis.z
+	back.y = 0.0
+	body.velocity += back.normalized() * shotgun_knockback
+	body.velocity.y += shotgun_knockback_lift
+
+
+func _update_burst(delta: float) -> void:
+	if _burst_left <= 0:
+		return
+	var body := _owner_body()
+	if body is Player and (body as Player).is_dead:
+		_burst_left = 0
+		return
+	if is_reloading:
+		_burst_left = 0
+		return
+	_burst_delay -= delta
+	if _burst_delay > 0.0:
+		return
+	_burst_left -= 1
+	if _fire_round():
+		_burst_delay = burst_interval
+
+
+func _update_streaks(delta: float) -> void:
+	if headshot_stacks > 0:
+		_headshot_stack_left -= delta
+		if _headshot_stack_left <= 0.0:
+			_reset_headshot_streak()
+	if kill_stacks > 0:
+		_kill_stack_left -= delta
+		if _kill_stack_left <= 0.0:
+			_reset_kill_streak()
+
+
+func _reset_headshot_streak() -> void:
+	headshot_stacks = 0
+	_headshot_stack_left = 0.0
+
+
+func _reset_kill_streak() -> void:
+	kill_stacks = 0
+	_kill_stack_left = 0.0
 
 
 func _spread_direction(forward: Vector3, spread: float) -> Vector3:
@@ -465,7 +753,7 @@ func _update_recoil(delta: float) -> void:
 	var dip := Vector3.ZERO
 	var roll := 0.0
 	if is_reloading:
-		var progress := 1.0 - clampf(_reload_left / maxf(reload_time, 0.01), 0.0, 1.0)
+		var progress := 1.0 - clampf(_reload_left / maxf(_reload_total, 0.01), 0.0, 1.0)
 		var curve := sin(progress * PI)
 		dip = Vector3(0.0, -0.075 * curve, 0.02 * curve)
 		roll = deg_to_rad(22.0) * curve
@@ -489,7 +777,7 @@ func _update_reload(delta: float) -> void:
 			_cylinder.rotation.z = _cylinder_base_rot
 		return
 
-	var duration := maxf(reload_time, 0.01)
+	var duration := maxf(_reload_total, 0.01)
 	var progress := 1.0 - clampf(_reload_left / duration, 0.0, 1.0)
 	if _cylinder:
 		# Six chambers, six clicks: the cylinder turns a sixth of a turn at a time.

@@ -9,6 +9,9 @@ const MAX_WEAPONS := 3
 const HEALTH_CARD_GAIN := 1.25
 ## Slot of the MP9 in the view model — the akimbo card hangs off it.
 const MP9_INDEX := 6
+## Golden weapon cards unlock after this many normal stat upgrades.
+const NORMAL_UPGRADES_FOR_UNIQUE := 3
+const UNIQUE_CARDS := preload("res://scripts/weapons/unique_cards.gd")
 
 @onready var level_menu: LevelUpMenu = $LevelUpMenu
 @onready var waves: WaveManager = $WaveManager
@@ -21,6 +24,9 @@ var player: Player
 
 ## Level-ups that happened while a card menu was already open.
 var _pending_levels: int = 0
+## Normal damage/rate/ammo/reload/spread upgrades taken this run. Golden cards
+## stay hidden until this reaches NORMAL_UPGRADES_FOR_UNIQUE.
+var _normal_upgrades: int = 0
 
 
 func _ready() -> void:
@@ -121,6 +127,7 @@ func _build_cards() -> Array:
 	var viewmodel: Viewmodel = player.viewmodel
 	var unlocks: Array[Dictionary] = []
 	var upgrades: Array[Dictionary] = []
+	var uniques := _available_unique_cards(viewmodel)
 	var unlocked_count := 0
 
 	for i in viewmodel.weapons.size():
@@ -164,6 +171,11 @@ func _build_cards() -> Array:
 	if unlocked_count < MAX_WEAPONS and not unlocks.is_empty():
 		unlocks.shuffle()
 		options.append(unlocks[0])
+	if not uniques.is_empty():
+		# The golden offer is guaranteed once the run is deep enough, otherwise
+		# it could stay buried under a pile of ordinary stat cards.
+		uniques.shuffle()
+		options.append(uniques[0])
 	if not dual_card.is_empty():
 		options.append(dual_card)
 
@@ -175,6 +187,32 @@ func _build_cards() -> Array:
 
 	options.shuffle()
 	return options
+
+
+## Golden cards for guns already in hand and not yet fully mastered.
+func _available_unique_cards(viewmodel: Viewmodel) -> Array[Dictionary]:
+	var cards: Array[Dictionary] = []
+	if _normal_upgrades < NORMAL_UPGRADES_FOR_UNIQUE:
+		return cards
+	for i in viewmodel.weapons.size():
+		if not viewmodel.is_unlocked(i):
+			continue
+		var weapon: Weapon = viewmodel.weapons[i]
+		for definition in UNIQUE_CARDS.for_weapon(i):
+			var perk := String(definition.get("perk", ""))
+			if perk == "" or weapon.has_unique(perk):
+				continue
+			cards.append({
+				"kind": "unique",
+				"index": i,
+				"perk": perk,
+				"unique": true,
+				"title": String(definition.get("title", "")),
+				"tag": String(definition.get("tag", "уникальное")),
+				"desc": String(definition.get("desc", "")),
+				"accent": UNIQUE_CARDS.GOLD,
+			})
+	return cards
 
 
 func _health_card() -> Dictionary:
@@ -232,6 +270,12 @@ func _weapon_blurb(index: int) -> String:
 			return "Автомат: 30 патронов, очередь.\nБыстрый и злой на средней дистанции."
 		3:
 			return "Снайперка: 10 патронов, 130 урона.\nОдин выстрел — один скелет."
+		4:
+			return "Пулемёт: 100 патронов, шквал огня.\nТяжёлый — с ним ходишь на 25% медленнее."
+		5:
+			return "Дробовик-автомат: 8 патронов.\nБлизко — страшная сила."
+		6:
+			return "ПП: 15 выстр./с, магазин на 30.\nБыстрый и вертлявый."
 	return "Надёжный ствол на шесть патронов."
 
 
@@ -250,13 +294,19 @@ func _apply_card(card: Dictionary) -> void:
 	if index < 0 or index >= viewmodel.weapons.size():
 		return
 	var weapon: Weapon = viewmodel.weapons[index]
+	var kind := String(card.get("kind", ""))
+	var stat := String(card.get("stat", ""))
 
-	match String(card.get("kind", "")):
+	if kind == "unique":
+		weapon.grant_unique(String(card.get("perk", "")))
+		return
+
+	match kind:
 		"unlock":
 			viewmodel.unlock(index)
 			player.switch_to(index)
 		"upgrade":
-			match String(card.get("stat", "")):
+			match stat:
 				"dual":
 					weapon.make_dual()
 				"damage":
@@ -271,6 +321,9 @@ func _apply_card(card: Dictionary) -> void:
 					weapon.reload_time = maxf(0.6, weapon.reload_time * 0.78)
 				"spread":
 					weapon.spread_degrees = maxf(0.05, weapon.spread_degrees * 0.7)
+			# Akimbo is a modification, not one of the three normal masteries.
+			if stat != "dual":
+				_normal_upgrades += 1
 
 
 func _capture() -> void:

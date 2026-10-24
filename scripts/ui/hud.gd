@@ -99,16 +99,33 @@ func _update_wave_label() -> void:
 func _update_weapon_stats() -> void:
 	if _weapon == null or stats_label == null:
 		return
-	var text := "урон %.0f\nтемп %.2f/с\nмагазин %d\nперезарядка %.2f с\nразброс %.2f°" % [
-		_weapon.damage,
-		_weapon.fire_rate,
+	var rate := "%.2f" % _weapon.effective_fire_rate()
+	if _weapon.has_unique("saiga_burst_pierce"):
+		rate += "×2"
+	var text := "урон %.0f\nтемп %s/с\nмагазин %d\nперезарядка %.2f с\nразброс %.2f°" % [
+		_weapon.effective_damage(),
+		rate,
 		_weapon.max_ammo,
-		_weapon.reload_time,
+		_weapon.effective_reload_time(),
 		_weapon.spread_degrees,
 	]
 	# Heavy guns show their mobility cost next to the damage numbers.
 	if _weapon.move_speed_multiplier < 0.999:
 		text += "\nход %d%%" % roundi(_weapon.move_speed_multiplier * 100.0)
+	var status: Array[String] = []
+	if _weapon.headshot_stacks > 0:
+		if _weapon.has_unique("revolver_heat"):
+			status.append("крест ×%d" % _weapon.headshot_stacks)
+		elif _weapon.has_unique("svd_headshot"):
+			status.append("серия ×%d" % _weapon.headshot_stacks)
+	if _weapon.kill_stacks > 0 and _weapon.has_unique("akm_kill_heat"):
+		status.append("убийства ×%d" % _weapon.kill_stacks)
+	if _weapon.is_overheating():
+		var burn := _weapon.self_burn_per_stack \
+			* float(_weapon.kill_stacks - _weapon.self_burn_threshold + 1)
+		status.append("ПЕРЕГРЕВ −%.1f HP" % burn)
+	if not status.is_empty():
+		text += "\n" + " · ".join(status)
 	if text != _stats_text:
 		_stats_text = text
 		stats_label.text = text
@@ -162,6 +179,11 @@ func _draw() -> void:
 	# Damage vignette: a quick red wash when the player is hit.
 	if _damage_flash > 0.0:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.75, 0.06, 0.05, 0.2 * _damage_flash))
+	# The overheated AKM keeps a low orange fire on the screen edges.
+	if _weapon and _weapon.is_overheating():
+		var flicker := 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.023)
+		draw_rect(Rect2(Vector2.ZERO, size),
+			Color(1.0, 0.23, 0.02, 0.055 + 0.035 * flicker))
 
 	# Health bar, bottom left, above the speed readout.
 	if _player:
@@ -204,6 +226,43 @@ func _draw() -> void:
 		for dir in [Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)]:
 			var d: Vector2 = (dir as Vector2).normalized()
 			draw_line(center + d * (outer - 7.0), center + d * outer, marker_color, 2.0, true)
+
+	if _weapon and _weapon.has_unique("revolver_heat") and _weapon.headshot_stacks > 0:
+		_draw_burning_cross(center)
+
+
+## The revolver's golden card turns every headshot into another notch of a
+## burning cross. More stacks = longer, hotter, more restless flames.
+func _draw_burning_cross(center: Vector2) -> void:
+	var heat := clampf(float(_weapon.headshot_stacks) / maxf(float(_weapon.headshot_stack_cap), 1.0), 0.0, 1.0)
+	var time := Time.get_ticks_msec() * 0.001
+	var flicker := clampf(0.78 + 0.18 * sin(time * 17.0) + 0.04 * sin(time * 41.0), 0.55, 1.0)
+	var reach := 22.0 + 16.0 * heat
+	var alpha := (0.25 + 0.75 * heat) * flicker
+	var hot := Color(1.0, lerpf(0.35, 0.9, heat), lerpf(0.06, 0.52, heat), alpha)
+
+	# A soft heat halo behind the cross sells the "burning" part.
+	draw_circle(center, 16.0 + 14.0 * heat, Color(1.0, 0.34, 0.03, 0.06 * alpha))
+	for width in [14.0, 6.0, 2.5]:
+		var layer := alpha * (0.06 if width > 8.0 else 0.14 if width > 4.0 else 0.9)
+		var candle := Color(hot.r, hot.g, hot.b, layer)
+		draw_line(center + Vector2(-reach, 0.0), center + Vector2(reach, 0.0), candle, width, true)
+		draw_line(center + Vector2(0.0, -reach), center + Vector2(0.0, reach), candle, width, true)
+
+	# Little licking flames at the four tips.
+	var tip := 3.0 + 5.0 * heat
+	for dir in [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]:
+		var d: Vector2 = dir as Vector2
+		var side: Vector2 = Vector2(-d.y, d.x)
+		draw_line(center + d * reach, center + d * (reach + tip) + side * 2.0,
+			Color(1.0, 0.52, 0.08, alpha * 0.75), 1.5, true)
+		draw_line(center + d * reach, center + d * (reach + tip) - side * 2.0,
+			Color(1.0, 0.52, 0.08, alpha * 0.75), 1.5, true)
+
+	draw_circle(center, 2.0 + 2.5 * heat, Color(1.0, 0.93, 0.62, alpha))
+	var label := "×%d" % _weapon.headshot_stacks
+	draw_string(ThemeDB.fallback_font, center + Vector2(-18.0, -reach - 9.0), label,
+		HORIZONTAL_ALIGNMENT_CENTER, 36.0, 14, Color(1.0, 0.82, 0.35, alpha))
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
