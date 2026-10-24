@@ -64,6 +64,26 @@ func _initialize() -> void:
 	_check(player.health < hp_arms, "arms damage the player (%.0f -> %.0f)" % [
 		hp_arms, player.health])
 
+	print("--- golden boss crystals ---")
+	player.global_position = Vector3(0.0, 0.2, 34.0)
+	boss.take_damage(99999.0, boss.global_position + Vector3.UP * 2.0, Vector3.FORWARD)
+	await create_timer(0.2).timeout
+	var gems := get_nodes_in_group("xp_gems")
+	_check(gems.size() == 12, "boss drops twelve crystals (%d)" % gems.size())
+	var all_gold := true
+	for node in gems:
+		var colour: Color = node.get("gem_color")
+		if not is_equal_approx(float(node.get("xp_value")), 48.0):
+			all_gold = false
+		if int(node.get("tier")) != 3 or not is_equal_approx(float(node.get("size_scale")), 3.6):
+			all_gold = false
+		if colour.r < 0.9 or colour.g < 0.6 or colour.g > 0.9 or colour.b > 0.3:
+			all_gold = false
+	_check(all_gold, "crystals are golden, tier 3 and 3x the red size")
+	if not gems.is_empty():
+		_check(is_equal_approx(float(gems[0].get("xp_value")), 48.0),
+			"each boss crystal gives 3x red XP (48 vs 16)")
+
 	print("")
 	if _failures == 0:
 		print("ALL CHECKS PASSED")

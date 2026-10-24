@@ -70,6 +70,8 @@ func _initialize() -> void:
 			all_falling = false
 	_check(all_red, "crystals are red and worth more XP")
 	_check(int(gems[0].get("tier")) == 2 if not gems.is_empty() else false, "crystals are tier 2")
+	_check(is_equal_approx(float(gems[0].get("size_scale")), 1.2) if not gems.is_empty() else false,
+		"red crystals use the 1.2 size scale")
 	_check(all_high, "crystals start in the air under the corpse")
 	_check(all_falling, "airborne crystals fall instead of hovering")
 

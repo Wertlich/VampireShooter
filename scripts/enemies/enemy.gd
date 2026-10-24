@@ -36,6 +36,8 @@ static var ai_frozen: bool = false
 ## XP per crystal. Slimes use a higher-value tier than the basic enemies.
 @export var gem_xp_value: float = 8.0
 @export var gem_tier: int = 1
+## Visual scale of the crystal. Slime red = 1.2, boss gold = 3x red.
+@export var gem_size: float = 1.0
 @export var gem_color: Color = Color(0.45, 0.95, 1.0, 1.0)
 
 @export_group("Behaviour")
@@ -518,11 +520,14 @@ func _drop_gems() -> void:
 		var gem := XP_GEM.instantiate() as Area3D
 		gem.set("xp_value", gem_xp_value)
 		gem.set("tier", gem_tier)
+		gem.set("size_scale", gem_size)
 		gem.set("gem_color", gem_color)
 		var spread := Vector3.ZERO
 		if gem_count > 1:
 			var angle := TAU * float(i) / float(gem_count)
-			spread = Vector3(cos(angle), 0.0, sin(angle)) * 0.7
+			# Big boss crystals need a wider ring, otherwise they merge visually.
+			var ring_radius := maxf(0.7, gem_size * 0.75)
+			spread = Vector3(cos(angle), 0.0, sin(angle)) * ring_radius
 		# Place before entering the tree, same rule as the impact effect.
 		gem.position = scene.to_local(global_position + Vector3.UP * 0.6 + spread)
 		scene.add_child(gem)

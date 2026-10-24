@@ -1,10 +1,11 @@
 extends Area3D
-## Experience crystal dropped by an enemy. High-tier crystals are bigger and
-## crimson; crystals dropped in mid-air fall to the floor before they can be
-## magnetised into the player.
+## Experience crystal dropped by an enemy. Slime crystals are crimson, boss
+## crystals are golden and three times their size. Crystals dropped in mid-air
+## fall to the floor before they can be magnetised into the player.
 
 @export var xp_value: float = 8.0
 @export var tier: int = 1
+@export var size_scale: float = 1.0
 @export var gem_color: Color = Color(0.45, 0.95, 1.0, 1.0)
 @export var magnet_radius: float = 5.5
 @export var magnet_speed: float = 7.0
@@ -55,7 +56,7 @@ func _process(delta: float) -> void:
 func _apply_tier_look() -> void:
 	if _mesh == null:
 		return
-	scale = Vector3.ONE * (1.0 + 0.2 * float(maxi(0, tier - 1)))
+	scale = Vector3.ONE * maxf(size_scale, 0.05)
 	var material := _mesh.material_override as StandardMaterial3D
 	if material == null:
 		return
