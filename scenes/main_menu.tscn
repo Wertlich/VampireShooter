@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d0e063s5n2syi" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://cyyq8awyok511" path="res://models/castle/castle.glb" id="2_ekxnf"]
+[ext_resource type="PackedScene" uid="uid://cbxxfmqmpw4a7" path="res://models/trees/tree_1.glb" id="3_bqqt6"]
 
 [node name="MainMenu" type="Control" unique_id=390163482]
 layout_mode = 3
@@ -14,3 +15,12 @@ script = ExtResource("1_menu")
 
 [node name="castle" parent="." unique_id=657602695 instance=ExtResource("2_ekxnf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18154061, 0, 2.2477808)
+
+[node name="tree_1" parent="." unique_id=648815202 instance=ExtResource("3_bqqt6")]
+transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, 66.81671, 0.23535347, 3.2937698)
+
+[node name="tree_2" parent="." unique_id=1638797002 instance=ExtResource("3_bqqt6")]
+transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, -73.476685, 0.23535347, 63.95926)
+
+[node name="tree_3" parent="." unique_id=1470212654 instance=ExtResource("3_bqqt6")]
+transform = Transform3D(10.334876, 0, -1.3068591, 0, 7.31533, 0, 1.9067994, 0, 7.0831914, -6.1878967, 0.23535347, -74.84483)

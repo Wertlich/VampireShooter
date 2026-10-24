@@ -19,6 +19,14 @@ var _time: float = 0.0
 
 
 func _ready() -> void:
+	if has_node("MapCollision") and has_node("Lights"):
+		for child in $Lights.get_children():
+			if child is OmniLight3D:
+				_lights.append(child)
+				_base_energy.append(child.light_energy)
+				_phase.append(randf() * TAU)
+				_speed.append(3.0 + randf_range(-0.6, 0.6))
+		return
 	var data := _load_data()
 	if data.is_empty():
 		return

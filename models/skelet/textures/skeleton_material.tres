@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://models/skelet/textures/skeleton_albedo_256.png" id="1_wcpi3"]
+
+[resource]
+resource_name = "Skeleton Albedo"
+cull_mode = 2
+albedo_texture = ExtResource("1_wcpi3")
+metallic_specular = 0.0

@@ -19,7 +19,7 @@ const CHEAT_CODE: Array[int] = [
 @export_group("Movement")
 @export var walk_speed: float = 5.2
 @export var sprint_speed: float = 8.0
-@export var ground_acceleration: float = 14.0
+@export var ground_acceleration: float = 12.0
 @export var ground_friction: float = 12.0
 @export var jump_velocity: float = 6.0
 @export var gravity: float = 18.0

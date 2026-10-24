@@ -1,35 +1,33 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://b64elpmcq0w61"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://scenes/viewmodel.tscn" id="2_viewmodel"]
+[ext_resource type="Script" uid="uid://c3tyswt8aayw4" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://deirwm3fwyw6d" path="res://scenes/viewmodel.tscn" id="2_viewmodel"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_body"]
 radius = 0.35
 height = 1.8
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
+[node name="Player" type="CharacterBody3D" unique_id=1267495099 groups=["player"]]
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_player")
 
-[node name="Collision" type="CollisionShape3D" parent="."]
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=906380113]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("Capsule_body")
 
-[node name="Head" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="." unique_id=1116112608]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58, 0)
 
-[node name="Camera" type="Camera3D" parent="Head"]
+[node name="Camera" type="Camera3D" parent="Head" unique_id=18933070]
 current = true
 fov = 78.0
-near = 0.05
 far = 400.0
 
-[node name="WorldFlash" type="OmniLight3D" parent="Head/Camera"]
+[node name="WorldFlash" type="OmniLight3D" parent="Head/Camera" unique_id=170867370]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -0.2, -0.9)
 light_color = Color(1, 0.75, 0.4, 1)
 light_energy = 0.0
-shadow_enabled = false
 omni_range = 7.0
 
-[node name="Viewmodel" parent="." instance=ExtResource("2_viewmodel")]
+[node name="Viewmodel" parent="." unique_id=1726671619 instance=ExtResource("2_viewmodel")]

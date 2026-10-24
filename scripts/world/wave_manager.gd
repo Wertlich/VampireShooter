@@ -32,6 +32,8 @@ const WAVE_MIX := {
 }
 
 @export_group("Wave Curve")
+## Overrides the default mix for matching wave numbers. Boss wave takes precedence.
+@export var compositions: Array[WaveComposition] = _default_compositions()
 ## Waves one map is worth. Later maps reuse the same curve.
 @export var waves_per_map: int = 10
 ## Enemies in the first wave.
@@ -78,6 +80,17 @@ var _spawned: int = 0
 var _batch: int = 1
 var _tick_left: float = 0.0
 var _started: bool = false
+
+static func _default_compositions() -> Array[WaveComposition]:
+	var result: Array[WaveComposition] = []
+	for index in WAVE_MIX:
+		var composition := WaveComposition.new()
+		composition.wave = index
+		composition.skeleton = 0.0
+		for kind in WAVE_MIX[index]:
+			composition.set(kind, WAVE_MIX[index][kind])
+		result.append(composition)
+	return result
 
 
 func _enter_tree() -> void:
@@ -151,6 +164,10 @@ func roster_for(index: int) -> Dictionary:
 
 	var size := wave_size_for(index)
 	var mix: Dictionary = WAVE_MIX.get(index, {"skeleton": 1.0})
+	for composition in compositions:
+		if composition != null and composition.wave == index:
+			mix = composition.weights()
+			break
 	var weight_sum := 0.0
 	for kind in mix:
 		weight_sum += float(mix[kind])

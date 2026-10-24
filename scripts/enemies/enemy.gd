@@ -111,6 +111,7 @@ var _strafe: float = 1.0
 var _strafe_timer: float = 0.0
 ## Seconds until the enemy looks for a closer player again.
 var _retarget: float = 0.0
+var behavior: EnemyBehavior
 
 
 ## Damage applied by the host, mirrored on a client copy.
@@ -144,6 +145,11 @@ func _pick_target() -> void:
 
 
 func _ready() -> void:
+	for child in get_children():
+		if child is EnemyBehavior:
+			behavior = child
+			mode = behavior.attack_style as Mode
+			break
 	health = max_health
 	if net_puppet:
 		# Mirror-only copy on a client: no AI, no spawn rise.
@@ -199,6 +205,8 @@ func _physics_process(delta: float) -> void:
 	if net_puppet:
 		return
 	if _dead:
+		if behavior:
+			behavior.set_state(&"Dead")
 		velocity.y -= gravity * delta
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
@@ -206,6 +214,8 @@ func _physics_process(delta: float) -> void:
 		return
 
 	if ai_frozen:
+		if behavior:
+			behavior.set_state(&"Idle")
 		velocity.x = move_toward(velocity.x, 0.0, 20.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 20.0 * delta)
 		if flying or is_on_floor():
@@ -222,7 +232,7 @@ func _physics_process(delta: float) -> void:
 	# In co-op the nearest player can change, so look around now and then.
 	_retarget -= delta
 	if _retarget <= 0.0:
-		_retarget = 0.5
+		_retarget = behavior.retarget_seconds if behavior else 0.5
 		_pick_target()
 
 	if not is_on_floor():
@@ -240,18 +250,24 @@ func _physics_process(delta: float) -> void:
 	if distance > 0.05:
 		var dir := to_player / distance
 		# Model front is +Z, so aim +Z at the player.
-		rotation.y = lerp_angle(rotation.y, atan2(dir.x, dir.z), clampf(delta * 10.0, 0.0, 1.0))
+		var turn_speed := behavior.turn_speed if behavior else 10.0
+		rotation.y = lerp_angle(rotation.y, atan2(dir.x, dir.z), clampf(delta * turn_speed, 0.0, 1.0))
 
-		if mode == Mode.RANGED:
+		if behavior:
+			behavior.tick(self, dir, distance, delta)
+		elif mode == Mode.RANGED:
 			_move_ranged(dir, distance, delta)
 		else:
 			_move_melee(dir, distance, delta)
 
 		# Push away from neighbours so the pack spreads instead of stacking up.
-		var push := _separation()
+		var allow_movement := behavior == null or (behavior.enabled and behavior.movement_enabled and distance <= behavior.detection_range)
+		var push := _separation() if allow_movement else Vector3.ZERO
 		velocity.x += push.x
 		velocity.z += push.z
 	else:
+		if behavior:
+			behavior.set_state(&"Idle")
 		velocity.x = move_toward(velocity.x, 0.0, 10.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 10.0 * delta)
 
@@ -316,7 +332,7 @@ func _has_line_of_sight() -> bool:
 # --- Attacks ----------------------------------------------------------------
 
 func _player_alive() -> bool:
-	return is_instance_valid(_player) and not _player.is_dead
+	return is_instance_valid(_player) and not _player.is_dead and (behavior == null or (behavior.enabled and behavior.attacks_enabled))
 
 
 func _swing() -> void:
@@ -329,7 +345,7 @@ func _swing() -> void:
 	if _dead:
 		return
 	_attacking = false
-	if ai_frozen:
+	if ai_frozen or not _player_alive():
 		return
 	if is_instance_valid(_player) and not _player.is_dead \
 			and global_position.distance_to(_player.global_position) <= attack_range * 1.35:
@@ -347,7 +363,7 @@ func _fire_arrow() -> void:
 	_attacking = false
 	if _dead or ai_frozen or projectile_scene == null:
 		return
-	if not is_instance_valid(_player) or _player.is_dead:
+	if not _player_alive():
 		return
 	if not _has_line_of_sight():
 		return

@@ -1,16 +1,17 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/enemy.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://models/vrag v2/zombie_a.glb" id="2_za"]
 [ext_resource type="PackedScene" path="res://models/vrag v2/zombie_b.glb" id="2_zb"]
 [ext_resource type="PackedScene" path="res://models/vrag v2/zombie_c.glb" id="2_zc"]
 [ext_resource type="PackedScene" path="res://models/vrag v2/zombie_d.glb" id="2_zd"]
+[ext_resource type="Script" path="res://scripts/enemies/enemy_behavior.gd" id="6_biokd"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_body"]
 radius = 0.35
 height = 1.8
 
-[node name="Zombie" type="CharacterBody3D" groups=["enemies"]]
+[node name="Zombie" type="CharacterBody3D" unique_id=165909288 groups=["enemies"]]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_script")
@@ -32,9 +33,12 @@ brightness_range = Vector2(0.88, 1.14)
 scale_range = Vector2(0.94, 1.06)
 albedo_boost = 1.7
 
-[node name="Collision" type="CollisionShape3D" parent="."]
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=562703456]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("Capsule_body")
 
-[node name="Model" type="Node3D" parent="."]
+[node name="Model" type="Node3D" parent="." unique_id=2089092177]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+
+[node name="Behavior" type="Node" parent="." unique_id=2107162038]
+script = ExtResource("6_biokd")
