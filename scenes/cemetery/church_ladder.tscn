@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/ladder_zone.gd" id="1_ladder"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_climb"]
+size = Vector3(1.0, 4.8, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_landing"]
+size = Vector3(0.8, 0.3, 1.6)
+
+[node name="ChurchLadder" type="Node3D"]
+
+[node name="Climb" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.82, 2.8, 3.35)
+script = ExtResource("1_ladder")
+exit_direction = Vector3(0.976, 0, -0.218)
+exit_height_offset = 2.05
+
+[node name="ClimbShape" type="CollisionShape3D" parent="Climb"]
+shape = SubResource("BoxShape3D_climb")
+
+[node name="Landing" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="LandingShape" type="CollisionShape3D" parent="Landing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7, 4.55, 3.1)
+shape = SubResource("BoxShape3D_landing")

@@ -62,15 +62,16 @@ $godot = 'D:\GodotMCP\Godot\Godot_v4.7.2-stable_win64_console.exe'
 `cemetery.tscn` пропадут при следующей пересборке. Церкви и лампы вынесены в
 `scenes/cemetery/*.tscn`, поэтому их можно править отдельно.
 
-Если меняются GLB церквей, пересобери их точную коллизию:
+Коллизия церкви лежит в отдельных сценах `church_intact_collision.tscn` и
+`church_ruined_collision.tscn`. Внутри каждый элемент — самостоятельный
+`CollisionShape3D` (`Floor`, `BackWall`, `NorthWall`, `SouthWall`, `FrontNorth`,
+`FrontSouth`, `EntranceRamp`, `NaveWall`) со своим `BoxShape3D`; двигай и
+растягивай нужный узел в инспекторе.
 
-```powershell
-& $godot --headless --path . --script res://tools/build_church_trimesh.gd
-```
-
-Лестница и верхняя площадка описаны в `LADDER_SPECS` / `LANDING_SPECS` внутри
-`build_cemetery.gd`; вход в церковь вырезан из trimesh, чтобы не застревать на
-ступеньках. Скорость лазания настраивается в инспекторе `Player > Ladders`.
+Лестница — `scenes/cemetery/church_ladder.tscn`: отдельно `Climb` (`Area3D`)
+и `Landing` (`StaticBody3D`). Она вложена в обе церкви как `LadderAccess`.
+`build_cemetery.gd` эти сцены не пересоздаёт. Скорость лазания — в
+`Player > Ladders`.
 
 ## Границы переноса
 

@@ -309,12 +309,12 @@ func _handle_climb() -> bool:
 	if not wants_up and not wants_down:
 		return false
 	# Step off onto the landing instead of climbing into the loft ceiling.
-	if wants_up and _ladder_zone.exit_height > 0.0 \
-			and global_position.y >= _ladder_zone.exit_height - 0.05 \
-			and _ladder_zone.exit_direction.length_squared() > 0.01:
+	var exit_direction := _ladder_zone.get_exit_direction()
+	if wants_up and global_position.y >= _ladder_zone.get_exit_height() - 0.05 \
+			and exit_direction.length_squared() > 0.01:
 		velocity.y = 0.0
-		velocity.x = _ladder_zone.exit_direction.x * 2.4
-		velocity.z = _ladder_zone.exit_direction.z * 2.4
+		velocity.x = exit_direction.x * 2.4
+		velocity.z = exit_direction.z * 2.4
 		move_and_slide()
 		planar_speed = 0.0
 		return true

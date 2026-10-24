@@ -1,65 +1,13 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="PackedScene" path="res://models/cemetery/church/church_intact.glb" id="1_model"]
-[ext_resource type="ConcavePolygonShape3D" path="res://models/cemetery/church/church_intact_trimesh.res" id="2_trimesh"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
-size = Vector3(15.3, 0.5, 8.4)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_back"]
-size = Vector3(0.5, 9.0, 8.4)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_side"]
-size = Vector3(15.3, 9.0, 0.5)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_front"]
-size = Vector3(0.5, 9.0, 1.8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
-size = Vector3(2.3, 0.25, 5.6)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_nave"]
-size = Vector3(0.4, 9.0, 8.4)
+[ext_resource type="PackedScene" path="res://scenes/cemetery/church_intact_collision.tscn" id="2_collision"]
+[ext_resource type="PackedScene" path="res://scenes/cemetery/church_ladder.tscn" id="3_ladder"]
 
 [node name="ChurchIntact" type="Node3D"]
 
 [node name="Model" parent="." instance=ExtResource("1_model")]
 
-[node name="Collision" type="StaticBody3D" parent="."]
-collision_layer = 1
-collision_mask = 0
+[node name="Collision" parent="." instance=ExtResource("2_collision")]
 
-[node name="Floor" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-shape = SubResource("BoxShape3D_floor")
-
-[node name="BackWall" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 4.5, 0)
-shape = SubResource("BoxShape3D_back")
-
-[node name="NorthWall" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 4.05)
-shape = SubResource("BoxShape3D_side")
-
-[node name="SouthWall" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -4.05)
-shape = SubResource("BoxShape3D_side")
-
-[node name="FrontNorth" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.55, 4.5, 3.4)
-shape = SubResource("BoxShape3D_front")
-
-[node name="FrontSouth" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.55, 4.5, -3.4)
-shape = SubResource("BoxShape3D_front")
-
-[node name="EntranceRamp" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(0.9719, 0.2355, 0, -0.2355, 0.9719, 0, 0, 0, 1, -7.95, 0.15, 0)
-shape = SubResource("BoxShape3D_ramp")
-
-[node name="NaveWall" type="CollisionShape3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.45, 4.5, 0)
-shape = SubResource("BoxShape3D_nave")
-
-[node name="ExactMesh" type="CollisionShape3D" parent="Collision"]
-shape = ExtResource("2_trimesh")
+[node name="LadderAccess" parent="." instance=ExtResource("3_ladder")]

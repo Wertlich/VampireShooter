@@ -161,12 +161,20 @@ lobby members: 1
 `assets/cemetery/shaders/night_sky.gdshader`; сцена пересобирается скриптом
 `tools/build_cemetery.gd`, а Blender-ассеты — `tools/blender_cemetery.py`.
 
-Церкви получили точную коллизию стен, пола и крыши из самой модели
-(`church_*_trimesh.res`), при этом вход через крыльцо остался проходимым.
-Деревянная лестница справа от входа ведёт на верхнюю деревянную площадку:
-подойди к ней и держи `W` (или `Space`) — игрок лезет вверх, `S` — вниз,
-а у верхней кромки сам сходит на площадку. Настройки скорости — в
-`Player > Ladders`.
+Церковь собрана из отдельных сцен, а не из одного меша:
+
+- `Model` — визуальный GLB;
+- `Collision` — `church_intact_collision.tscn` / `church_ruined_collision.tscn`,
+  внутри каждый элемент отдельным `CollisionShape3D`: `Floor`, `BackWall`,
+  `NorthWall`, `SouthWall`, `FrontNorth`, `FrontSouth`, `EntranceRamp`,
+  `NaveWall`;
+- `LadderAccess` — `church_ladder.tscn`, внутри отдельно `Climb` (`Area3D`)
+  и `Landing` (`StaticBody3D`).
+
+Любую стену, пол или площадку можно двигать и растягивать прямо в инспекторе.
+Лестница: подойди и держи `W` (или `Space`) — вверх, `S` — вниз; у верхней
+кромки игрок сам сходит на площадку. Скорость — в `Player > Ladders`.
+`build_cemetery.gd` эти узлы не пересоздаёт.
 
 Что уже работает:
 
@@ -494,7 +502,6 @@ tools/
   preview_sky.gd           отдельный кадр ночного неба
   test_cemetery.gd         проверка кладбища: коллизии, лампы, небо, лестница
   build_cemetery.gd        сборка scenes/cemetery.tscn из ассетов
-  build_church_trimesh.gd  точная коллизия стен/пола/крыши обеих церквей
   blender_cemetery.py      церкви, лампы и модульный забор (Blender → GLB)
   test_levelup.gd          проверка гема, опыта и меню карточек
   blender_analyze.py       обмер меша скелета перед постройкой рига

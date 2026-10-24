@@ -116,15 +116,23 @@ func _initialize() -> void:
 	_check(gate_probe.is_empty(), "gate opening stays passable")
 
 	print("--- church access ---")
-	var ladders := cemetery.get_node_or_null("Ladders")
-	_check(ladders != null and ladders.get_child_count() >= 2,
-			"ladder triggers exist in both churches (%d)" % (ladders.get_child_count() if ladders else 0))
-	var platforms := cemetery.get_node_or_null("PlatformCollision") as StaticBody3D
-	_check(platforms != null and platforms.get_child_count() >= 2,
-			"landings at the top of the ladders are solid (%d)" % (platforms.get_child_count() if platforms else 0))
-	var climb_zone: LadderZone = null
-	if ladders:
-		climb_zone = ladders.get_node_or_null("Ladder_ChurchIntact_FrontLadder") as LadderZone
+	var intact_church := cemetery.get_node("Churches/ChurchIntact")
+	var ruined_church := cemetery.get_node("Churches/ChurchRuined")
+	var intact_collision := intact_church.get_node("Collision") as StaticBody3D
+	var ruined_collision := ruined_church.get_node("Collision") as StaticBody3D
+	_check(intact_collision.get_child_count() >= 8,
+			"intact church collision is split into parts (%d shapes)" % intact_collision.get_child_count())
+	_check(ruined_collision.get_child_count() >= 8,
+			"ruined church collision is split into parts (%d shapes)" % ruined_collision.get_child_count())
+	var intact_ladder := intact_church.get_node("LadderAccess")
+	var ruined_ladder := ruined_church.get_node("LadderAccess")
+	_check(intact_ladder.get_node_or_null("Climb") is LadderZone
+			and ruined_ladder.get_node_or_null("Climb") is LadderZone,
+			"ladder triggers exist in both churches (2)")
+	_check(intact_ladder.get_node_or_null("Landing") is StaticBody3D
+			and ruined_ladder.get_node_or_null("Landing") is StaticBody3D,
+			"landings at the top of the ladders are solid (2)")
+	var climb_zone := intact_ladder.get_node("Climb") as LadderZone
 	_check(climb_zone != null, "the church ladder has a climb trigger")
 	if climb_zone and player:
 		player.global_position = Vector3(
