@@ -86,6 +86,35 @@ func _initialize() -> void:
 	var bounds := scene.get_node("ArenaBounds") as ArenaBounds
 	_check(bounds != null and bounds.half_size >= 45.0, "arena guard rails remain outside the fence")
 
+	print("--- everything is solid ---")
+	var prop_body := cemetery.get_node_or_null("PropCollision") as StaticBody3D
+	_check(prop_body != null and prop_body.get_child_count() >= 170,
+			"prop collision covers graves, monuments, trees, lamps and rubble (%d shapes)"
+			% (prop_body.get_child_count() if prop_body else 0))
+	if prop_body and graves and graves.get_child_count() > 0:
+		var grave := graves.get_child(0) as MeshInstance3D
+		var target := (grave.global_transform * grave.mesh.get_aabb()).get_center()
+		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+				target + Vector3(0, 6, 0), target - Vector3(0, 0.5, 0), 1))
+		_check(not hit.is_empty() and hit.collider == prop_body, "a gravestone blocks a ray")
+	if prop_body and not standing.is_empty():
+		var lamp_model := (standing[0] as Node).get_node_or_null("Model")
+		var lamp_hit := false
+		if lamp_model:
+			for child in lamp_model.find_children("*", "MeshInstance3D", true, false):
+				var mi := child as MeshInstance3D
+				var lamp_target := (mi.global_transform * mi.mesh.get_aabb()).get_center()
+				var probe := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+						lamp_target + Vector3(0, 5, 0), lamp_target - Vector3(0, 0.3, 0), 1))
+				if not probe.is_empty() and probe.collider == prop_body:
+					lamp_hit = true
+					break
+		_check(lamp_hit, "a standing lamp blocks a ray")
+	# The south gate must still be walkable through its opening.
+	var gate_probe := space.intersect_ray(PhysicsRayQueryParameters3D.create(
+			Vector3(0, 1.2, 42), Vector3(0, 1.2, 46), 1))
+	_check(gate_probe.is_empty(), "gate opening stays passable")
+
 	# Walk up the entrance steps and stop at the visible nave wall instead of
 	# clipping through the church's solid core.
 	if player:

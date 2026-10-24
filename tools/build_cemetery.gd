@@ -85,6 +85,7 @@ func _initialize() -> void:
 	_build_props()
 	_build_trees()
 	_build_fireflies()
+	_build_prop_collisions()
 	_save_scene()
 	quit()
 
@@ -515,6 +516,112 @@ func _build_trees() -> void:
 func _build_fireflies() -> void:
 	_add_particles("Fireflies", Vector3(0, 1.4, 16), Vector3(34, 1.4, 25), 70, 0.10, true)
 	_add_particles("ChurchFireflies", Vector3(0, 2.0, -6), Vector3(9, 2.5, 11), 34, 0.085, true)
+
+
+# --- Collision -------------------------------------------------------------
+
+func _build_prop_collisions() -> void:
+	var body := StaticBody3D.new()
+	body.name = "PropCollision"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	scene.add_child(body)
+	body.owner = scene
+
+	var shape_count := 0
+	shape_count += _collide_group(body, scene.get_node("Graves"))
+	shape_count += _collide_group(body, scene.get_node("Props"), ["GateArch"])
+	shape_count += _collide_group(body, scene.get_node("Trees"))
+
+	# Lamp models are solid; the glowing sphere, chain and light are not.
+	var lamps := scene.get_node("Lamps")
+	for lamp in lamps.get_children():
+		for mesh_instance in lamp.find_children("*", "MeshInstance3D", true, false):
+			var mi := mesh_instance as MeshInstance3D
+			if mi.name == "Glow" or mi.name == "Chain":
+				continue
+			_add_mesh_collision(body, mi)
+			shape_count += 1
+
+	# Rubble chunks created directly under Churches.
+	for node in scene.get_node("Churches").find_children("RuinBeam_*", "MeshInstance3D", true, false):
+		_add_mesh_collision(body, node as MeshInstance3D)
+		shape_count += 1
+	for node in scene.get_node("Churches").find_children("RuinStone_*", "MeshInstance3D", true, false):
+		_add_mesh_collision(body, node as MeshInstance3D)
+		shape_count += 1
+
+	# The visual gate posts next to the south opening.
+	for node in scene.get_node("Fence").find_children("GatePost_*", "MeshInstance3D", true, false):
+		_add_mesh_collision(body, node as MeshInstance3D)
+		shape_count += 1
+
+	# The gate arch is a single mesh with a walk-through opening, so its full
+	# AABB would wall the entrance off. Give its two side posts and top beam
+	# explicit boxes instead.
+	_add_box_collision(body, "GateArchLeft", Vector3(-1.9, 2.5, 44.0), Vector3(0.55, 5.0, 0.8))
+	_add_box_collision(body, "GateArchRight", Vector3(1.9, 2.5, 44.0), Vector3(0.55, 5.0, 0.8))
+	_add_box_collision(body, "GateArchBeam", Vector3(0, 5.35, 44.0), Vector3(4.4, 0.7, 0.8))
+	shape_count += 3
+
+	print("PROP COLLISION SHAPES ", shape_count)
+
+
+func _collide_group(body: StaticBody3D, root: Node, excluded: Array[String] = []) -> int:
+	var count := 0
+	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
+		var mi := mesh_instance as MeshInstance3D
+		if mi.name in excluded:
+			continue
+		_add_mesh_collision(body, mi)
+		count += 1
+	return count
+
+
+func _add_mesh_collision(body: StaticBody3D, mi: MeshInstance3D) -> void:
+	if mi.mesh == null:
+		return
+	var aabb := mi.mesh.get_aabb()
+	if aabb.size.x < 0.01 or aabb.size.y < 0.01 or aabb.size.z < 0.01:
+		return
+	# Some imported sub-scenes report that their internal mesh nodes are not in
+	# the tree yet during this generation pass, so derive the transform from
+	# the parent chain instead of calling global_transform().
+	var xf := _node_global_transform(mi)
+	var scale := xf.basis.get_scale().abs()
+	var size := Vector3(
+		maxf(aabb.size.x * scale.x, 0.06),
+		maxf(aabb.size.y * scale.y, 0.06),
+		maxf(aabb.size.z * scale.z, 0.06))
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collider := CollisionShape3D.new()
+	collider.name = "Box_%03d" % body.get_child_count()
+	collider.shape = shape
+	collider.transform = Transform3D(xf.basis.orthonormalized(), xf * aabb.get_center())
+	body.add_child(collider)
+	collider.owner = scene
+
+
+func _node_global_transform(node: Node3D) -> Transform3D:
+	var xf := node.transform
+	var parent := node.get_parent()
+	while parent != null and parent != scene:
+		if parent is Node3D:
+			xf = (parent as Node3D).transform * xf
+		parent = parent.get_parent()
+	return xf
+
+
+func _add_box_collision(body: StaticBody3D, node_name: String, pos: Vector3, size: Vector3) -> void:
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collider := CollisionShape3D.new()
+	collider.name = node_name
+	collider.shape = shape
+	collider.position = pos
+	body.add_child(collider)
+	collider.owner = scene
 
 
 func _add_particles(node_name: String, pos: Vector3, extents: Vector3, amount: int,
