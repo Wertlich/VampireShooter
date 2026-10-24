@@ -1,8 +1,9 @@
-[gd_scene format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/enemy.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://models/bosss/pig_demon.glb" id="2_body"]
+[ext_resource type="PackedScene" path="res://models/new boss/daemonium.glb" id="2_body"]
 [ext_resource type="Script" path="res://scripts/enemies/enemy_behavior.gd" id="3_lq6pu"]
+[ext_resource type="Script" path="res://scripts/enemies/boss_attacks.gd" id="4_attacks"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_body"]
 radius = 2.25
@@ -21,11 +22,10 @@ attack_hit_delay = 0.65
 knockback_force = 8.0
 head_zone_height = 5.0
 gem_count = 12
-walk_anim = &"Take 001"
+walk_anim = &""
 attack_anim = &""
 sync_anim_speed = false
-model_yaw_degrees = 90.0
-albedo_boost = 2.2
+albedo_boost = 1.2
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=2045806233]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.25, 0)
@@ -34,7 +34,10 @@ shape = SubResource("Capsule_body")
 [node name="Model" type="Node3D" parent="." unique_id=2056651828]
 
 [node name="Body" type="Node3D" parent="Model" unique_id=1595771142 instance=ExtResource("2_body")]
-transform = Transform3D(0.06075, 0, 0, 0, 0.06075, 0, 0, 0, 0.06075, 0.8, 0, -0.15)
+transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, 0, 0, 0.24)
 
 [node name="Behavior" type="Node" parent="." unique_id=437099825]
 script = ExtResource("3_lq6pu")
+
+[node name="Attacks" type="Node" parent="." unique_id=2092614037]
+script = ExtResource("4_attacks")

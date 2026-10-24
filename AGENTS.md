@@ -20,6 +20,7 @@ godot --headless --path . --script res://tools/test_bhop.gd
 godot --headless --path . --script res://tools/test_weapon_movement.gd
 godot --headless --path . --script res://tools/test_unique_cards.gd
 godot --headless --path . --script res://tools/test_slime.gd
+godot --headless --path . --script res://tools/test_boss_attacks.gd
 godot --headless --path . --script res://tools/test_weakpoint.gd
 ```
 

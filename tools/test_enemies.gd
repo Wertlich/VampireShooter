@@ -99,8 +99,8 @@ func _initialize() -> void:
 		boss.max_health, skeleton.max_health])
 
 	var boss_body := boss.get_node("Model/Body") as Node3D
-	_check(is_equal_approx(boss_body.scale.x, 0.06075),
-		"boss model is 2.5x the base scale (got %.5f)" % boss_body.scale.x)
+	_check(is_equal_approx(boss_body.scale.x, 0.03),
+		"daemonium model is scaled to arena size (got %.5f)" % boss_body.scale.x)
 	var boss_shape := (boss.get_node("Collision") as CollisionShape3D).shape as CapsuleShape3D
 	_check(boss_shape.radius > 2.0 and boss_shape.height > 6.0,
 		"boss collision grew with it (r=%.2f h=%.2f)" % [boss_shape.radius, boss_shape.height])

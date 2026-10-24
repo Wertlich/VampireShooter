@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/fx/arm_trap.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://models/arm/skeleton_arm.fbx" id="2_arm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape_arm"]
+radius = 0.95
+
+[sub_resource type="SphereMesh" id="SphereMesh_dust"]
+radius = 0.035
+height = 0.07
+radial_segments = 4
+rings = 2
+
+[sub_resource type="StandardMaterial3D" id="Mat_dust"]
+shading_mode = 0
+albedo_color = Color(0.52, 0.45, 0.34, 1)
+emission_enabled = true
+emission = Color(0.24, 0.12, 0.04, 1)
+emission_energy_multiplier = 0.8
+
+[node name="SkeletonArmTrap" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="Pivot" type="Node3D" parent="."]
+position = Vector3(0, -2.7, 0)
+
+[node name="Arm" parent="Pivot" instance=ExtResource("2_arm")]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, -1.64, -1.41, 1.64)
+
+[node name="DamageArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Collision" type="CollisionShape3D" parent="DamageArea"]
+position = Vector3(0, 1.0, 0)
+shape = SubResource("SphereShape_arm")
+
+[node name="Dust" type="CPUParticles3D" parent="."]
+material_override = SubResource("Mat_dust")
+mesh = SubResource("SphereMesh_dust")
+emitting = false
+amount = 18
+lifetime = 0.65
+one_shot = true
+explosiveness = 0.9
+direction = Vector3(0, 1, 0)
+spread = 60.0
+gravity = Vector3(0, -6, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 3.2
+scale_amount_min = 0.7
+scale_amount_max = 1.7
