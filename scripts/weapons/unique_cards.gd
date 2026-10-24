@@ -7,6 +7,17 @@ extends RefCounted
 
 const GOLD := Color(1.0, 0.79, 0.26, 1.0)
 
+## Transparent weapon renders used as the label-free seal entry card.
+const ICONS := {
+	0: "res://assets/ui/seals/revolver.png",
+	1: "res://assets/ui/seals/shotgun.png",
+	2: "res://assets/ui/seals/akm.png",
+	3: "res://assets/ui/seals/svd.png",
+	4: "res://assets/ui/seals/rpd.png",
+	5: "res://assets/ui/seals/saiga.png",
+	6: "res://assets/ui/seals/mp9.png",
+}
+
 const BY_WEAPON := {
 	0: [ # Revolver
 		{
@@ -19,7 +30,7 @@ const BY_WEAPON := {
 			"perk": "revolver_blast",
 			"title": "Пороховая печать",
 			"tag": "уникальное",
-			"desc": "Убийство в голову вызывает взрыв.\nУрон по площади — 1/3 базового урона, радиус 2.6 м.",
+			"desc": "Убийство в голову вызывает взрыв.\nУрон по площади — 1/3 базового урона, радиус 5 м.",
 		},
 	],
 	1: [ # Double barrel
@@ -91,3 +102,7 @@ static func for_weapon(index: int) -> Array[Dictionary]:
 	for card in BY_WEAPON.get(index, []):
 		cards.append((card as Dictionary).duplicate(true))
 	return cards
+
+
+static func icon_for(index: int) -> String:
+	return String(ICONS.get(index, ""))

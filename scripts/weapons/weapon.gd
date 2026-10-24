@@ -88,7 +88,7 @@ const HEADSHOT_BLAST_SCENE := preload("res://scenes/fx/headshot_blast.tscn")
 @export var revolver_rate_bonus: float = 0.04
 ## Revolver: headshot-kill blast, as a fraction of base damage.
 @export var blast_damage_fraction: float = 1.0 / 3.0
-@export var blast_radius: float = 2.6
+@export var blast_radius: float = 5.0
 ## AKM: lifesteal and kill-streak bonuses.
 @export var lifesteal_fraction: float = 0.05
 @export var kill_rate_bonus: float = 0.08
@@ -569,13 +569,13 @@ func _explode_headshot(center: Vector3) -> void:
 		var enemy := node as Enemy
 		if enemy == null or enemy.is_queued_for_deletion():
 			continue
-		if enemy.global_position.distance_to(center) > blast_radius:
+		var push := enemy.global_position - center
+		push.y = 0.0
+		if push.length() > blast_radius:
 			continue
 		if not _blast_has_line_of_sight(center, enemy):
 			continue
 		var point := enemy.global_position + Vector3.UP * minf(1.0, enemy.head_zone_height * 0.5)
-		var push := enemy.global_position - center
-		push.y = 0.0
 		enemy.take_damage(blast_damage, point, push.normalized())
 	_spawn_headshot_blast(center)
 

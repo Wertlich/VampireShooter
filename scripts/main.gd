@@ -27,6 +27,8 @@ var _pending_levels: int = 0
 ## Normal damage/rate/ammo/reload/spread upgrades taken this run. Golden cards
 ## stay hidden until this reaches NORMAL_UPGRADES_FOR_UNIQUE.
 var _normal_upgrades: int = 0
+## One golden pick per gun. Once a weapon's golden offer is chosen, it is done.
+var _golden_taken: Array[bool] = []
 
 
 func _ready() -> void:
@@ -127,7 +129,6 @@ func _build_cards() -> Array:
 	var viewmodel: Viewmodel = player.viewmodel
 	var unlocks: Array[Dictionary] = []
 	var upgrades: Array[Dictionary] = []
-	var uniques := _available_unique_cards(viewmodel)
 	var unlocked_count := 0
 
 	for i in viewmodel.weapons.size():
@@ -171,11 +172,6 @@ func _build_cards() -> Array:
 	if unlocked_count < MAX_WEAPONS and not unlocks.is_empty():
 		unlocks.shuffle()
 		options.append(unlocks[0])
-	if not uniques.is_empty():
-		# The golden offer is guaranteed once the run is deep enough, otherwise
-		# it could stay buried under a pile of ordinary stat cards.
-		uniques.shuffle()
-		options.append(uniques[0])
 	if not dual_card.is_empty():
 		options.append(dual_card)
 
@@ -185,34 +181,84 @@ func _build_cards() -> Array:
 			break
 		options.append(card)
 
+	# One sealed entry card can replace a normal offer. It hides its text until
+	# clicked, then opens the seal window for that specific weapon.
+	var seal := _build_seal_card(viewmodel)
+	if not seal.is_empty():
+		if options.size() >= 3:
+			options[randi() % options.size()] = seal
+		else:
+			options.append(seal)
+
 	options.shuffle()
 	return options
 
 
-## Golden cards for guns already in hand and not yet fully mastered.
-func _available_unique_cards(viewmodel: Viewmodel) -> Array[Dictionary]:
-	var cards: Array[Dictionary] = []
+## Builds the label-free sealed entry card. It carries the weapon render and
+## opens the separate seal window; all text lives behind that click.
+func _build_seal_card(viewmodel: Viewmodel) -> Dictionary:
 	if _normal_upgrades < NORMAL_UPGRADES_FOR_UNIQUE:
-		return cards
+		return {}
+	_ensure_golden_flags(viewmodel)
+
+	var candidates: Array[int] = []
 	for i in viewmodel.weapons.size():
-		if not viewmodel.is_unlocked(i):
+		if not viewmodel.is_unlocked(i) or _golden_taken[i]:
 			continue
 		var weapon: Weapon = viewmodel.weapons[i]
-		for definition in UNIQUE_CARDS.for_weapon(i):
-			var perk := String(definition.get("perk", ""))
-			if perk == "" or weapon.has_unique(perk):
-				continue
-			cards.append({
-				"kind": "unique",
-				"index": i,
-				"perk": perk,
-				"unique": true,
-				"title": String(definition.get("title", "")),
-				"tag": String(definition.get("tag", "уникальное")),
-				"desc": String(definition.get("desc", "")),
-				"accent": UNIQUE_CARDS.GOLD,
-			})
-	return cards
+		if not _seal_choices_for(i, weapon).is_empty():
+			candidates.append(i)
+	if candidates.is_empty():
+		return {}
+
+	var index := candidates[randi() % candidates.size()]
+	var weapon: Weapon = viewmodel.weapons[index]
+	return {
+		"kind": "seal",
+		"index": index,
+		"seal": true,
+		"golden": true,
+		"icon": UNIQUE_CARDS.icon_for(index),
+		"weapon_name": weapon.display_name,
+		"seal_cards": _seal_choices_for(index, weapon),
+	}
+
+
+## Every still-available seal for one weapon. The separate window shows only
+## these, never normal upgrades of other guns.
+func _seal_choices_for(index: int, weapon: Weapon) -> Array[Dictionary]:
+	var choices: Array[Dictionary] = []
+	for definition in UNIQUE_CARDS.for_weapon(index):
+		var perk := String(definition.get("perk", ""))
+		if perk == "" or weapon.has_unique(perk):
+			continue
+		choices.append(_unique_card(index, definition))
+	return choices
+
+
+## One golden perk card, already annotated for the level-up UI.
+func _unique_card(index: int, definition: Dictionary) -> Dictionary:
+	return {
+		"kind": "unique",
+		"index": index,
+		"perk": String(definition.get("perk", "")),
+		"unique": true,
+		"golden": true,
+		"title": String(definition.get("title", "")),
+		"tag": String(definition.get("tag", "уникальное")),
+		"desc": String(definition.get("desc", "")),
+		"accent": UNIQUE_CARDS.GOLD,
+	}
+
+
+func _ensure_golden_flags(viewmodel: Viewmodel) -> void:
+	if _golden_taken.size() < viewmodel.weapons.size():
+		_golden_taken.resize(viewmodel.weapons.size())
+
+
+func _mark_golden_taken(index: int) -> void:
+	_ensure_golden_flags(player.viewmodel)
+	_golden_taken[index] = true
 
 
 func _health_card() -> Dictionary:
@@ -298,7 +344,8 @@ func _apply_card(card: Dictionary) -> void:
 	var stat := String(card.get("stat", ""))
 
 	if kind == "unique":
-		weapon.grant_unique(String(card.get("perk", "")))
+		if weapon.grant_unique(String(card.get("perk", ""))):
+			_mark_golden_taken(index)
 		return
 
 	match kind:
@@ -324,6 +371,9 @@ func _apply_card(card: Dictionary) -> void:
 			# Akimbo is a modification, not one of the three normal masteries.
 			if stat != "dual":
 				_normal_upgrades += 1
+			# Even a golden stat pick spends this weapon's one golden slot.
+			if bool(card.get("golden", false)):
+				_mark_golden_taken(index)
 
 
 func _capture() -> void:

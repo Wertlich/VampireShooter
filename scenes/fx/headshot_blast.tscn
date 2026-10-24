@@ -56,4 +56,4 @@ scale_amount_max = 1.9
 light_color = Color(1, 0.55, 0.2, 1)
 light_energy = 0.0
 shadow_enabled = false
-omni_range = 6.0
+omni_range = 9.0

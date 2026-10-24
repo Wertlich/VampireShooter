@@ -39,32 +39,53 @@ func _initialize() -> void:
 			_check(String(card.get("perk", "")) != "" and String(card.get("title", "")) != "",
 				"card has a perk id and title")
 
-	print("--- three normal upgrades unlock golden cards ---")
-	_check(not _has_unique(main._build_cards()), "no golden card before three upgrades")
+	print("--- three normal upgrades unlock the seal ---")
+	_check(_find_seal(main._build_cards()).is_empty(), "no seal before three upgrades")
 	var revolver := player.viewmodel.weapons[0] as Weapon
 	for i in 3:
 		main._apply_card({"kind": "upgrade", "index": 0, "stat": "damage"})
 	_check(int(main.get("_normal_upgrades")) == 3, "three normal upgrades counted")
 	var cards = main._build_cards()
-	var golden := _find_unique(cards)
-	_check(not golden.is_empty(), "a golden card is offered after three upgrades")
-	if not golden.is_empty():
-		_check(bool(golden.get("unique", false)), "card carries the unique flag")
-		_check(golden.get("accent") == UNIQUE_CARDS.GOLD, "card uses the golden accent")
-		var panel := menu._make_card(golden, 0) as PanelContainer
+	var seal := _find_seal(cards)
+	_check(cards.size() == 3, "level-up keeps three entries (%d)" % cards.size())
+	_check(not seal.is_empty(), "a golden seal is offered after three upgrades")
+	if not seal.is_empty():
+		var seal_index := int(seal.get("index", -1))
+		var icon := String(seal.get("icon", ""))
+		_check(icon.ends_with(".png") and ResourceLoader.exists(icon),
+			"seal carries the assigned weapon image")
+		_check(not seal.has("title") and not seal.has("desc"),
+			"seal entry has no text labels")
+		var choices: Array = seal.get("seal_cards", [])
+		_check(not choices.is_empty(), "seal has cards to choose from")
+		_check(_all_golden(choices), "every seal choice is golden")
+		_check(_all_weapon(choices, seal_index), "all seal choices belong to one weapon")
+
+		var panel := menu._make_card(seal, 0) as PanelContainer
 		var style := panel.get_theme_stylebox("panel") as StyleBoxFlat
 		_check(style.border_width_left >= 3 and style.shadow_size >= 16 and style.shadow_color.a > 0.2,
-			"golden card has a glowing border (shadow %d)" % style.shadow_size)
+			"seal card has a glowing border (shadow %d)" % style.shadow_size)
+		_check(_label_count(panel) == 0, "seal card draws no labels")
+		_check(_texture_count(panel) > 0, "seal card draws the weapon image")
 		panel.queue_free()
-		var perk := String(golden.get("perk", ""))
-		main._apply_card(golden)
-		_check(revolver.has_unique(perk), "golden card installs its perk")
+
+		var seal_slot := -1
+		for i in cards.size():
+			if bool(cards[i].get("seal", false)):
+				seal_slot = i
+		menu._cards = cards
+		menu._choose(seal_slot)
+		_check(menu._in_seal_window, "clicking the seal opens the separate window")
+		_check(menu._seal_choices.size() == choices.size(),
+			"seal window offers only this weapon's seals")
+		_check(menu._panels.size() == choices.size(), "seal window renders those choices")
+		var first_seal: Dictionary = menu._seal_choices[0]
+		var perk := String(first_seal.get("perk", ""))
+		menu._choose(0)
+		_check(revolver.has_unique(perk), "choosing a seal installs its perk")
+		_check(bool(main._golden_taken[seal_index]), "weapon's one golden slot is spent")
 		var next_cards = main._build_cards()
-		var found_taken := false
-		for card in next_cards:
-			if String(card.get("perk", "")) == perk:
-				found_taken = true
-		_check(not found_taken, "taken golden card is not offered again")
+		_check(_find_seal(next_cards).is_empty(), "weapon gets only one seal")
 
 	print("--- revolver burning cross ---")
 	revolver.grant_unique("revolver_heat")
@@ -93,17 +114,24 @@ func _initialize() -> void:
 
 	print("--- revolver headshot blast ---")
 	revolver.grant_unique("revolver_blast")
+	_check(is_equal_approx(revolver.blast_radius, 5.0), "blast radius is 5 m")
 	var blast_a := _spawn_enemy(waves, Vector3(10.0, 0.05, 16.0))
 	var blast_b := _spawn_enemy(waves, Vector3(11.0, 0.05, 16.0))
+	var blast_edge := _spawn_enemy(waves, Vector3(15.3, 0.05, 16.0))
+	var blast_far := _spawn_enemy(waves, Vector3(16.0, 0.05, 16.0))
 	await physics_frame
 	var health_a := blast_a.health
 	var health_b := blast_b.health
+	var health_edge := blast_edge.health
+	var health_far := blast_far.health
 	revolver._explode_headshot(Vector3(10.5, 0.2, 16.0))
 	var expected_blast := revolver.damage * revolver.blast_damage_fraction
 	_check(absf((health_a - blast_a.health) - expected_blast) < 0.2,
 		"blast hits the first enemy for 1/3 base damage (%.1f)" % (health_a - blast_a.health))
 	_check(absf((health_b - blast_b.health) - expected_blast) < 0.2,
 		"blast hits the second enemy for 1/3 base damage (%.1f)" % (health_b - blast_b.health))
+	_check(blast_edge.health < health_edge, "enemy at 4.8 m is inside the blast")
+	_check(is_equal_approx(blast_far.health, health_far), "enemy at 5.5 m is outside the blast")
 
 	print("--- SVD headshot tempo ---")
 	var svd := player.viewmodel.weapons[3] as Weapon
@@ -217,18 +245,39 @@ func _spawn_enemy(waves: WaveManager, at: Vector3) -> Enemy:
 	return enemy
 
 
-func _has_unique(cards: Array) -> bool:
+func _all_golden(cards: Array) -> bool:
 	for card in cards:
-		if bool(card.get("unique", false)):
-			return true
-	return false
+		if not bool(card.get("golden", false)):
+			return false
+	return not cards.is_empty()
 
 
-func _find_unique(cards: Array) -> Dictionary:
+func _all_weapon(cards: Array, index: int) -> bool:
 	for card in cards:
-		if bool(card.get("unique", false)):
+		if int(card.get("index", -1)) != index:
+			return false
+	return not cards.is_empty()
+
+
+func _find_seal(cards: Array) -> Dictionary:
+	for card in cards:
+		if bool(card.get("seal", false)):
 			return card
 	return {}
+
+
+func _label_count(node: Node) -> int:
+	var count := 1 if node is Label else 0
+	for child in node.get_children():
+		count += _label_count(child)
+	return count
+
+
+func _texture_count(node: Node) -> int:
+	var count := 1 if node is TextureRect else 0
+	for child in node.get_children():
+		count += _texture_count(child)
+	return count
 
 
 func _check(condition: bool, label: String) -> void:

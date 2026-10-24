@@ -1,7 +1,7 @@
 extends Node3D
 ## Short orange blast spawned by the revolver's headshot-kill card.
 
-@export var lifetime: float = 0.42
+@export var lifetime: float = 0.5
 
 @onready var flash: MeshInstance3D = $Flash
 @onready var light: OmniLight3D = $Light
@@ -14,13 +14,14 @@ var _flash_scale: Vector3
 func _ready() -> void:
 	_flash_material = flash.material_override as StandardMaterial3D
 	_flash_scale = flash.scale
-	light.light_energy = 12.0
+	light.light_energy = 18.0
 
 
 func _process(delta: float) -> void:
 	_age += delta
-	var grow := clampf(_age / 0.2, 0.0, 1.0)
-	flash.scale = _flash_scale * lerpf(0.35, 3.6, ease(grow, 0.35))
+	var grow := clampf(_age / 0.24, 0.0, 1.0)
+	# The fireball covers the full 5 m damage radius.
+	flash.scale = _flash_scale * lerpf(0.35, 10.0, ease(grow, 0.35))
 	flash.rotation.z += delta * 1.7
 	if _flash_material:
 		_flash_material.albedo_color.a = 1.0 - grow
