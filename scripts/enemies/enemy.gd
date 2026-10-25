@@ -105,6 +105,8 @@ static var ai_frozen: bool = false
 @export var gravity: float = 22.0
 @export var separation_radius: float = 1.35
 @export var separation_strength: float = 2.6
+## Maximum vertical obstacle height that can be walked over without jumping.
+@export var max_step_height: float = 0.42
 
 var health: float = 60.0
 ## Network identity, assigned by the host; 0 while offline.
@@ -294,11 +296,35 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, 10.0 * delta)
 		velocity.z = move_toward(velocity.z, 0.0, 10.0 * delta)
 
-	move_and_slide()
+	if not _try_step_up(delta):
+		move_and_slide()
 	_update_visual(delta)
 
 
 # --- Movement ---------------------------------------------------------------
+
+## Moves the body onto a low ledge when horizontal movement would hit it.
+## Taller walls remain blocking because the raised test also collides.
+func _try_step_up(delta: float) -> bool:
+	if flying or not is_on_floor() or max_step_height <= 0.0:
+		return false
+	var horizontal_motion := Vector3(velocity.x, 0.0, velocity.z) * delta
+	if horizontal_motion.length_squared() < 0.000001:
+		return false
+	if not test_move(global_transform, horizontal_motion):
+		return false
+
+	var raised_transform := global_transform.translated(Vector3.UP * max_step_height)
+	if test_move(raised_transform, horizontal_motion):
+		return false
+
+	var landing_transform := raised_transform.translated(horizontal_motion)
+	var landing_collision := KinematicCollision3D.new()
+	if not test_move(landing_transform, Vector3.DOWN * (max_step_height + 0.2), landing_collision):
+		return false
+	global_position = landing_transform.origin + landing_collision.get_travel()
+	velocity.y = 0.0
+	return true
 
 func _uses_descent_flight() -> bool:
 	return flying and flight_altitude > 0.0

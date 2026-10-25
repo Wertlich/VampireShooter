@@ -23,6 +23,8 @@ const CHEAT_CODE: Array[int] = [
 @export var ground_friction: float = 12.0
 @export var jump_velocity: float = 6.0
 @export var gravity: float = 18.0
+## Maximum vertical obstacle height that can be walked over without jumping.
+@export var max_step_height: float = 0.42
 
 @export_group("Bunny Hop")
 ## Air acceleration. Higher = easier to build speed by strafing in the air.
@@ -388,8 +390,34 @@ func _handle_movement(delta: float) -> void:
 			velocity.x *= scale
 			velocity.z *= scale
 
-	move_and_slide()
+	if not _try_step_up(delta):
+		move_and_slide()
 	planar_speed = Vector2(velocity.x, velocity.z).length()
+
+
+## Moves the body onto a low ledge when horizontal movement would hit it.
+## The raised and lowered positions are tested before changing the transform,
+## so taller walls still block the body normally.
+func _try_step_up(delta: float) -> bool:
+	if not is_on_floor() or max_step_height <= 0.0:
+		return false
+	var horizontal_motion := Vector3(velocity.x, 0.0, velocity.z) * delta
+	if horizontal_motion.length_squared() < 0.000001:
+		return false
+	if not test_move(global_transform, horizontal_motion):
+		return false
+
+	var raised_transform := global_transform.translated(Vector3.UP * max_step_height)
+	if test_move(raised_transform, horizontal_motion):
+		return false
+
+	var landing_transform := raised_transform.translated(horizontal_motion)
+	var landing_collision := KinematicCollision3D.new()
+	if not test_move(landing_transform, Vector3.DOWN * (max_step_height + 0.2), landing_collision):
+		return false
+	global_position = landing_transform.origin + landing_collision.get_travel()
+	velocity.y = 0.0
+	return true
 
 
 func _handle_weapon_input() -> void:
