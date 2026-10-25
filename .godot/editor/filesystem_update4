@@ -1,5 +1,5 @@
-res://scenes/level_1.tscn
-res://shaders/EA_FogVolume.gdshader
-res://shaders/EA_GrassWind.gdshader
-res://shaders/EA_Skybox.gdshader
-res://shaders/EA_TerrainMud.gdshader
+res://terrain/terrain3d_00-01.res
+res://terrain/terrain3d_00_00.res
+res://addons/godotsteam/editor/updater.tres
+res://terrain/terrain3d-01-01.res
+res://terrain/terrain3d-01_00.res
