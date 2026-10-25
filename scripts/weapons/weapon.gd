@@ -16,6 +16,7 @@ signal hit_enemy(headshot: bool)
 
 const IMPACT_SCENE := preload("res://scenes/fx/impact.tscn")
 const HEADSHOT_BLAST_SCENE := preload("res://scenes/fx/headshot_blast.tscn")
+const BULLET_TRACER_SCENE := preload("res://scenes/fx/bullet_tracer.tscn")
 
 @export_group("Identity")
 @export var display_name: String = "Revolver"
@@ -181,7 +182,8 @@ func _collect_muzzles() -> void:
 	_lights.clear()
 	for marker in _markers(self):
 		_muzzles.append(marker)
-		_flashes.append(_find_by_name(marker, "MuzzleFlash") as MeshInstance3D)
+		var flash := _find_by_name(marker, "MuzzleFlash") as MeshInstance3D
+		_flashes.append(flash)
 		_lights.append(_find_by_name(marker, "MuzzleLight") as OmniLight3D)
 	for flash in _flashes:
 		if flash:
@@ -497,6 +499,8 @@ func _shoot(dealt: float) -> Dictionary:
 
 	# Online: the host resolves the shot so damage is authoritative.
 	if Net.is_online():
+		if has_unique("svd_pierce"):
+			_spawn_bullet_tracer(origin, origin + forward * max_range)
 		var game := get_tree().get_first_node_in_group("network_game")
 		if game != null and game.has_method("request_shot"):
 			game.call("request_shot", origin, forward, spread, pellets, dealt, max_range)
@@ -505,6 +509,7 @@ func _shoot(dealt: float) -> Dictionary:
 	for i in pellets:
 		var dir := _spread_direction(forward, spread)
 		var ray_origin := origin
+		var trace_end := origin + dir * max_range
 		var exclude: Array[RID] = [body_rid]
 		var pierce_left := maxi(1, pierce_targets) if _has_piercing() else 1
 
@@ -514,7 +519,11 @@ func _shoot(dealt: float) -> Dictionary:
 			query.collide_with_areas = false
 			var hit := space.intersect_ray(query)
 			if hit.is_empty():
+				# Keep the visible tracer going past the last pierced enemy until
+				# the remaining shot range ends.
+				trace_end = origin + dir * max_range
 				break
+			trace_end = hit["position"]
 			_spawn_impact(hit["position"], hit["normal"])
 			var collider: Object = hit["collider"]
 			if collider == null or not collider.has_method("take_damage"):
@@ -549,7 +558,18 @@ func _shoot(dealt: float) -> Dictionary:
 				break
 			# Step past the enemy we just hit and keep flying along the same line.
 			ray_origin = (hit["position"] as Vector3) + dir * 0.05
+		if has_unique("svd_pierce"):
+			_spawn_bullet_tracer(origin, trace_end)
 	return result
+
+
+func _spawn_bullet_tracer(from: Vector3, to: Vector3) -> void:
+	var scene := get_tree().current_scene
+	if scene == null:
+		return
+	var tracer := BULLET_TRACER_SCENE.instantiate() as Node3D
+	scene.add_child(tracer)
+	tracer.setup(from, to)
 
 
 func _has_piercing() -> bool:
