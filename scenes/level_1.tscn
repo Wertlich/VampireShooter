@@ -316,9 +316,9 @@ metadata/asset_placer_res_id = "uid://6tnaf4oehdd"
 [node name="OmniLight3D" type="OmniLight3D" parent="church_ne_normal" unique_id=871180393]
 transform = Transform3D(0.7047575, 0, 2.3841858e-07, 0, 1, 0, 8.940697e-08, 0, -4.5894094, 5.0251045, 1.8270302, 0.01166153)
 light_color = Color(0.7194535, 2.5509298e-06, 5.7756904e-07, 1)
-light_energy = 7.691
+light_energy = 2.455
 light_indirect_energy = 1.825
-light_volumetric_fog_energy = 15.836
+light_volumetric_fog_energy = 12.976
 light_size = 0.264
 light_specular = 3.7
 
@@ -770,10 +770,6 @@ metadata/asset_placer_res_id = "uid://xw3hj7qwodky"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.651886, 8.073465, -30.271074)
 metadata/asset_placer_res_id = "uid://xw3hj7qwodky"
 
-[node name="tree_dead2 (6)" parent="trees" unique_id=73259006 instance=ExtResource("36_bamb7")]
-transform = Transform3D(0.98690945, 0, 0.16127555, 0, 1, 0, -0.16127555, 0, 0.98690945, 56.017704, 8.744677, -60.047783)
-metadata/asset_placer_res_id = "uid://crcrae1juyf34"
-
 [node name="tree_dead2 (7)" parent="trees" unique_id=5211365 instance=ExtResource("36_bamb7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.144772, 6.1815004, -20.60085)
 metadata/asset_placer_res_id = "uid://crcrae1juyf34"
@@ -1000,10 +996,6 @@ metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
 transform = Transform3D(-0.76604366, 0, -0.64278764, 0, 1, 0, 0.64278764, 0, -0.76604366, 35.401943, 0, -3.6043797)
 metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
 
-[node name="EA_Grave_Mud_Flat_01a2 (3)" parent="trees/graes/EA_Grave_Mud_Flat_01a2 (3)" unique_id=1266388688 instance=ExtResource("42_gwsl1")]
-transform = Transform3D(-0.7451094, 0, 0.6669414, 0, 1, 0, -0.6669414, 0, -0.7451094, 45.502167, 0, 12.321251)
-metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
-
 [node name="EA_Grave_Mud_Plank_01a2" parent="trees/graes" unique_id=574853469 instance=ExtResource("43_lkded")]
 transform = Transform3D(-7.1525506e-07, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -7.1525506e-07, 9.211767, 4.038467, 71.942276)
 metadata/asset_placer_res_id = "uid://dtdycq5p8pgcu"
@@ -1038,21 +1030,25 @@ metadata/asset_placer_res_id = "uid://ch0727u2e6itb"
 [node name="EA_Grave_Columbarium_01a" parent="trees/graes" unique_id=1094228893 instance=ExtResource("46_qb2q0")]
 transform = Transform3D(-0.6427875, 0, -0.7660448, 0, 1, 0, 0.7660448, 0, -0.6427875, 42.55494, 0, -9.446318)
 
+[node name="EA_Grave_Mud_Flat_01a2 (3)2" parent="trees/graes" unique_id=1266388688 instance=ExtResource("42_gwsl1")]
+transform = Transform3D(0.999488, 0, -0.031959157, 0, 1, 0, 0.031959157, 0, 0.999488, -7.374649, 0, 16.205233)
+metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
+
+[node name="EA_Grave_Mud_Flat_01a3" parent="trees/graes" unique_id=367213715 instance=ExtResource("42_gwsl1")]
+transform = Transform3D(0.5638574, 0, -0.8258717, 0, 1, 0, 0.8258717, 0, 0.5638574, 32.793533, 0.44938064, 25.404438)
+metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
+
+[node name="EA_Grave_Mud_Flat_01a2 (1)2" parent="trees/graes" unique_id=355837125 instance=ExtResource("42_gwsl1")]
+transform = Transform3D(-0.7660442, 0, -0.64278805, 0, 1, 0, 0.64278805, 0, -0.7660442, 33.86479, 10.220816, 71.12866)
+metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
+
+[node name="EA_Grave_Mud_Flat_01a2 (2)2" parent="trees/graes" unique_id=855563357 instance=ExtResource("42_gwsl1")]
+transform = Transform3D(-0.7660442, 0, -0.64278805, 0, 1, 0, 0.64278805, 0, -0.7660442, 37.694374, 10.433893, 74.00301)
+metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
+
+[node name="EA_Grave_Mud_Flat_01a2 (3)3" parent="trees/graes" unique_id=1558307813 instance=ExtResource("42_gwsl1")]
+transform = Transform3D(-0.7660442, 0, -0.64278805, 0, 1, 0, 0.64278805, 0, -0.7660442, 38.627247, 10.5961, 77.79703)
+metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
+
 [node name="castle" parent="." unique_id=657602695 instance=ExtResource("37_tdlki")]
 transform = Transform3D(-0.6366955, 0, 0.77111536, 0, 1, 0, -0.77111536, 0, -0.6366955, -256.4244, 0.5090065, 238.01912)
-
-[node name="EA_Grave_Mud_Flat_01a2" parent="." unique_id=367213715 instance=ExtResource("42_gwsl1")]
-transform = Transform3D(0.8258726, 0, 0.5638576, 0, 1, 0, -0.5638576, 0, 0.8258726, -2.1912682, 0.44938064, -5.5447783)
-metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
-
-[node name="EA_Grave_Mud_Flat_01a2 (1)" parent="." unique_id=355837125 instance=ExtResource("42_gwsl1")]
-transform = Transform3D(0.64278835, 0, -0.76604503, 0, 1, 0, 0.76604503, 0, 0.64278835, 43.533, 10.220816, -6.6160216)
-metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
-
-[node name="EA_Grave_Mud_Flat_01a2 (2)" parent="." unique_id=855563357 instance=ExtResource("42_gwsl1")]
-transform = Transform3D(0.64278835, 0, -0.76604503, 0, 1, 0, 0.76604503, 0, 0.64278835, 46.407352, 10.433893, -10.445606)
-metadata/asset_placer_res_id = "uid://2ebs20wy5fye"
-
-[node name="EA_Grave_Mud_Flat_01a2 (3)" parent="." unique_id=1558307813 instance=ExtResource("42_gwsl1")]
-transform = Transform3D(0.64278835, 0, -0.76604503, 0, 1, 0, 0.76604503, 0, 0.64278835, 50.201366, 10.5961, -11.378479)
-metadata/asset_placer_res_id = "uid://2ebs20wy5fye"

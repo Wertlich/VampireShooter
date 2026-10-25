@@ -9,6 +9,8 @@ extends Node3D
 @export var flicker_amount: float = 0.17
 @export var flicker_speed: float = 4.6
 @export var glow_pulse: float = 0.07
+## Light energy does not need to be recalculated every rendered frame.
+@export var flicker_update_rate: float = 20.0
 
 @export_group("Hanging")
 ## 0 = standing lamp with no chain. Positive values extend a chain upward from
@@ -24,6 +26,7 @@ var _base_energy: float = 1.0
 var _phase: float = 0.0
 var _speed: float = 1.0
 var _time: float = 0.0
+var _flicker_accumulator: float = 0.0
 var _base_glow_scale: Vector3 = Vector3.ONE
 
 
@@ -52,6 +55,10 @@ func _process(delta: float) -> void:
 	if not enable_flicker:
 		return
 	_time += delta
+	_flicker_accumulator += delta
+	if _flicker_accumulator < 1.0 / maxf(flicker_update_rate, 1.0):
+		return
+	_flicker_accumulator = 0.0
 	var value := sin(_time * _speed + _phase) + 0.55 * sin(_time * _speed * 2.37 + _phase * 1.7)
 	var flicker := 1.0 + flicker_amount * value * 0.5
 	_light.light_energy = _base_energy * flicker

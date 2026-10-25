@@ -108,6 +108,12 @@ static var ai_frozen: bool = false
 ## Maximum vertical obstacle height that can be walked over without jumping.
 @export var max_step_height: float = 0.42
 
+@export_group("Obstacle Avoidance")
+## Distance at which an enemy starts steering around a world obstacle.
+@export var obstacle_look_ahead: float = 2.2
+## How long to keep following the chosen side of a wall.
+@export var obstacle_commit_time: float = 0.7
+
 var health: float = 60.0
 ## Network identity, assigned by the host; 0 while offline.
 var net_id: int = 0
@@ -136,6 +142,8 @@ var _retarget: float = 0.0
 ## First flight tick snaps the body from the spawn point up to its cruise height.
 var _flight_ready: bool = false
 var behavior: EnemyBehavior
+var _avoid_side: float = 0.0
+var _avoid_time: float = 0.0
 
 
 ## Damage applied by the host, mirrored on a client copy.
@@ -274,6 +282,7 @@ func _physics_process(delta: float) -> void:
 	_update_flight(delta, distance)
 	if distance > 0.05:
 		var dir := to_player / distance
+		dir = _navigation_direction(dir)
 		# Model front is +Z, so aim +Z at the player.
 		var turn_speed := behavior.turn_speed if behavior else 10.0
 		rotation.y = lerp_angle(rotation.y, atan2(dir.x, dir.z), clampf(delta * turn_speed, 0.0, 1.0))
@@ -302,6 +311,46 @@ func _physics_process(delta: float) -> void:
 
 
 # --- Movement ---------------------------------------------------------------
+
+## Steers around world geometry before the combat behaviour receives direction.
+## This is intentionally local: the arena has no baked NavigationRegion3D, and
+## local wall following is still enough to get enemies around cemetery walls.
+func _navigation_direction(desired: Vector3) -> Vector3:
+	_avoid_time = maxf(0.0, _avoid_time - get_physics_process_delta_time())
+	var hit := _world_obstacle_ahead(desired, obstacle_look_ahead)
+	if hit.is_empty():
+		if _avoid_time <= 0.0:
+			_avoid_side = 0.0
+		return desired
+
+	var normal := hit.get("normal", Vector3.ZERO) as Vector3
+	var tangent_left := Vector3(-normal.z, 0.0, normal.x).normalized()
+	if tangent_left.length_squared() < 0.01:
+		tangent_left = Vector3(-desired.z, 0.0, desired.x)
+	var tangent_right := -tangent_left
+
+	if _avoid_side == 0.0 or _avoid_time <= 0.0:
+		var left_score := _obstacle_side_score(tangent_left, desired)
+		var right_score := _obstacle_side_score(tangent_right, desired)
+		_avoid_side = 1.0 if left_score >= right_score else -1.0
+		_avoid_time = obstacle_commit_time
+
+	var tangent := tangent_left if _avoid_side > 0.0 else tangent_right
+	# Keep some target-facing component so a wall is rounded rather than traced
+	# forever, while the tangent component prevents repeated head-on impacts.
+	return (tangent * 0.9 + desired * 0.35).normalized()
+
+
+func _obstacle_side_score(side: Vector3, desired: Vector3) -> float:
+	var clearance := 1.0 if _world_obstacle_ahead(side, 1.4).is_empty() else -1.0
+	return clearance * 2.0 + side.dot(desired)
+
+
+func _world_obstacle_ahead(direction: Vector3, distance: float) -> Dictionary:
+	var origin := global_position + Vector3.UP * 0.85
+	var target := origin + direction * distance
+	var query := PhysicsRayQueryParameters3D.create(origin, target, 1, [self])
+	return get_world_3d().direct_space_state.intersect_ray(query)
 
 ## Moves the body onto a low ledge when horizontal movement would hit it.
 ## Taller walls remain blocking because the raised test also collides.
