@@ -1,8 +1,8 @@
-AreaLight3D
+OmniLight3D
 Node3D
+AreaLight3D
 Terrain3D
 Node2D
-OmniLight3D
 SpotLight3D
 DirectionalLight3D
 CharacterBody3D
