@@ -64,6 +64,8 @@ const WAVE_MIX := {
 ## does not stall the frame it arrives on.
 @export var spawn_ticks: int = 20
 @export var spawn_tick_seconds: float = 0.2
+## More attempts prevent the final fallback from placing an enemy in geometry.
+@export var spawn_attempts: int = 48
 
 var state: State = State.IDLE
 ## 1-based number of the wave being fought or just cleared.
@@ -253,7 +255,7 @@ func spawn_kind(kind: String, at: Vector3 = Vector3.INF) -> Enemy:
 	enemy.net_kind = kind
 	enemy.died.connect(_on_enemy_died)
 	add_child(enemy)
-	enemy.global_position = _find_spawn_position() if at == Vector3.INF else at
+	enemy.global_position = _find_spawn_position(enemy) if at == Vector3.INF else at
 	return enemy
 
 
@@ -310,7 +312,7 @@ func _spawn_from_queue(scene: PackedScene) -> void:
 	enemy.net_kind = kind_for_scene(scene)
 	enemy.died.connect(_on_enemy_died)
 	add_child(enemy)
-	enemy.global_position = _find_spawn_position()
+	enemy.global_position = _find_spawn_position(enemy)
 
 
 ## Roster name of a scene, so clients know what to instantiate.
@@ -336,19 +338,18 @@ func _on_enemy_died(_enemy: Enemy) -> void:
 	kills += 1
 
 
-func _find_spawn_position() -> Vector3:
+func _find_spawn_position(enemy: Enemy = null) -> Vector3:
 	var player := get_tree().get_first_node_in_group("player") as Player
 	if player == null:
 		return global_position
 
 	var space := get_world_3d().direct_space_state
-	var shape := SphereShape3D.new()
-	shape.radius = 0.6
+	var shape: Shape3D = _spawn_shape(enemy)
 	var query := PhysicsShapeQueryParameters3D.new()
 	query.shape = shape
 	query.collision_mask = 5  # world geometry + already spawned enemies
 
-	for i in 12:
+	for i in maxi(12, spawn_attempts):
 		var angle := randf() * TAU
 		var distance := randf_range(spawn_radius_min, spawn_radius_max)
 		var candidate := player.global_position + Vector3(cos(angle), 0.0, sin(angle)) * distance
@@ -356,9 +357,9 @@ func _find_spawn_position() -> Vector3:
 		candidate.z = clampf(candidate.z, -arena_half_size, arena_half_size)
 		if candidate.distance_to(player.global_position) < spawn_radius_min:
 			continue
-		candidate.y = 1.0
-		query.transform = Transform3D(Basis(), candidate)
-		if space.intersect_shape(query, 1).is_empty():
+		candidate.y = 0.05
+		query.transform = Transform3D(Basis(), candidate + Vector3.UP * 0.9)
+		if space.intersect_shape(query, 1).is_empty() and _has_spawn_los(candidate, player):
 			candidate.y = 0.05
 			return candidate
 
@@ -370,15 +371,43 @@ func _find_spawn_position() -> Vector3:
 		candidate.z = clampf(candidate.z, -arena_half_size, arena_half_size)
 		if candidate.distance_to(player.global_position) < spawn_radius_min:
 			continue
-		candidate.y = 1.0
-		query.transform = Transform3D(Basis(), candidate)
-		if space.intersect_shape(query, 1).is_empty():
+		candidate.y = 0.05
+		query.transform = Transform3D(Basis(), candidate + Vector3.UP * 0.9)
+		if space.intersect_shape(query, 1).is_empty() and _has_spawn_los(candidate, player):
 			candidate.y = 0.05
 			return candidate
 
-	# If every valid point is blocked, keep the distance rule instead of spawning
-	# nearby. This is preferable to clamping inside the arena and breaking the
-	# minimum-distance guarantee.
-	var fallback := player.global_position + Vector3.RIGHT * spawn_radius_min
-	fallback.y = 0.05
-	return fallback
+	# A final search at the arena edge is safer than placing a body at an
+	# unchecked point near the player or inside a building.
+	for angle in range(0, 360, 15):
+		var radians := deg_to_rad(float(angle))
+		var fallback := Vector3(cos(radians), 0.0, sin(radians)) * (arena_half_size - 1.0)
+		fallback += Vector3(0.0, 0.05, 0.0)
+		query.transform = Transform3D(Basis(), fallback + Vector3.UP * 0.9)
+		if space.intersect_shape(query, 1).is_empty() and _has_spawn_los(fallback, player):
+			return fallback
+
+	# The arena should always have an open edge; retain a deterministic result
+	# rather than returning a point inside the player or a church.
+	return Vector3(0.0, 0.05, arena_half_size - 1.0)
+
+
+func _spawn_shape(enemy: Enemy) -> Shape3D:
+	if enemy:
+		var collision := enemy.get_node_or_null("Collision") as CollisionShape3D
+		if collision and collision.shape:
+			return collision.shape
+	var shape := CapsuleShape3D.new()
+	shape.radius = 0.35
+	shape.height = 1.8
+	return shape
+
+
+## Only spawn where the mob has a clear route into the arena. This rejects
+## points inside a church or behind a solid wall, which otherwise look clear to
+## a shape-overlap test because the building interior is hollow.
+func _has_spawn_los(candidate: Vector3, player: Player) -> bool:
+	var from := candidate + Vector3.UP * 0.9
+	var to := player.global_position + Vector3.UP * 0.9
+	var query := PhysicsRayQueryParameters3D.create(from, to, 1)
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
