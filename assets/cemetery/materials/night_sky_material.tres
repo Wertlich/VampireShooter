@@ -1,6 +1,6 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://mcnlgtywywje"]
 
-[ext_resource type="Shader" path="res://assets/cemetery/shaders/night_sky.gdshader" id="1_shader"]
+[ext_resource type="Shader" uid="uid://cq873garntqeq" path="res://assets/cemetery/shaders/night_sky.gdshader" id="1_shader"]
 
 [resource]
 resource_name = "NightCemeterySky"

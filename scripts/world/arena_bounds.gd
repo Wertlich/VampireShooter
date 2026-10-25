@@ -7,7 +7,7 @@ extends Node3D
 ## rescues enemies that end up outside (knockback can throw them over a wall)
 ## and the player if they fall through the map.
 
-@export var half_size: float = 48.0
+@export var half_size: float = 1000.0
 @export var wall_height: float = 16.0
 @export var wall_thickness: float = 1.0
 ## How far past the walls something must be before it counts as escaped.

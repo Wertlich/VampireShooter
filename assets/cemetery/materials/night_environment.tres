@@ -1,20 +1,26 @@
-[gd_resource type="Environment" load_steps=2 format=3]
+[gd_resource type="Environment" format=3 uid="uid://byggd3w1gikp4"]
 
-[ext_resource type="Sky" path="res://assets/cemetery/materials/night_sky.tres" id="1_sky"]
+[ext_resource type="Sky" uid="uid://dsjeicf27uw8k" path="res://assets/cemetery/materials/night_sky.tres" id="1_sky"]
 
 [resource]
 resource_name = "CemeteryNightEnvironment"
 background_mode = 2
 sky = ExtResource("1_sky")
+sky_rotation = Vector3(0, -0.19024089, 0)
 ambient_light_source = 2
 ambient_light_color = Color(0.23, 0.3, 0.5, 1)
 ambient_light_energy = 1.8
 reflected_light_source = 2
 tonemap_mode = 3
 tonemap_exposure = 1.3
+ssr_enabled = true
 ssao_enabled = true
 ssao_radius = 1.7
 ssao_intensity = 1.7
+sdfgi_enabled = true
+sdfgi_read_sky_light = false
+sdfgi_bounce_feedback = 0.29
+sdfgi_cascades = 2
 glow_enabled = true
 glow_intensity = 1.0
 glow_bloom = 0.08
@@ -22,5 +28,8 @@ fog_enabled = true
 fog_light_color = Color(0.028, 0.042, 0.08, 1)
 fog_light_energy = 0.4
 fog_density = 0.006
-fog_sky_affect = 0.25
 fog_aerial_perspective = 0.2
+fog_sky_affect = 0.25
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0154
+volumetric_fog_albedo = Color(0.61138725, 0, 0, 1)

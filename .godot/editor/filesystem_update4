@@ -1,5 +1,11 @@
-res://terrain/terrain3d_00-01.res
-res://terrain/terrain3d_00_00.res
 res://addons/godotsteam/editor/updater.tres
 res://terrain/terrain3d-01-01.res
 res://terrain/terrain3d-01_00.res
+res://terrain/terrain3d_00-01.res
+res://terrain/terrain3d_00_00.res
+res://scenes/level_1.tscn
+res://scripts/world/arena_bounds.gd
+res://assets/cemetery/materials/night_environment.tres
+res://assets/cemetery/shaders/night_sky.gdshader
+res://assets/cemetery/materials/night_sky_material.tres
+res://assets/cemetery/materials/night_sky.tres
